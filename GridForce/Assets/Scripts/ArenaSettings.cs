@@ -3,15 +3,16 @@ using System.Collections;
 
 public class ArenaSettings : MonoBehaviour
 {
-    public float tileRatio = 1.0f;
+    public float gridSize = 1.0f;
 
-	// Set tiling for all children
+    // Use this for initialization
 	void Start ()
     {
+        // Set tiling for all children
         MeshRenderer[] allChildren = this.GetComponentsInChildren <MeshRenderer>();
         foreach (MeshRenderer child in allChildren)
         {
-            child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x * tileRatio, child.gameObject.transform.localScale.y * tileRatio);
+            child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
         }
 	
 	}

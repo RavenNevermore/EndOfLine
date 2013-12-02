@@ -69,7 +69,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  iPhoneBundleIdentifier: de.games-academy.GridForce
+  iPhoneBundleIdentifier: com.Company.ProductName
   productGUID: 45cf1731a1c5b4ea2a01806bf577fe14
   iPhoneBundleVersion: 1.0
   AndroidBundleVersionCode: 1
@@ -84,7 +84,7 @@ PlayerSettings:
   CreateWallpaper: 0
   APKExpansionFiles: 0
   StripUnusedMeshComponents: 0
-  iPhoneSdkVersion: 988
+  iPhoneSdkVersion: 989
   iPhoneTargetOSVersion: 22
   uIPrerenderedIcon: 0
   uIRequiresPersistentWiFi: 0
