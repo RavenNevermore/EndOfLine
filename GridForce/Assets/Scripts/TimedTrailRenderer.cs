@@ -129,7 +129,7 @@ public class TimedTrailRenderer : MonoBehaviour
             if (pointCnt == 0)
                 return;
             Color color = instanceMaterial.GetColor("_TintColor");
-            color.a -= fadeOutRatio * lifeTimeRatio * Time.deltaTime;
+            color.a = fadeOutRatio * lifeTimeRatio * Time.deltaTime;
             if (color.a > 0)
                 instanceMaterial.SetColor("_TintColor", color);
             else

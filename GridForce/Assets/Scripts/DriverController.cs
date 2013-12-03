@@ -7,12 +7,16 @@ using System;
 public class DriverController : MonoBehaviour
 {
     public float baseSpeed = 10.0f;     // Base drive speed
+    public float baseTrailLength = 20.0f;   // Base length of trail
     public float rotationSpeed = 10.0f;  // Rotation speed when changing orientation
     public ArenaSettings arenaSettings = null;      // Arena settings
     public Transform cameraTransform = null;    // The camera's transform
-    public Vector3 cameraDistance = new Vector3(0, 2, -10);     // The camera's default position relative to the driver
+    public Vector3 cameraDistance = new Vector3(0.0f, 2.0f, -10.0f);     // The camera's default position relative to the driver
+    public Vector3 cameraAngleShift = new Vector3(0.0f, 1.0f, 0.0f);      // The shift of camera angle after calculation
 
     private CharacterController characterController;        // Character controller
+    private TimedTrailRenderer trailRenderer;      // This object's trail renderer
+    private TrailRenderer cameraTrail;      // This object's trail renderer for the camera
     private Vector3 moveDirection;          // Character move direction
     private Vector3 gravityDirection;       // Character gravity
     private const int groundLayerMask = (1 << 8);       // Layer mask for ground
@@ -109,6 +113,11 @@ public class DriverController : MonoBehaviour
         this.moveDirection = this.transform.forward;
         this.gravityDirection = -this.transform.up;
 
+        this.trailRenderer = this.GetComponent<TimedTrailRenderer>();
+        this.trailRenderer.lifeTime = this.baseTrailLength / this.baseSpeed;
+        this.cameraTrail = this.GetComponent<TrailRenderer>();
+        this.cameraTrail.time = this.baseTrailLength / this.baseSpeed;
+
         if (this.arenaSettings != null)
             this.gridSize = this.arenaSettings.gridSize;
 
@@ -145,8 +154,8 @@ public class DriverController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-        for (int i = 0; i < this.nodeList.Count; i++)
-            Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f);
+        this.trailRenderer.lifeTime = this.baseTrailLength / this.baseSpeed;
+        this.cameraTrail.time = this.baseTrailLength / this.baseSpeed;
 
         Vector3 totalMovement = Vector3.zero;
 
@@ -173,6 +182,8 @@ public class DriverController : MonoBehaviour
             if (Physics.Linecast(this.transform.position, this.transform.position - (this.moveDirection * (this.characterController.radius + 0.1f)), groundLayerMask))
             {
                 // Change direction if a wall was detected
+                this.nodeList.Add(new PathNode(this.transform.position, (this.gravityDirection + this.moveDirection).normalized));
+
                 Vector3 temp = -this.moveDirection;
                 this.moveDirection = this.gravityDirection;
                 this.gravityDirection = temp;
@@ -219,6 +230,8 @@ public class DriverController : MonoBehaviour
             if (Physics.Linecast(this.transform.position, this.transform.position + (this.moveDirection * (this.characterController.radius + 0.1f)), groundLayerMask))
             {
                 // Change direction if a wall was detected
+                this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection - this.moveDirection).normalized));
+
                 Vector3 temp = this.moveDirection;
                 this.moveDirection = -this.gravityDirection;
                 this.gravityDirection = temp;
@@ -240,7 +253,23 @@ public class DriverController : MonoBehaviour
             Vector3 targetPos = this.cameraDistance.x * this.transform.right + this.cameraDistance.y * this.transform.up + this.cameraDistance.z * this.transform.forward;
             this.cameraPos = Vector3.RotateTowards(this.cameraPos, targetPos, 0.1f, 10.0f);
             this.cameraTransform.position = this.transform.position + this.cameraPos;
-            this.cameraTransform.rotation = Quaternion.LookRotation(-this.cameraPos, this.transform.up);
+
+            targetPos = this.cameraAngleShift.x * this.transform.right + this.cameraAngleShift.y * this.transform.up + this.cameraAngleShift.z * this.transform.forward;
+            this.cameraTransform.rotation = Quaternion.LookRotation(-this.cameraPos + targetPos, this.transform.up);
         }
+
+        // Clean up node list
+        float currentLength = (this.transform.position - this.nodeList[this.nodeList.Count - 1].position).magnitude;
+        for (int i = this.nodeList.Count - 2; i >= 0; i--)
+        {
+            currentLength += (this.nodeList[i].position - this.nodeList[i + 1].position).magnitude;
+            if (currentLength > this.baseTrailLength)
+            {
+                this.nodeList.RemoveAt(i);
+            }
+        }
+
+        for (int i = 0; i < this.nodeList.Count; i++)
+            Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f);
      }
 }
