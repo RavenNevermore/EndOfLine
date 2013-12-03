@@ -446,10 +446,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 775509799}
   m_LocalRotation: {x: .0131069645, y: 0, z: 0, w: .99991411}
-  m_LocalPosition: {x: 0, y: 1.46644211, z: -6.24511242}
+  m_LocalPosition: {x: .5, y: -23.0335579, z: -5.74511242}
   m_LocalScale: {x: 10, y: 4.46476173, z: 2.20190501}
   m_Children: []
-  m_Father: {fileID: 1701146064}
+  m_Father: {fileID: 0}
 --- !u!1 &832051625
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,7 +637,7 @@ GameObject:
   - 64: {fileID: 1295629210}
   - 23: {fileID: 1295629209}
   m_Layer: 9
-  m_Name: Floor
+  m_Name: Ceiling
   m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -655,7 +655,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: bcb642bad67974af6bcf6c1f6d6cef33, type: 2}
+  - {fileID: 2100000, guid: 9d9979d356f54487186f914a168e7d67, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -844,6 +844,8 @@ MonoBehaviour:
   baseSpeed: 10
   rotationSpeed: 10
   arenaSettings: {fileID: 832051627}
+  cameraTransform: {fileID: 775509804}
+  cameraDistance: {x: 0, y: 2, z: -10}
 --- !u!33 &1701146063
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -861,7 +863,6 @@ Transform:
   m_LocalPosition: {x: .5, y: -24.5, z: .5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 775509804}
   - {fileID: 1788560162}
   m_Father: {fileID: 0}
 --- !u!143 &1701146065
