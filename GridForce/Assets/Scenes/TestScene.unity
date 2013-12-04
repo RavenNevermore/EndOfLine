@@ -74,6 +74,75 @@ NavMeshSettings:
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
   m_NavMesh: {fileID: 0}
+--- !u!1 &158827797
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 158827798}
+  - 96: {fileID: 158827799}
+  m_Layer: 0
+  m_Name: Trail Renderer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &158827798
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 158827797}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: .495000005, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1701146064}
+--- !u!96 &158827799
+TrailRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 158827797}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: f6c3671ace70e004e81ffdc2b9401c56, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_Time: 1
+  m_StartWidth: .100000001
+  m_EndWidth: .100000001
+  m_Colors:
+    m_Color[0]:
+      serializedVersion: 2
+      rgba: 4294836233
+    m_Color[1]:
+      serializedVersion: 2
+      rgba: 4294770697
+    m_Color[2]:
+      serializedVersion: 2
+      rgba: 4294705161
+    m_Color[3]:
+      serializedVersion: 2
+      rgba: 4294639625
+    m_Color[4]:
+      serializedVersion: 2
+      rgba: 16384009
+  m_MinVertexDistance: .100000001
+  m_Autodestruct: 0
 --- !u!1 &386352452
 GameObject:
   m_ObjectHideFlags: 0
@@ -829,7 +898,6 @@ GameObject:
   - 143: {fileID: 1701146065}
   - 114: {fileID: 1701146062}
   - 114: {fileID: 1701146066}
-  - 96: {fileID: 1701146067}
   m_Layer: 10
   m_Name: Driver
   m_TagString: Untagged
@@ -894,6 +962,7 @@ Transform:
   m_LocalPosition: {x: .5, y: -24.5, z: .5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 158827798}
   - {fileID: 1788560162}
   m_Father: {fileID: 0}
 --- !u!143 &1701146065
@@ -935,48 +1004,6 @@ MonoBehaviour:
   optimizeAngleInterval: .100000001
   optimizeDistanceInterval: 0
   optimizeCount: 30
---- !u!96 &1701146067
-TrailRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1701146060}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 2100000, guid: f6c3671ace70e004e81ffdc2b9401c56, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortingLayerID: 0
-  m_Time: 1
-  m_StartWidth: .100000001
-  m_EndWidth: .100000001
-  m_Colors:
-    m_Color[0]:
-      serializedVersion: 2
-      rgba: 4294836233
-    m_Color[1]:
-      serializedVersion: 2
-      rgba: 4294770697
-    m_Color[2]:
-      serializedVersion: 2
-      rgba: 4294770697
-    m_Color[3]:
-      serializedVersion: 2
-      rgba: 4294770697
-    m_Color[4]:
-      serializedVersion: 2
-      rgba: 16580617
-  m_MinVertexDistance: .100000001
-  m_Autodestruct: 0
 --- !u!1 &1788560161
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,6 +24,7 @@ public class DriverController : MonoBehaviour
     private List<PathNode> nodeList = new List<PathNode>();     // List of previous path nodes
     private PlayerAction playerAction = PlayerAction.None;      // Defines player's action
     private Vector3 cameraPos = Vector3.zero;         // The camera's current position relative to the driver
+    private int fingerId = -1;      // Id of first finger touching screen
 
 
     // Defines a path node
@@ -115,7 +116,7 @@ public class DriverController : MonoBehaviour
 
         this.trailRenderer = this.GetComponent<TimedTrailRenderer>();
         this.trailRenderer.lifeTime = this.baseTrailLength / this.baseSpeed;
-        this.cameraTrail = this.GetComponent<TrailRenderer>();
+        this.cameraTrail = this.GetComponentsInChildren<TrailRenderer>()[0];
         this.cameraTrail.time = this.baseTrailLength / this.baseSpeed;
 
         if (this.arenaSettings != null)
@@ -173,6 +174,46 @@ public class DriverController : MonoBehaviour
             {
                 this.playerAction = PlayerAction.TurnRight;
             }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                this.playerAction = PlayerAction.UseItem;
+            }
+        }
+
+        foreach (Touch touch in Input.touches)
+        {
+            if (this.fingerId >= 0 && touch.fingerId != this.fingerId)
+                continue;
+
+            if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude / touch.deltaTime >= 1500.0f && this.fingerId != touch.fingerId)
+            {
+                float direction = 1000.0f;
+                if (touch.deltaPosition.x != 0.0f)
+                    direction = touch.deltaPosition.y / touch.deltaPosition.x;
+
+                if (direction > -1.0f && direction < 1.0f)
+                {
+                    if (touch.deltaPosition.x < 0.0f)
+                        this.playerAction = PlayerAction.TurnLeft;
+                    else
+                        this.playerAction = PlayerAction.TurnRight;
+                }
+                else if (touch.deltaPosition.y < 0.0f)
+                    this.playerAction = PlayerAction.UseItem;
+
+                this.fingerId = touch.fingerId;
+            }
+
+            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled && this.fingerId != touch.fingerId)
+            {
+                this.fingerId = -1;
+            }
+        }
+
+        // Player used item
+        if (this.playerAction == PlayerAction.UseItem)
+        {
+            this.playerAction = PlayerAction.None;
         }
 
         // First check if player is in the air...

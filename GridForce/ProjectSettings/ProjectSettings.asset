@@ -5,7 +5,7 @@ PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   AndroidProfiler: 0
-  defaultScreenOrientation: 4
+  defaultScreenOrientation: 0
   targetDevice: 1
   targetGlesGraphics: 1
   targetResolution: 0
@@ -27,8 +27,8 @@ PlayerSettings:
   iosShowActivityIndicatorOnLoading: -1
   androidShowActivityIndicatorOnLoading: -1
   displayResolutionDialog: 1
-  allowedAutorotateToPortrait: 0
-  allowedAutorotateToPortraitUpsideDown: 0
+  allowedAutorotateToPortrait: 1
+  allowedAutorotateToPortraitUpsideDown: 1
   allowedAutorotateToLandscapeRight: 1
   allowedAutorotateToLandscapeLeft: 1
   useOSAutorotation: 1
@@ -73,7 +73,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  iPhoneBundleIdentifier: de.games-academy.GridForce
+  iPhoneBundleIdentifier: com.Company.ProductName
   productGUID: 45cf1731a1c5b4ea2a01806bf577fe14
   iPhoneBundleVersion: 1.0
   AndroidBundleVersionCode: 1
@@ -88,7 +88,7 @@ PlayerSettings:
   CreateWallpaper: 0
   APKExpansionFiles: 0
   StripUnusedMeshComponents: 1
-  iPhoneSdkVersion: 988
+  iPhoneSdkVersion: 989
   iPhoneTargetOSVersion: 22
   uIPrerenderedIcon: 0
   uIRequiresPersistentWiFi: 0
@@ -155,10 +155,10 @@ PlayerSettings:
   metroPackageLogo: 
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets/MetroTestCertificate.pfx
-  metroCertificatePassword: "RGKCMZ\x19\x1A\e"
+  metroCertificatePassword: 
   metroCertificateSubject: End of Line
   metroCertificateIssuer: End of Line
-  metroCertificateNotAfter: 005cdc096e0fd001
+  metroCertificateNotAfter: 006e45423210d001
   metroApplicationDescription: GridForce
   metroTileLogo: 
   metroTileWideLogo: 
