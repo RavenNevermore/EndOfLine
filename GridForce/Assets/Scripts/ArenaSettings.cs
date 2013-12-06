@@ -11,9 +11,18 @@ public class ArenaSettings : MonoBehaviour
         // Set tiling for all children
         MeshRenderer[] allChildren = this.GetComponentsInChildren <MeshRenderer>();
         foreach (MeshRenderer child in allChildren)
-        {
             child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
-        }
-	
 	}
+
+    // On drawing gizmos
+    void OnDrawGizmos()
+    {
+        #if UNITY_EDITOR
+
+        MeshRenderer[] allChildren = this.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer child in allChildren)
+                child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
+
+        #endif
+    }
 }

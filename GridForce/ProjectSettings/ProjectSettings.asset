@@ -158,7 +158,7 @@ PlayerSettings:
   metroCertificatePassword: 
   metroCertificateSubject: End of Line
   metroCertificateIssuer: End of Line
-  metroCertificateNotAfter: 006e45423210d001
+  metroCertificateNotAfter: 806cc51ce510d001
   metroApplicationDescription: GridForce
   metroTileLogo: 
   metroTileWideLogo: 
