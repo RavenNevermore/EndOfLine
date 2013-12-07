@@ -249,4 +249,9 @@ public class TimedTrailRenderer : MonoBehaviour
             timeCreated = Time.time;
         }
     }
+
+    public GameObject GetTrail()
+    {
+        return this.trailObj;
+    }
 }

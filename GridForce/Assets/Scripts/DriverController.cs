@@ -6,11 +6,13 @@ using System;
 [RequireComponent(typeof(CharacterController))]
 public class DriverController : MonoBehaviour
 {
-    public float baseSpeed = 10.0f;     // Base drive speed
-    public float baseTrailLength = 20.0f;   // Base length of trail
-    public float rotationSpeed = 10.0f;  // Rotation speed when changing orientation
+    public Transform trailCollisionSegment = null;    // Game object that represents collision segment
+    public Transform explosionPrefab = null;     // Which effect to use for the explosion
     public ArenaSettings arenaSettings = null;      // Arena settings
     public Transform cameraTransform = null;    // The camera's transform
+    public float baseSpeed = 20.0f;     // Base drive speed
+    public float baseTrailLength = 20.0f;   // Base length of trail
+    public float rotationSpeed = 15.0f;  // Rotation speed when changing orientation
     public Vector3 cameraDistance = new Vector3(0.0f, 2.0f, -8.0f);     // The camera's default position relative to the driver
     public Vector3 cameraAngleShift = new Vector3(0.0f, 1.0f, 0.0f);      // The shift of camera angle after calculation
     public float swipeSpeed = 1500.0f;     // Speed of touch input swipe
@@ -27,6 +29,8 @@ public class DriverController : MonoBehaviour
     private PlayerAction playerAction = PlayerAction.None;      // Defines player's action
     private Vector3 cameraPos = Vector3.zero;         // The camera's current position relative to the driver
     private int fingerId = -1;      // Id of first finger touching screen
+    private List<Transform> colliderList = new List<Transform>();   // List of colliders
+    private bool killed = false;    // True when driver was killed
 
 
     // Defines a path node
@@ -114,11 +118,11 @@ public class DriverController : MonoBehaviour
     private void UpdateColors()
     {
         Light light = this.GetComponent<Light>();
-        light.color = new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, light.color.a);
+        light.color = new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, light.color.a * this.mainColor.a);
         
         for (int i = 0; i < this.trailRenderer.colors.GetLength(0); i++)
-            this.trailRenderer.colors[i] = new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, this.trailRenderer.colors[i].a);
-        this.cameraTrail.material.SetColor("_TintColor", new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, this.cameraTrail.material.GetColor("_TintColor").a));
+            this.trailRenderer.colors[i] = new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, this.trailRenderer.colors[i].a * this.mainColor.a);
+        this.cameraTrail.material.SetColor("_TintColor", new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, this.cameraTrail.material.GetColor("_TintColor").a * this.mainColor.a));
     }
 
 
@@ -132,7 +136,7 @@ public class DriverController : MonoBehaviour
         this.moveDirection = this.transform.forward;
         this.gravityDirection = -this.transform.up;
 
-        this.trailRenderer = this.GetComponent<TimedTrailRenderer>();
+        this.trailRenderer = this.GetComponentsInChildren<TimedTrailRenderer>()[0];
         this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
         this.cameraTrail = this.GetComponentsInChildren<TrailRenderer>()[0];
         this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
@@ -173,7 +177,7 @@ public class DriverController : MonoBehaviour
 
 	
 	// Update is called once per frame
-	void Update()
+    void Update()
     {
         this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
         this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
@@ -356,14 +360,83 @@ public class DriverController : MonoBehaviour
             this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), normalVector));
         }
 
-        // CALCULATE NEW COLLISION UNDERNEATH HERE
-
-
-        // CALCULATE NEW COLLISION ABOVE HERE
+        // Create new trail collision
+        int currentCollider = 0;
+        for (int i = 0; i < this.nodeList.Count - 1; i++)
+        {
+            Vector3 lookDirection = this.nodeList[i + 1].position - this.nodeList[i].position;
+            if (currentCollider >= this.colliderList.Count)
+            {
+                if (lookDirection.sqrMagnitude > 0)
+                {
+                    this.trailCollisionSegment.localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
+                    UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.trailCollisionSegment, this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f)), Quaternion.LookRotation(lookDirection, this.nodeList[i].normal));
+                    ((Transform)(newObject)).parent = this.transform;
+                    this.colliderList.Add((Transform)(newObject));
+                    currentCollider++;
+                }
+            }
+            else
+            {
+                this.colliderList[i].localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
+                this.colliderList[i].position = this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f));
+                if (lookDirection.sqrMagnitude > 0)
+                    this.colliderList[i].rotation = Quaternion.LookRotation(lookDirection, this.nodeList[i].normal);
+                currentCollider++;
+            }
+        }
 
         this.nodeList.RemoveAt(this.nodeList.Count - 1);
+    }
 
-        for (int i = 0; i < this.nodeList.Count; i++)
-            Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f);
-     }
+    void Kill()
+    {
+        if (!(this.killed))
+        {
+            this.mainColor = new Color(this.mainColor.r * 0.35f, this.mainColor.g * 0.35f, this.mainColor.b * 0.35f, this.mainColor.a * 0.1f);
+            this.UpdateColors();
+
+            this.trailRenderer.gameObject.transform.parent = null;
+            this.cameraTrail.gameObject.transform.parent = null;
+
+            UnityEngine.Object explosion = UnityEngine.Object.Instantiate(this.explosionPrefab, this.transform.position, this.transform.rotation);
+            ParticleSystem particleSystem = ((Transform)(explosion)).gameObject.GetComponent<ParticleSystem>();
+            particleSystem.startColor = this.mainColor;
+            particleSystem = ((Transform)(explosion)).gameObject.GetComponentsInChildren<ParticleSystem>()[0];
+            particleSystem.startColor = this.mainColor;
+            UnityEngine.Object.Destroy(((Transform)(explosion)).gameObject, 3.0f);
+
+            UnityEngine.Object.Destroy(this.trailRenderer.GetTrail(), this.trailRenderer.lifeTime);
+            UnityEngine.Object.Destroy(this.trailRenderer.gameObject, this.trailRenderer.lifeTime);
+            UnityEngine.Object.Destroy(this.cameraTrail.gameObject, this.cameraTrail.time);
+            UnityEngine.Object.Destroy(this.gameObject);
+
+            this.killed = true;
+        }
+    }
+
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.tag == this.trailCollisionSegment.tag)
+        {
+            if (collider.transform.parent == this.transform)
+            {
+                float totalLength = 0;
+                int lastIndex = this.nodeList.Count - 2;
+                for (; lastIndex > 0 && totalLength < 2.0f; lastIndex--)
+                {
+                    totalLength += (this.nodeList[lastIndex].position - this.nodeList[lastIndex + 1].position).magnitude;
+                }
+
+                for (int i = lastIndex; i < this.colliderList.Count; i++)
+                {
+                    if (collider.transform == this.colliderList[i].transform)
+                        return;
+                }
+            }
+
+            this.Kill();
+        }
+    }
 }

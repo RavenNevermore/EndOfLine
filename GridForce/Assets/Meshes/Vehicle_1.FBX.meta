@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dfb0ca1543b116d49bf493b48e86c0d0
+guid: 6042872ed55d45342b0d55053037ae21
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -7,9 +7,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Cylinder001
-    4300002: Vehicle 1
-    7400000: Take 001
+    4300000: Torus001
     9500000: //RootNode
   materials:
     importMaterials: 1

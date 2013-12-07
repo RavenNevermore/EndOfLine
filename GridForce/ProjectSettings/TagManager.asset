@@ -5,6 +5,7 @@ TagManager:
   tags:
   - Drivable
   - NonDrivable
+  - TrailCollisionSegment
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   User Layer 8: Drivable
   User Layer 9: NonDrivable
   User Layer 10: Driver
-  User Layer 11: 
+  User Layer 11: TrailCollisionSegment
   User Layer 12: 
   User Layer 13: 
   User Layer 14: 
@@ -38,3 +39,8 @@ TagManager:
   User Layer 29: 
   User Layer 30: 
   User Layer 31: 
+  m_SortingLayers:
+  - name: Default
+    userID: 0
+    uniqueID: 0
+    locked: 0
