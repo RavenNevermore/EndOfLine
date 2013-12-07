@@ -389,6 +389,8 @@ public class DriverController : MonoBehaviour
         this.nodeList.RemoveAt(this.nodeList.Count - 1);
     }
 
+
+    // Kill driver
     void Kill()
     {
         if (!(this.killed))
@@ -416,6 +418,7 @@ public class DriverController : MonoBehaviour
     }
 
 
+    // On collision enter
     void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == this.trailCollisionSegment.tag)
