@@ -428,11 +428,12 @@ public class DriverController : MonoBehaviour
         if (this.cameraTransform != null)
         {
             Vector3 targetPos = this.cameraDistance.x * this.transform.right + this.cameraDistance.y * this.transform.up + this.cameraDistance.z * this.transform.forward;
-            this.cameraPos = Vector3.RotateTowards(this.cameraPos, targetPos, 0.1f, 10.0f);
+            this.cameraPos = Vector3.RotateTowards(this.cameraPos, targetPos, 6.0f * Time.deltaTime, 5.0f * Time.deltaTime);
             this.cameraTransform.position = this.transform.position + this.cameraPos;
 
             targetPos = this.cameraAngleShift.x * this.transform.right + this.cameraAngleShift.y * this.transform.up + this.cameraAngleShift.z * this.transform.forward;
             this.cameraTransform.rotation = Quaternion.LookRotation(-this.cameraPos + targetPos, this.transform.up);
+            Debug.Log("Camera wird rotiert");
         }
     }
 
