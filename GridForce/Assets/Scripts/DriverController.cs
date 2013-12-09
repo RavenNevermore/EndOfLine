@@ -18,12 +18,18 @@ public class DriverController : MonoBehaviour
     public float swipeSpeed = 1500.0f;     // Speed of touch input swipe
     public Color mainColor = new Color(0.0f, 0.0f, 0.9f);    // Main color of light and trail
 
+    private const int layerDrivable = 8;     // Layer of drivable plane
+    private const int layerNonDrivable = 9;    // Layer of non drivable plane
+    private const int drivableLayerMask = (1 << DriverController.layerDrivable);       // Layer mask for drivable planes
+    private const int nonDrivableLayerMask = (1 << DriverController.layerNonDrivable);    // Layer mask for non-drivable planes
+    private const int layerDriver = 10;     // Layer of driver
+    private const int layerDriverInvincible = 12;    // Layer of invincible driver
+
     private CharacterController characterController;        // Character controller
     private TimedTrailRenderer trailRenderer;      // This object's trail renderer
     private TrailRenderer cameraTrail;      // This object's trail renderer for the camera
     private Vector3 moveDirection;          // Character move direction
     private Vector3 gravityDirection;       // Character gravity
-    private const int groundLayerMask = (1 << 8) | (1 << 9);       // Layer mask for ground
     private float gridSize = 1.0f;          // Grid size
     private List<PathNode> nodeList = new List<PathNode>();     // List of previous path nodes
     private PlayerAction playerAction = PlayerAction.None;      // Defines player's action
@@ -31,6 +37,8 @@ public class DriverController : MonoBehaviour
     private int fingerId = -1;      // Id of first finger touching screen
     private List<Transform> colliderList = new List<Transform>();   // List of colliders
     private bool killed = false;    // True when driver was killed
+    private bool invincible = false;       // Driver invincible, when true
+    private GameObject trailCollisionObject;    // Trail collisions' parent game object
 
 
     // Defines a path node
@@ -63,7 +71,7 @@ public class DriverController : MonoBehaviour
         PathNode pathNode = new PathNode(Vector3.zero, Vector3.up);
 
         RaycastHit raycastHit;
-        if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, groundLayerMask))
+        if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
         {
             // Convert from world to local space
             Vector3 localPos = raycastHit.transform.InverseTransformDirection(this.transform.position);
@@ -73,8 +81,13 @@ public class DriverController : MonoBehaviour
             startOffset.x = (raycastHit.transform.localScale.x - (this.gridSize * 0.5f)) % this.gridSize;
             startOffset.z = (raycastHit.transform.localScale.z - (this.gridSize * 0.5f)) % this.gridSize;
 
+            Vector3 zeroShift = (raycastHit.transform.localScale * 0.5f) + Vector3.one;
+            zeroShift.x = (int)(zeroShift.x);
+            zeroShift.y = (int)(zeroShift.y);
+            zeroShift.z = (int)(zeroShift.z);
+
             // Convert to grid space
-            localPos += raycastHit.transform.localScale * 0.5f;
+            localPos += zeroShift;
             localPos.x -= startOffset.x;
             localPos.z -= startOffset.z;
             localPos.x /= this.gridSize;
@@ -99,7 +112,7 @@ public class DriverController : MonoBehaviour
             localPos.z *= this.gridSize;
             localPos.x += startOffset.x;
             localPos.z += startOffset.z;
-            localPos -= raycastHit.transform.localScale * 0.5f;
+            localPos -= zeroShift;
 
             Vector3 zeroLocal = raycastHit.transform.InverseTransformDirection(raycastHit.transform.position);
 
@@ -117,7 +130,7 @@ public class DriverController : MonoBehaviour
     // Update all colors to main color
     private void UpdateColors()
     {
-        Light light = this.GetComponent<Light>();
+        Light light = this.GetComponentInChildren<Light>();
         light.color = new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, light.color.a * this.mainColor.a);
         
         for (int i = 0; i < this.trailRenderer.colors.GetLength(0); i++)
@@ -136,19 +149,21 @@ public class DriverController : MonoBehaviour
         this.moveDirection = this.transform.forward;
         this.gravityDirection = -this.transform.up;
 
-        this.trailRenderer = this.GetComponentsInChildren<TimedTrailRenderer>()[0];
+        this.trailRenderer = this.GetComponentInChildren<TimedTrailRenderer>();
         this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
-        this.cameraTrail = this.GetComponentsInChildren<TrailRenderer>()[0];
+        this.cameraTrail = this.GetComponentInChildren<TrailRenderer>();
         this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
 
         if (this.arenaSettings != null)
             this.gridSize = this.arenaSettings.gridSize;
 
+        this.trailCollisionObject = new GameObject("Trail Collision");
+
         this.UpdateColors();
 
         // Snap player to a close node point on grid
         RaycastHit raycastHit;
-        if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, groundLayerMask))
+        if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
         {
             Vector3 localPos = raycastHit.transform.InverseTransformDirection(this.transform.position);
 
@@ -179,150 +194,236 @@ public class DriverController : MonoBehaviour
 	// Update is called once per frame
     void Update()
     {
-        this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
-        this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
-
-        Vector3 totalMovement = Vector3.zero;
-
-        Vector3 gravityRayStart = this.transform.position - (this.moveDirection * (this.characterController.radius + 0.1f));
-        Vector3 gravityRayEnd = gravityRayStart + (this.gravityDirection * (this.characterController.height + 0.1f));
-
-        // Get player action
-        #if UNITY_STANDALONE || UNITY_EDITOR
-
-        if (this.playerAction == PlayerAction.None)
+        if (!(this.killed))
         {
-            if (Input.GetButtonDown("Left"))
-            {
-                this.playerAction = PlayerAction.TurnLeft;
-            }
-            else if (Input.GetButtonDown("Right"))
-            {
-                this.playerAction = PlayerAction.TurnRight;
-            }
-            else if (Input.GetButtonDown("Item"))
-            {
-                this.playerAction = PlayerAction.UseItem;
-            }
-            else if (Input.GetButtonDown("Cancel"))
-            {
-                Application.Quit();
-            }
-        }
+            if (this.invincible)
+                this.gameObject.layer = DriverController.layerDriverInvincible;
+            else
+                this.gameObject.layer = DriverController.layerDriver;
 
-        #endif
+            this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
+            this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
 
-        foreach (Touch touch in Input.touches)
-        {
-            if (this.fingerId >= 0 && touch.fingerId != this.fingerId)
-                continue;
+            Vector3 totalMovement = Vector3.zero;
 
-            if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude / touch.deltaTime >= this.swipeSpeed && this.fingerId != touch.fingerId)
+            Vector3 gravityRayStart = this.transform.position - (this.moveDirection * (this.characterController.radius + 0.1f));
+            Vector3 gravityRayEnd = gravityRayStart + (this.gravityDirection * (this.characterController.height + 0.1f));
+
+            // Get player action
+#if UNITY_STANDALONE || UNITY_EDITOR
+
+            if (this.playerAction == PlayerAction.None)
             {
-                float direction = 1000.0f;
-                if (touch.deltaPosition.x != 0.0f)
-                    direction = touch.deltaPosition.y / touch.deltaPosition.x;
-
-                if (direction > -1.0f && direction < 1.0f)
+                if (Input.GetButtonDown("Left"))
                 {
-                    if (touch.deltaPosition.x < 0.0f)
-                        this.playerAction = PlayerAction.TurnLeft;
-                    else
-                        this.playerAction = PlayerAction.TurnRight;
+                    this.playerAction = PlayerAction.TurnLeft;
                 }
-                else if (touch.deltaPosition.y < 0.0f)
+                else if (Input.GetButtonDown("Right"))
+                {
+                    this.playerAction = PlayerAction.TurnRight;
+                }
+                else if (Input.GetButtonDown("Item"))
+                {
                     this.playerAction = PlayerAction.UseItem;
-
-                this.fingerId = touch.fingerId;
-            }
-
-            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled && this.fingerId != touch.fingerId)
-            {
-                this.fingerId = -1;
-            }
-        }
-
-        // Player used item
-        if (this.playerAction == PlayerAction.UseItem)
-        {
-            this.playerAction = PlayerAction.None;
-        }
-
-        // First check if player is in the air...
-        if (!(Physics.Linecast(gravityRayStart, gravityRayEnd, groundLayerMask)))
-        {
-            // ...and if he is, check if there is a wall behind him
-            if (Physics.Linecast(this.transform.position - (this.gravityDirection * (this.characterController.height / 2.0f)), this.transform.position - (this.moveDirection * (this.characterController.radius + 0.75f)), groundLayerMask))
-            {
-                // Change direction if a wall was detected
-                this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection + this.moveDirection).normalized));
-
-                Vector3 temp = -this.moveDirection;
-                this.moveDirection = this.gravityDirection;
-                this.gravityDirection = temp;
-                this.characterController.Move(((this.characterController.radius + 0.1f) * this.moveDirection));
-            }
-
-            // Apply gravity
-            totalMovement += this.gravityDirection * this.baseSpeed;
-        }
-        else
-        {
-            // Check, if player can turn
-            PathNode nextNode = this.GetNextNode();
-            Vector3 nodeOnDriver = nextNode.position; // this.nextNode.position;
-            Quaternion transformRotation = this.transform.rotation;
-            this.transform.rotation = Quaternion.LookRotation(this.moveDirection, -this.gravityDirection);
-            nodeOnDriver = this.transform.InverseTransformDirection(nodeOnDriver);
-            nodeOnDriver.y = this.transform.InverseTransformDirection(this.transform.position).y;
-            nodeOnDriver = this.transform.TransformDirection(nodeOnDriver);
-            this.transform.rotation = transformRotation;
-
-            Debug.DrawRay(nextNode.position, nextNode.normal * 10.0f, Color.yellow);
-
-            float nodeDistance = (this.baseSpeed * this.moveDirection * Time.deltaTime).magnitude - (nodeOnDriver - this.transform.position).magnitude;
-
-            if (nodeDistance >= 0 && (nextNode.position - this.transform.position).magnitude <= this.gridSize)
-            {
-                switch (this.playerAction)
+                }
+                else if (Input.GetButtonDown("Cancel"))
                 {
-                    case PlayerAction.TurnLeft:
-                        this.moveDirection = Vector3.Cross(this.gravityDirection, this.moveDirection);
-                        this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
-                        break;
-                    case PlayerAction.TurnRight:
-                        this.moveDirection = Vector3.Cross(this.moveDirection, this.gravityDirection);
-                        this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
-                        break;
-                    default:
-                        break;
+                    Application.Quit();
+                }
+            }
+
+#endif
+
+            foreach (Touch touch in Input.touches)
+            {
+                if (this.fingerId >= 0 && touch.fingerId != this.fingerId)
+                    continue;
+
+                if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude / touch.deltaTime >= this.swipeSpeed && this.fingerId != touch.fingerId)
+                {
+                    float direction = 1000.0f;
+                    if (touch.deltaPosition.x != 0.0f)
+                        direction = touch.deltaPosition.y / touch.deltaPosition.x;
+
+                    if (direction > -1.0f && direction < 1.0f)
+                    {
+                        if (touch.deltaPosition.x < 0.0f)
+                            this.playerAction = PlayerAction.TurnLeft;
+                        else
+                            this.playerAction = PlayerAction.TurnRight;
+                    }
+                    else if (touch.deltaPosition.y < 0.0f)
+                        this.playerAction = PlayerAction.UseItem;
+
+                    this.fingerId = touch.fingerId;
                 }
 
-                this.playerAction = PlayerAction.None;
-                this.nodeList.Add(nextNode);
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled && this.fingerId != touch.fingerId)
+                {
+                    this.fingerId = -1;
+                }
             }
 
-            // If player is not in the air, check if there is a wall ahead of him 
-            if (Physics.Linecast(this.transform.position, this.transform.position + (this.moveDirection * (this.characterController.radius + 0.1f)), groundLayerMask))
+            // Player used item
+            if (this.playerAction == PlayerAction.UseItem)
             {
-                // Change direction if a wall was detected
-                this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection - this.moveDirection).normalized));
-
-                Vector3 temp = this.moveDirection;
-                this.moveDirection = -this.gravityDirection;
-                this.gravityDirection = temp;
+                this.playerAction = PlayerAction.None;
+                this.invincible = !(this.invincible);
             }
 
-            // Apply driving speed
-            totalMovement += (this.baseSpeed * this.moveDirection);
-        }
+            RaycastHit raycastHit;
+            // First check if player is in the air...
+            if (!(Physics.Linecast(gravityRayStart, gravityRayEnd, out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask)))
+            {
+                // ...and if he is, check if there is a wall behind him
+                if (Physics.Linecast(this.transform.position - (this.gravityDirection * (this.characterController.height / 2.0f)), this.transform.position - (this.moveDirection * (this.characterController.radius + 3.0f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+                {
+                    // Change direction if a wall was detected
+                    this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection + this.moveDirection).normalized));
 
-        // Player transformations
-        totalMovement = new Vector3((float)(Math.Round(totalMovement.x, 1)), (float)(Math.Round(totalMovement.y, 1)), (float)(Math.Round(totalMovement.z, 1)));
-        this.characterController.Move(totalMovement * Time.deltaTime);
+                    Vector3 temp = -this.moveDirection;
+                    this.moveDirection = this.gravityDirection;
+                    this.gravityDirection = temp;
+                    this.characterController.Move(((this.characterController.radius + 0.1f) * this.moveDirection));
+                }
+
+                // Apply gravity
+                totalMovement += this.gravityDirection * this.baseSpeed;
+            }
+            else
+            {
+                // Check, if player can turn
+                PathNode nextNode = this.GetNextNode();
+                Vector3 nodeOnDriver = nextNode.position; // this.nextNode.position;
+                Quaternion transformRotation = this.transform.rotation;
+                this.transform.rotation = Quaternion.LookRotation(this.moveDirection, -this.gravityDirection);
+                nodeOnDriver = this.transform.InverseTransformDirection(nodeOnDriver);
+                nodeOnDriver.y = this.transform.InverseTransformDirection(this.transform.position).y;
+                nodeOnDriver = this.transform.TransformDirection(nodeOnDriver);
+                this.transform.rotation = transformRotation;
+
+                float nodeDistance = (this.baseSpeed * this.moveDirection * Time.deltaTime).magnitude - (nodeOnDriver - this.transform.position).magnitude;
+
+                if (nodeDistance >= 0 && (nextNode.position - this.transform.position).magnitude <= this.gridSize)
+                {
+                    switch (this.playerAction)
+                    {
+                        case PlayerAction.TurnLeft:
+                            this.moveDirection = Vector3.Cross(this.gravityDirection, this.moveDirection);
+                            this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
+                            this.nodeList.Add(nextNode);
+                            break;
+                        case PlayerAction.TurnRight:
+                            this.moveDirection = Vector3.Cross(this.moveDirection, this.gravityDirection);
+                            this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
+                            this.nodeList.Add(nextNode);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    this.playerAction = PlayerAction.None;
+                }
+
+                if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable && !(this.invincible))
+                {
+                    this.Kill();
+                }
+
+                // If player is not in the air, check if there is a wall ahead of him 
+                if (Physics.Linecast(this.transform.position, this.transform.position + (this.moveDirection * (this.characterController.radius + 0.1f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+                {                    
+                    // Change direction or kill if a wall was detected
+                    if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable && !(this.invincible))
+                    {
+                        this.Kill();
+                    }
+                    else
+                    {
+                        this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection - this.moveDirection).normalized));
+
+                        Vector3 temp = this.moveDirection;
+                        this.moveDirection = -this.gravityDirection;
+                        this.gravityDirection = temp;
+                    }
+                }
+
+                // Apply driving speed
+                totalMovement += (this.baseSpeed * this.moveDirection);
+            }
+
+            // Clean up node list
+            this.nodeList.Add(new PathNode(this.transform.position, -this.gravityDirection));
+            float currentLength = 0.0f;
+            float totalLength = 0.0f;
+            PathNode firstRemoved = new PathNode();
+            bool removed = false;
+
+            for (int i = this.nodeList.Count - 2; i >= 0; i--)
+            {
+                currentLength += (this.nodeList[i].position - this.nodeList[i + 1].position).magnitude;
+                if (currentLength > this.baseTrailLength * this.gridSize)
+                {
+                    if (!removed)
+                        firstRemoved = this.nodeList[i];
+                    this.nodeList.RemoveAt(i);
+                    removed = true;
+                }
+                if (currentLength <= this.baseTrailLength * this.gridSize)
+                    totalLength = currentLength;
+            }
+
+            Vector3 directionVector = (firstRemoved.position - this.nodeList[0].position).normalized;
+            bool inserted = false;
+            if (totalLength < this.baseTrailLength * this.gridSize && currentLength > this.baseTrailLength * this.gridSize)
+            {
+                float difference = (this.baseTrailLength * this.gridSize) - totalLength;
+                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), this.nodeList[0].normal));
+                inserted = true;
+            }
+
+            // Create new trail collision
+            int currentCollider = 0;
+            for (int i = 0; i < this.nodeList.Count - 1; i++)
+            {
+                Vector3 lookDirection = this.nodeList[i + 1].position - this.nodeList[i].position;
+                if (currentCollider >= this.colliderList.Count)
+                {
+                    if (lookDirection.sqrMagnitude > 0)
+                    {
+                        this.trailCollisionSegment.localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
+                        UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.trailCollisionSegment, this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f)), Quaternion.LookRotation(lookDirection, this.nodeList[i].normal));
+                        ((Transform)(newObject)).parent = this.trailCollisionObject.transform;
+                        this.colliderList.Add((Transform)(newObject));
+                        currentCollider++;
+                    }
+                }
+                else
+                {
+                    this.colliderList[i].collider.enabled = true;
+                    this.colliderList[i].localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
+                    this.colliderList[i].position = this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f));
+                    if (lookDirection.sqrMagnitude > 0)
+                        this.colliderList[i].rotation = Quaternion.LookRotation(lookDirection, this.nodeList[i].normal);
+                    currentCollider++;
+                }
+            }
+
+            for (int i = currentCollider; i < this.colliderList.Count; i++)
+            {
+                this.colliderList[i].collider.enabled = false;
+            }
+
+            this.nodeList.RemoveAt(this.nodeList.Count - 1);
+            if (inserted && !removed)
+                this.nodeList.RemoveAt(0);
+
+            // Player transformations
+            totalMovement = new Vector3((float)(Math.Round(totalMovement.x, 1)), (float)(Math.Round(totalMovement.y, 1)), (float)(Math.Round(totalMovement.z, 1)));
+            this.characterController.Move(totalMovement * Time.deltaTime);
+        }
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), this.rotationSpeed * Time.deltaTime);
-        //this.transform.rotation = new Quaternion((float)(Math.Round(this.transform.rotation.x, 3)), (float)(Math.Round(this.transform.rotation.y, 3)), (float)(Math.Round(this.transform.rotation.z, 3)), (float)(Math.Round(this.transform.rotation.w, 3)));
 
         if (this.cameraTransform != null)
         {
@@ -333,60 +434,6 @@ public class DriverController : MonoBehaviour
             targetPos = this.cameraAngleShift.x * this.transform.right + this.cameraAngleShift.y * this.transform.up + this.cameraAngleShift.z * this.transform.forward;
             this.cameraTransform.rotation = Quaternion.LookRotation(-this.cameraPos + targetPos, this.transform.up);
         }
-
-        // Clean up node list
-        this.nodeList.Add(new PathNode(this.transform.position, -this.gravityDirection));
-        float currentLength = 0.0f;
-        float totalLength = 0.0f;
-        PathNode lastRemoved = new PathNode();
-
-        for (int i = this.nodeList.Count - 2; i >= 0; i--)
-        {
-            currentLength += (this.nodeList[i].position - this.nodeList[i + 1].position).magnitude;
-            if (currentLength > this.baseTrailLength * this.gridSize)
-            {
-                lastRemoved = this.nodeList[i];
-                this.nodeList.RemoveAt(i);
-            }
-            if (currentLength <= this.baseTrailLength * this.gridSize)
-                totalLength = currentLength;
-        }
-
-        Vector3 directionVector = (lastRemoved.position - this.nodeList[0].position).normalized;
-        Vector3 normalVector = (this.nodeList[0].normal + lastRemoved.normal) * 0.5f;
-        if (totalLength < this.baseTrailLength * this.gridSize)
-        {
-            float difference = ((this.baseTrailLength * this.gridSize) - totalLength) % this.gridSize;
-            this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), normalVector));
-        }
-
-        // Create new trail collision
-        int currentCollider = 0;
-        for (int i = 0; i < this.nodeList.Count - 1; i++)
-        {
-            Vector3 lookDirection = this.nodeList[i + 1].position - this.nodeList[i].position;
-            if (currentCollider >= this.colliderList.Count)
-            {
-                if (lookDirection.sqrMagnitude > 0)
-                {
-                    this.trailCollisionSegment.localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
-                    UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.trailCollisionSegment, this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f)), Quaternion.LookRotation(lookDirection, this.nodeList[i].normal));
-                    ((Transform)(newObject)).parent = this.transform;
-                    this.colliderList.Add((Transform)(newObject));
-                    currentCollider++;
-                }
-            }
-            else
-            {
-                this.colliderList[i].localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
-                this.colliderList[i].position = this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f));
-                if (lookDirection.sqrMagnitude > 0)
-                    this.colliderList[i].rotation = Quaternion.LookRotation(lookDirection, this.nodeList[i].normal);
-                currentCollider++;
-            }
-        }
-
-        this.nodeList.RemoveAt(this.nodeList.Count - 1);
     }
 
 
@@ -404,37 +451,43 @@ public class DriverController : MonoBehaviour
             UnityEngine.Object explosion = UnityEngine.Object.Instantiate(this.explosionPrefab, this.transform.position, this.transform.rotation);
             ParticleSystem particleSystem = ((Transform)(explosion)).gameObject.GetComponent<ParticleSystem>();
             particleSystem.startColor = this.mainColor;
-            particleSystem = ((Transform)(explosion)).gameObject.GetComponentsInChildren<ParticleSystem>()[0];
+            particleSystem = ((Transform)(explosion)).gameObject.GetComponentInChildren<ParticleSystem>();
             particleSystem.startColor = this.mainColor;
             UnityEngine.Object.Destroy(((Transform)(explosion)).gameObject, 3.0f);
 
             UnityEngine.Object.Destroy(this.trailRenderer.GetTrail(), this.trailRenderer.lifeTime);
             UnityEngine.Object.Destroy(this.trailRenderer.gameObject, this.trailRenderer.lifeTime);
             UnityEngine.Object.Destroy(this.cameraTrail.gameObject, this.cameraTrail.time);
-            UnityEngine.Object.Destroy(this.gameObject);
+            UnityEngine.Object.Destroy(this.GetComponentInChildren<MeshRenderer>().gameObject);
+            UnityEngine.Object.Destroy(this.GetComponentInChildren<Light>().gameObject);
+            UnityEngine.Object.Destroy(this.trailCollisionObject);
+            UnityEngine.Object.Destroy(this.gameObject, 3.0f);
 
             this.killed = true;
         }
     }
 
 
-    // On collision enter
+    // On trigger enter
     void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == this.trailCollisionSegment.tag)
         {
-            if (collider.transform.parent == this.transform)
+            if (this.invincible || this.killed)
+                return;
+
+            if (collider.gameObject.transform.parent == this.trailCollisionObject.transform)
             {
-                float totalLength = 0;
-                int lastIndex = this.nodeList.Count - 2;
-                for (; lastIndex > 0 && totalLength < 2.0f; lastIndex--)
+                int lastEnabled = 0;
+                for (int i = 0; i < this.colliderList.Count; i++)
                 {
-                    totalLength += (this.nodeList[lastIndex].position - this.nodeList[lastIndex + 1].position).magnitude;
+                    if (this.colliderList[i].collider.enabled)
+                        lastEnabled = i;
                 }
 
-                for (int i = lastIndex; i < this.colliderList.Count; i++)
+                for (int i = Math.Max(0, lastEnabled - 2); i < this.colliderList.Count; i++)
                 {
-                    if (collider.transform == this.colliderList[i].transform)
+                    if (i >= 0 && collider.transform == this.colliderList[i].transform)
                         return;
                 }
             }
