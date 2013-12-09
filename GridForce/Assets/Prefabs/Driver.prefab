@@ -307,7 +307,7 @@ MonoBehaviour:
   cameraDistance: {x: 0, y: 2, z: -8}
   cameraAngleShift: {x: 0, y: 1, z: 0}
   swipeSpeed: 1500
-  mainColor: {r: 0, g: 0, b: .882352948, a: 1}
+  mainColor: {r: .874509811, g: 0, b: 0, a: 1}
 --- !u!143 &14300000
 CharacterController:
   m_ObjectHideFlags: 1

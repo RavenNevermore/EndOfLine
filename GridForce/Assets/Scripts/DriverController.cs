@@ -433,7 +433,6 @@ public class DriverController : MonoBehaviour
 
             targetPos = this.cameraAngleShift.x * this.transform.right + this.cameraAngleShift.y * this.transform.up + this.cameraAngleShift.z * this.transform.forward;
             this.cameraTransform.rotation = Quaternion.LookRotation(-this.cameraPos + targetPos, this.transform.up);
-            Debug.Log("Camera wird rotiert");
         }
     }
 
@@ -451,9 +450,11 @@ public class DriverController : MonoBehaviour
 
             UnityEngine.Object explosion = UnityEngine.Object.Instantiate(this.explosionPrefab, this.transform.position, this.transform.rotation);
             ParticleSystem particleSystem = ((Transform)(explosion)).gameObject.GetComponent<ParticleSystem>();
-            particleSystem.startColor = this.mainColor;
-            particleSystem = ((Transform)(explosion)).gameObject.GetComponentInChildren<ParticleSystem>();
-            particleSystem.startColor = this.mainColor;
+            particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
+            particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
+            particleSystem = ((Transform)(explosion)).gameObject.GetComponentsInChildren<ParticleSystem>()[1];
+            particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
+            particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
             UnityEngine.Object.Destroy(((Transform)(explosion)).gameObject, 3.0f);
 
             UnityEngine.Object.Destroy(this.trailRenderer.GetTrail(), this.trailRenderer.lifeTime);
@@ -488,7 +489,7 @@ public class DriverController : MonoBehaviour
 
                 for (int i = Math.Max(0, lastEnabled - 2); i < this.colliderList.Count; i++)
                 {
-                    if (i >= 0 && collider.transform == this.colliderList[i].transform)
+                    if (collider.transform == this.colliderList[i].transform)
                         return;
                 }
             }
