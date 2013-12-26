@@ -17,6 +17,7 @@ public class MenuState : MonoBehaviour {
 
 	public void startGame(){
 		Debug.Log("Starting game for " + this.arenaName);
+		DontDestroyOnLoad(this);
 		Application.LoadLevel(this.arenaName);
 	}
 }

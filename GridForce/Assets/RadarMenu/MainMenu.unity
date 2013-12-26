@@ -757,6 +757,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleName: vehicle02
+--- !u!1 &623721121
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 623721123}
+  - 114: {fileID: 623721122}
+  m_Layer: 0
+  m_Name: state
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &623721122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 623721121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573dcbb73d2744c3aa003cd5369eb0a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  hostName: 
+  hostIp: 
+  arenaName: 
+  vehicleName: 
+  color: 
+--- !u!4 &623721123
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 623721121}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
 --- !u!1 &643609109
 GameObject:
   m_ObjectHideFlags: 0
@@ -1718,7 +1762,6 @@ GameObject:
   - 4: {fileID: 1368799303}
   - 114: {fileID: 1368799305}
   - 114: {fileID: 1368799304}
-  - 114: {fileID: 1368799306}
   m_Layer: 0
   m_Name: root
   m_TagString: Untagged
@@ -1769,23 +1812,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bf6a8afd7f6497b92e9dac168d52e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1368799306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1368799302}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 573dcbb73d2744c3aa003cd5369eb0a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
-  hostName: 
-  hostIp: 
-  arenaName: 
-  vehicleName: 
-  color: 
 --- !u!1001 &1398606556
 Prefab:
   m_ObjectHideFlags: 0

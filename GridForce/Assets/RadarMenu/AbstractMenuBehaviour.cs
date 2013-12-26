@@ -10,8 +10,8 @@ public class AbstractMenuBehaviour : MonoBehaviour {
 
 	public MenuState gameState {
 		get {
-			GameObject root = GameObject.Find("root");
-			return root.GetComponent<MenuState>();
+			GameObject state = GameObject.Find("state");
+			return state.GetComponent<MenuState>();
 		}
 	}
 }
