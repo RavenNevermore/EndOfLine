@@ -11,6 +11,9 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
+
+		//notify clients that the game starts.
+
 		this.previewState.SetActive(false);
 		this.gameState.SetActive(true);
 	}
