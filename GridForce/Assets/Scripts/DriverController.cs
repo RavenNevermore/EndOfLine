@@ -23,6 +23,8 @@ public class DriverController : MonoBehaviour
     private const int drivableLayerMask = (1 << DriverController.layerDrivable);       // Layer mask for drivable planes
     private const int nonDrivableLayerMask = (1 << DriverController.layerNonDrivable);    // Layer mask for non-drivable planes
     private const int layerDriver = 10;     // Layer of driver
+    private const int layerTrail = 11;    // Layer of trail collision
+    private const int trailLayerMask = (1 << DriverController.layerTrail);    // Layer mask for trail
     private const int layerDriverInvincible = 12;    // Layer of invincible driver
 
     private CharacterController characterController;        // Character controller
@@ -192,7 +194,7 @@ public class DriverController : MonoBehaviour
 
 	
 	// Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!(this.killed))
         {
@@ -331,10 +333,10 @@ public class DriverController : MonoBehaviour
                 }
 
                 // If player is not in the air, check if there is a wall ahead of him 
-                if (Physics.Linecast(this.transform.position, this.transform.position + (this.moveDirection * (this.characterController.radius + 0.1f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+                if (Physics.Linecast(this.transform.position + (this.moveDirection * 0.1f), this.transform.position + (this.moveDirection * (this.characterController.radius + 0.25f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask | DriverController.trailLayerMask))
                 {                    
                     // Change direction or kill if a wall was detected
-                    if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable && !(this.invincible))
+                    if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable || (raycastHit.transform.gameObject.layer == DriverController.layerTrail && !(this.invincible)))
                     {
                         this.Kill();
                     }
@@ -466,35 +468,6 @@ public class DriverController : MonoBehaviour
             UnityEngine.Object.Destroy(this.gameObject, 3.0f);
 
             this.killed = true;
-        }
-    }
-
-
-    // On trigger enter
-    void OnTriggerEnter(Collider collider)
-    {
-        if (collider.tag == this.trailCollisionSegment.tag)
-        {
-            if (this.invincible || this.killed)
-                return;
-
-            if (collider.gameObject.transform.parent == this.trailCollisionObject.transform)
-            {
-                int lastEnabled = 0;
-                for (int i = 0; i < this.colliderList.Count; i++)
-                {
-                    if (this.colliderList[i].collider.enabled)
-                        lastEnabled = i;
-                }
-
-                for (int i = Math.Max(0, lastEnabled - 2); i < this.colliderList.Count; i++)
-                {
-                    if (collider.transform == this.colliderList[i].transform)
-                        return;
-                }
-            }
-
-            this.Kill();
         }
     }
 }
