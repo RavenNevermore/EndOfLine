@@ -19,7 +19,7 @@ RenderSettings:
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientLight: {r: .200000003, g: .200000003, b: .200000003, a: 1}
-  m_SkyboxMaterial: {fileID: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 5aab239cac7fe8a4c931693a7535da5c, type: 2}
   m_HaloStrength: .5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -391,6 +391,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51430e8e45eedb64faf01a0b78e1dcba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationsVector: {x: 0, y: 1, z: 0}
+  speed: 1
 --- !u!23 &244768029
 Renderer:
   m_ObjectHideFlags: 0
@@ -1750,6 +1752,7 @@ GameObject:
   - 4: {fileID: 1368799303}
   - 114: {fileID: 1368799305}
   - 114: {fileID: 1368799304}
+  - 114: {fileID: 1368799306}
   m_Layer: 0
   m_Name: root
   m_TagString: Untagged
@@ -1802,6 +1805,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9bf6a8afd7f6497b92e9dac168d52e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1368799306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1368799302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51430e8e45eedb64faf01a0b78e1dcba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationsVector: {x: 0, y: 1, z: 0}
+  speed: .150000006
 --- !u!1001 &1398606556
 Prefab:
   m_ObjectHideFlags: 0
