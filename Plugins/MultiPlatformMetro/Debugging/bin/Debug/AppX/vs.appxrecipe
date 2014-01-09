@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>MARKUS-WIN81-VB</Machine>
+    <WindowsUser>Markus</WindowsUser>
+    <SolutionConfiguration>Debug|AnyCPU</SolutionConfiguration>
+    <PackageArchitecture>neutral</PackageArchitecture>
+    <PackageIdentityName>047bd335-9f68-41fa-bcf5-07e9f01a28a3</PackageIdentityName>
+    <RegisteredManifestChecksum>22C4A224446CB8D941A066747857ADA5E471F97CCCEAC307C90DD06C940C7FDA</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>047bd335-9f68-41fa-bcf5-07e9f01a28a3_1.0.0.0_neutral__v30vr5hfa5qb0</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>047bd335-9f68-41fa-bcf5-07e9f01a28a3_v30vr5hfa5qb0!App</RegisteredUserModeAppID>
+    <RegisteredPackageID>047bd335-9f68-41fa-bcf5-07e9f01a28a3</RegisteredPackageID>
+    <RegisteredPackagePublisher>CN=Markus</RegisteredPackagePublisher>
+    <RegisteredVersion>1.0.0.0</RegisteredVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\bin\Debug\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2013-12-20T21:47:16.519</Modified>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\bin\Debug\Debugging.exe">
+      <PackagePath>Debugging.exe</PackagePath>
+      <Modified>2013-12-21T16:49:41.229</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\Builds\Assets\Plugins\Metro\MultiPlatform.dll">
+      <PackagePath>MultiPlatform.dll</PackagePath>
+      <Modified>2013-12-21T01:02:24.111</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\Assets\Logo.scale-100.png">
+      <PackagePath>Assets\Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2013-04-26T02:36:00.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\Assets\SmallLogo.scale-100.png">
+      <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2013-04-26T02:36:00.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\Assets\SplashScreen.scale-100.png">
+      <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2013-04-26T02:36:00.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\Assets\StoreLogo.scale-100.png">
+      <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2013-04-26T02:36:00.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\bin\Debug\App.xbf">
+      <PackagePath>App.xbf</PackagePath>
+      <Modified>2013-12-20T21:47:12.987</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\bin\Debug\MainPage.xbf">
+      <PackagePath>MainPage.xbf</PackagePath>
+      <Modified>2013-12-20T21:47:12.987</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Markus\Desktop\MultiPlatformMetro\Debugging\bin\Debug\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+      <Modified>2013-12-20T21:47:15.847</Modified>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>

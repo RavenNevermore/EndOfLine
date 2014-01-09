@@ -11,15 +11,15 @@ build/
 # Visual Studio / MonoDevelop generated #
 # ===================================== #
 ExportedObj/
-*.svd
-*.userprefs
-*.csproj
-*.pidb
-*.suo
-*.sln
-*.user
-*.unityproj
-*.booproj
+GridForce/*.svd
+GridForce/*.userprefs
+GridForce/*.csproj
+GridForce/*.pidb
+GridForce/*.suo
+GridForce/*.sln
+GridForce/*.user
+GridForce/*.unityproj
+GridForce/*.booproj
 
 # ============ #
 # OS generated #
