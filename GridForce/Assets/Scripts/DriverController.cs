@@ -194,7 +194,7 @@ public class DriverController : MonoBehaviour
 
 	
 	// Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (!(this.killed))
         {
@@ -393,8 +393,8 @@ public class DriverController : MonoBehaviour
                 {
                     if (lookDirection.sqrMagnitude > 0)
                     {
-                        this.trailCollisionSegment.localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
                         UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.trailCollisionSegment, this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f)), Quaternion.LookRotation(lookDirection, this.nodeList[i].normal));
+                        ((Transform)(newObject)).localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
                         ((Transform)(newObject)).parent = this.trailCollisionObject.transform;
                         this.colliderList.Add((Transform)(newObject));
                         currentCollider++;
