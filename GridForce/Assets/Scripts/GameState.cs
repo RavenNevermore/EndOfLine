@@ -14,10 +14,12 @@ public class GameState : MonoBehaviour
 	void Start (){
 		this.createPlayer();
 
-		this.arenaSettings.bots -= 
+		/*this.arenaSettings.bots -= 
 			(this.arenaSettings.spawnPoints.Count + 1) - this.arenaSettings.bots;
-
+		Debug.Log("Will create " + this.arenaSettings.bots + " bots");
+*/
 		for (int i = 1; i <= this.arenaSettings.bots; i++){
+			Debug.Log("Creating Bot " + i);
 			this.createDriver(i);
 		}
 	}
