@@ -6,6 +6,7 @@ public class ArenaSettings : MonoBehaviour
 {
     public float gridSize = 1.0f;
     public List<Transform> spawnPoints = new List<Transform>();
+	public int bots = 0;
 
     // Use this for initialization
 	void Start ()
