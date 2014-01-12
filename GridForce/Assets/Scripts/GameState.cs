@@ -26,6 +26,9 @@ public class GameState : MonoBehaviour
     {
         this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
         this.networkView.group = 0;
+
+        if (Network.connections.Length <= 0)
+            this.StartGameRPC();
 	}
 
     // Update is called once per frame

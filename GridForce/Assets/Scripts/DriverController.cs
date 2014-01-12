@@ -218,7 +218,7 @@ public class DriverController : MonoBehaviour
 	// Update is called once per frame
     void Update()
     {
-        if (this.killed && this.networkView.isMine)
+        if (this.killed && (Network.connections.Length <= 0 || this.networkView.isMine))
         {
             this.killTimer -= Time.deltaTime;
             if (this.killTimer <= 0.0f)
@@ -278,7 +278,7 @@ public class DriverController : MonoBehaviour
 
             // Get player action
 
-            if (this.networkView.isMine)
+            if (Network.connections.Length <= 0 || this.networkView.isMine)
             {
 
 #if UNITY_STANDALONE || UNITY_EDITOR
@@ -486,7 +486,7 @@ public class DriverController : MonoBehaviour
                 }
             }
 
-            for (int i = currentCollider; i < this.colliderList.Count; i++)
+            for (int i = currentCollider; i < this.colliderList.Count && this.colliderList[i] != null; i++)
             {
                 this.colliderList[i].collider.enabled = false;
             }
