@@ -499,6 +499,9 @@ public class DriverController : MonoBehaviour
             totalMovement = new Vector3((float)(Math.Round(totalMovement.x, 1)), (float)(Math.Round(totalMovement.y, 1)), (float)(Math.Round(totalMovement.z, 1)));
             if (this.characterController.enabled)
                 this.characterController.Move(totalMovement * Time.deltaTime);
+
+            if (this.transform.position.magnitude > this.arenaSettings.maxDistance)
+                this.Kill();
         }
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), this.rotationSpeed * Time.deltaTime);
