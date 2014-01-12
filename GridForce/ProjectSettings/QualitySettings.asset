@@ -4,7 +4,7 @@
 QualitySettings:
   m_ObjectHideFlags: 0
   serializedVersion: 5
-  m_CurrentQuality: 2
+  m_CurrentQuality: 4
   m_QualitySettings:
   - serializedVersion: 2
     name: Fastest
@@ -88,7 +88,7 @@ QualitySettings:
     - iPhone
   - serializedVersion: 2
     name: Beautiful
-    pixelLightCount: 3
+    pixelLightCount: 10
     shadows: 2
     shadowResolution: 2
     shadowProjection: 1
@@ -108,7 +108,7 @@ QualitySettings:
     - iPhone
   - serializedVersion: 2
     name: Fantastic
-    pixelLightCount: 4
+    pixelLightCount: 10
     shadows: 2
     shadowResolution: 2
     shadowProjection: 1

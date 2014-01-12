@@ -6,51 +6,85 @@ public class GameState : MonoBehaviour
 {
     public ArenaSettings arenaSettings = null;    // Arena settings
     public Transform driverGameObject = null;     // Driver game object
-    public Transform cameraTransform = null;      // Camera transform
+    private bool gameStarted = false;
 
-    private List<Transform> activerPlayers = new List<Transform>();     // List of players
+    private Transform currentPlayerObject = null;   // Current player object
 
-	// Use this for initialization
-	void Start (){
-		this.createPlayer();
-
-		/*this.arenaSettings.bots -= 
-			(this.arenaSettings.spawnPoints.Count + 1) - this.arenaSettings.bots;
-		Debug.Log("Will create " + this.arenaSettings.bots + " bots");
-*/
-		for (int i = 1; i <= this.arenaSettings.bots; i++){
-			Debug.Log("Creating Bot " + i);
-			this.createDriver(i);
-		}
-	}
-
-	void createPlayer(){
-		DriverController driver = this.createDriver(0);
-		driver.cameraTransform = this.cameraTransform;
-	}
-
-	DriverController createDriver(int spawnpoint){
-		UnityEngine.Object newObject = UnityEngine.Object.Instantiate(
-			this.driverGameObject, 
-			this.arenaSettings.spawnPoints[spawnpoint].position, 
-			this.arenaSettings.spawnPoints[spawnpoint].rotation);
-		activerPlayers.Add((Transform)(newObject));
-		
-		DriverController driver = ((Transform)(newObject)).gameObject.GetComponent<DriverController>();
-		driver.arenaSettings = this.arenaSettings;
-		return driver;
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    private static Color[] colorList = new Color[]   // List of possible colors
     {
-        if (activerPlayers[0] == null)
-        {
-            UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.driverGameObject, this.arenaSettings.spawnPoints[0].position, this.arenaSettings.spawnPoints[0].rotation);
-            DriverController driver = ((Transform)(newObject)).gameObject.GetComponent<DriverController>();
-            driver.arenaSettings = this.arenaSettings;
-            driver.cameraTransform = this.cameraTransform;
-            activerPlayers[0] = ((Transform)(newObject));
-        }	
+        new Color(0.8f, 0.0f, 0.0f, 1.0f),
+        new Color(0.0f, 0.8f, 0.0f, 1.0f),
+        new Color(0.0f, 0.0f, 0.8f, 1.0f),
+        new Color(0.6f, 0.0f, 0.6f, 1.0f)
+    };
+
+    private int spawnPoint = 0;    // This player's initial spawn point
+    private Color playerColor = colorList[0];  // This player's colors
+
+    // Use this for initialization
+    void Start()
+    {
+        this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
+        this.networkView.group = 0;
 	}
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (this.gameStarted && this.currentPlayerObject == null)
+        {
+            this.createDriverObject(Random.Range(0, this.arenaSettings.spawnPoints.Count - 1), this.playerColor);
+        }
+    }
+
+
+    // Instantiate a player object
+	void createDriverObject(int spawnpoint, Color playerColor)
+    {
+        int i = Mathf.Min(spawnpoint, this.arenaSettings.spawnPoints.Count - 1);
+        UnityEngine.Object newObject = UnityEngine.Network.Instantiate(this.driverGameObject, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation, 0);
+		DriverController driver = ((Transform)(newObject)).gameObject.GetComponent<DriverController>();
+        driver.arenaSettings = this.arenaSettings;
+        driver.cameraTransform = this.arenaSettings.cameraTransform;
+        this.currentPlayerObject = ((Transform)(newObject));
+    }
+
+
+    public IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        int i = 0;
+        foreach (NetworkPlayer player in Network.connections)
+        {
+            i++;
+            this.networkView.RPC("AssignVariables", player, Mathf.Min(i, this.arenaSettings.spawnPoints.Count - 1), colorList[i].r, colorList[i].g, colorList[i].b, colorList[i].a);
+        }
+
+        this.networkView.RPC("StartGameRPC", RPCMode.All);
+    }
+
+    [RPC]
+    void AssignVariables(int spawnPoint, float colorR, float colorG, float colorB, float colorA)
+    {
+        this.spawnPoint = spawnPoint;
+        this.playerColor = new Color(colorR, colorG, colorB, colorA);
+    }
+
+    [RPC]
+    void StartGameRPC()
+    {
+        GameObject.Find("preview_state").SetActive(false);
+        this.arenaSettings.cameraTransform.gameObject.SetActive(true);
+
+        this.gameStarted = true;
+        this.createDriverObject(this.spawnPoint, this.playerColor);
+    }
+
+
+    void OnNetworkInstantiate(NetworkMessageInfo info)
+    {
+        if (Network.isServer)
+            StartCoroutine(this.StartGame());
+    }
 }

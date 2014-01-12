@@ -2,7 +2,11 @@ fileFormatVersion: 2
 guid: 908d520db3f8247f19a561f3dc15ace5
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - debugMenuState: {instanceID: 0}
+  - previewState: {fileID: 100008, guid: 971012cdfae7ca643b16eea25e620250, type: 2}
+  - previewHostObject: {instanceID: 0}
+  - previewClientObject: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

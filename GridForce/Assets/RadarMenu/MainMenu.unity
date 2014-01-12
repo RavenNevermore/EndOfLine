@@ -854,7 +854,8 @@ MonoBehaviour:
   type: 0
   hostName: 
   hostIp: 
-  arenaName: 
+  portNumber: 21496
+  arenaName: Testarena5
   vehicleName: 
   color: 
 --- !u!4 &623721123
@@ -2111,7 +2112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuCamera: {fileID: 0}
   hostName: Marvin
-  hostIp: 1.2.3.4
+  hostIp: 127.0.0.1
   otherPlayers: 7
 --- !u!1 &1453687591
 GameObject:
@@ -2475,6 +2476,10 @@ Prefab:
     - target: {fileID: 400002, guid: 4094af6bfa00a4bad85d229d34cd2677, type: 2}
       propertyPath: m_LocalScale.x
       value: .038414631
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 4094af6bfa00a4bad85d229d34cd2677, type: 2}
+      propertyPath: hostIp
+      value: 127.0.0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4094af6bfa00a4bad85d229d34cd2677, type: 2}

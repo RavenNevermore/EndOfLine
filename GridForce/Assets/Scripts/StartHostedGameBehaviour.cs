@@ -4,17 +4,15 @@ using System.Collections;
 public class StartHostedGameBehaviour : MonoBehaviour {
 
 	public GameObject previewState;
-	public GameObject gameState;
+    public GameObject gameStatePrefab = null;
 
-	void Start () {
+	void Start ()
+    {
 		Input.simulateMouseWithTouches = true;
 	}
 
-	void OnMouseDown(){
-
-		//notify clients that the game starts.
-
-		this.previewState.SetActive(false);
-		this.gameState.SetActive(true);
+	void OnMouseDown()
+    {
+        UnityEngine.Object newObject = UnityEngine.Network.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity, 0);
 	}
 }

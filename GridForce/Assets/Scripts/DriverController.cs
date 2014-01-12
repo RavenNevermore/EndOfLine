@@ -501,4 +501,10 @@ public class DriverController : MonoBehaviour
             this.Kill();
         }
     }
+
+    // On trigger stay
+    void OnTriggerStay(Collider collider)
+    {
+        this.OnTriggerEnter(collider);
+    }
 }

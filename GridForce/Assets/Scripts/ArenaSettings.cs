@@ -6,7 +6,7 @@ public class ArenaSettings : MonoBehaviour
 {
     public float gridSize = 1.0f;
     public List<Transform> spawnPoints = new List<Transform>();
-	public int bots = 0;
+    public Transform cameraTransform = null;      // Camera transform
 
     // Use this for initialization
 	void Start ()
