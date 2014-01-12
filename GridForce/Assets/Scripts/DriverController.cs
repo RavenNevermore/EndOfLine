@@ -722,4 +722,11 @@ public class DriverController : MonoBehaviour
             }
         }
     }
+
+    // Call when instantiated on network
+    void OnNetworkInstantiate(NetworkMessageInfo info)
+    {
+        if (!(this.networkView.isMine))
+            this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
+    }
 }
