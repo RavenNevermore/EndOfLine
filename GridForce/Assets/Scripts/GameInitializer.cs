@@ -23,16 +23,15 @@ public class GameInitializer : MonoBehaviour {
 			this.previewState.SetActive(false);
 		else
         {
-            // BUG: client object and host object swapped?!?
 			if (MenuState.GameType.HOST.Equals(lastMenuState.type))
             {
-				this.previewClientObject.SetActive(true);
-				this.previewHostObject.SetActive(false);
+				this.previewClientObject.SetActive(false);
+				this.previewHostObject.SetActive(true);
 			}
             else
             {
-				this.previewHostObject.SetActive(true);
-                this.previewClientObject.SetActive(false);
+				this.previewHostObject.SetActive(false);
+                this.previewClientObject.SetActive(true);
 			}
 
 			this.previewState.SetActive(true);
