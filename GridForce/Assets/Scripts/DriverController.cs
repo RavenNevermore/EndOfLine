@@ -519,7 +519,10 @@ public class DriverController : MonoBehaviour
     {
         if (!(this.killed))
         {
-            this.networkView.RPC("KillRPC", RPCMode.All);
+            if (Network.connections.Length > 0)
+                this.networkView.RPC("KillRPC", RPCMode.All);
+            else
+                this.KillRPC();
         }
     }
 
