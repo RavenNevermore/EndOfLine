@@ -309,6 +309,7 @@ MonoBehaviour:
   cameraAngleShift: {x: 0, y: 1, z: 0}
   swipeSpeed: 1500
   mainColor: {r: .0758621693, g: 1, b: 0, a: 1}
+  updateColor: 1
 --- !u!143 &14300000
 CharacterController:
   m_ObjectHideFlags: 1
@@ -331,7 +332,7 @@ NetworkView:
   m_GameObject: {fileID: 100006}
   m_Enabled: 1
   m_StateSynchronization: 1
-  m_Observed: {fileID: 400006}
+  m_Observed: {fileID: 11400002}
   m_ViewID:
     m_ID: 0
     m_Type: 0

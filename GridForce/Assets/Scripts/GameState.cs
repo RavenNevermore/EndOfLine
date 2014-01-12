@@ -13,9 +13,9 @@ public class GameState : MonoBehaviour
     private static Color[] colorList = new Color[]   // List of possible colors
     {
         new Color(0.8f, 0.0f, 0.0f, 1.0f),
-        new Color(0.0f, 0.8f, 0.0f, 1.0f),
         new Color(0.0f, 0.0f, 0.8f, 1.0f),
-        new Color(0.6f, 0.0f, 0.6f, 1.0f)
+        new Color(0.6f, 0.0f, 0.6f, 1.0f),
+        new Color(0.0f, 0.8f, 0.0f, 1.0f)
     };
 
     private int spawnPoint = 0;    // This player's initial spawn point
@@ -42,14 +42,20 @@ public class GameState : MonoBehaviour
 	void createDriverObject(int spawnpoint, Color playerColor)
     {
         int i = Mathf.Min(spawnpoint, this.arenaSettings.spawnPoints.Count - 1);
-        UnityEngine.Object newObject = UnityEngine.Network.Instantiate(this.driverGameObject, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation, 0);
+        UnityEngine.Object newObject = null;
+        if (Network.connections.Length > 0)
+            newObject = UnityEngine.Network.Instantiate(this.driverGameObject, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation, 0);
+        else
+            newObject = UnityEngine.Object.Instantiate(this.driverGameObject, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation);
 		DriverController driver = ((Transform)(newObject)).gameObject.GetComponent<DriverController>();
         driver.arenaSettings = this.arenaSettings;
         driver.cameraTransform = this.arenaSettings.cameraTransform;
+        driver.mainColor = this.playerColor;
+        driver.updateColor = true;
         this.currentPlayerObject = ((Transform)(newObject));
     }
 
-
+    // Start hosted game
     public IEnumerator StartGame()
     {
         yield return new WaitForSeconds(0.1f);
@@ -64,6 +70,7 @@ public class GameState : MonoBehaviour
         this.networkView.RPC("StartGameRPC", RPCMode.All);
     }
 
+    // Assign player-specific variables
     [RPC]
     void AssignVariables(int spawnPoint, float colorR, float colorG, float colorB, float colorA)
     {
@@ -71,6 +78,7 @@ public class GameState : MonoBehaviour
         this.playerColor = new Color(colorR, colorG, colorB, colorA);
     }
 
+    // Start game remote call
     [RPC]
     void StartGameRPC()
     {
@@ -81,7 +89,7 @@ public class GameState : MonoBehaviour
         this.createDriverObject(this.spawnPoint, this.playerColor);
     }
 
-
+    // Call when instantiated on network
     void OnNetworkInstantiate(NetworkMessageInfo info)
     {
         if (Network.isServer)

@@ -17,6 +17,7 @@ public class DriverController : MonoBehaviour
     public Vector3 cameraAngleShift = new Vector3(0.0f, 1.0f, 0.0f);      // The shift of camera angle after calculation
     public float swipeSpeed = 1500.0f;     // Speed of touch input swipe
     public Color mainColor = new Color(0.0f, 0.0f, 0.9f);    // Main color of light and trail
+    public bool updateColor = true;     // Whether to update player's color
 
     private const int layerDrivable = 8;     // Layer of drivable plane
     private const int layerNonDrivable = 9;    // Layer of non drivable plane
@@ -28,6 +29,7 @@ public class DriverController : MonoBehaviour
     private CharacterController characterController;        // Character controller
     private TimedTrailRenderer trailRenderer;      // This object's trail renderer
     private TrailRenderer cameraTrail;      // This object's trail renderer for the camera
+    private MeshRenderer meshRenderer;      // This object's mesh renderer
     private Vector3 moveDirection;          // Character move direction
     private Vector3 gravityDirection;       // Character gravity
     private float gridSize = 1.0f;          // Grid size
@@ -37,8 +39,14 @@ public class DriverController : MonoBehaviour
     private int fingerId = -1;      // Id of first finger touching screen
     private List<Transform> colliderList = new List<Transform>();   // List of colliders
     private bool killed = false;    // True when driver was killed
-    private bool invincible = false;       // Driver invincible, when true
+    private float invincibleTimer = 3.0f;       // Driver invincible
+    private float harmlessTimer = 3.0f;         // Driver can't hurt other players
     private GameObject trailCollisionObject;    // Trail collisions' parent game object
+    private float killTimer = 3.0f;     // Seconds until object is destroyed
+
+    private float lightColorA = 1.0f;       // Light's original alpha value
+    private float[] trailRendererA = null;    // Trail renderer's original alpha values
+    private float cameraTrailA = 1.0f;      // Camera trail's original alpha value
 
 
     // Defines a path node
@@ -130,12 +138,18 @@ public class DriverController : MonoBehaviour
     // Update all colors to main color
     private void UpdateColors()
     {
+        Color currentColor = this.mainColor;
+        if (this.harmlessTimer > 0.0f)
+            currentColor = new Color(currentColor.r * 0.35f, currentColor.g * 0.35f, currentColor.b * 0.35f, currentColor.a * 0.1f);
+
         Light light = this.GetComponentInChildren<Light>();
-        light.color = new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, light.color.a * this.mainColor.a);
-        
-        for (int i = 0; i < this.trailRenderer.colors.GetLength(0); i++)
-            this.trailRenderer.colors[i] = new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, this.trailRenderer.colors[i].a * this.mainColor.a);
-        this.cameraTrail.material.SetColor("_TintColor", new Color(this.mainColor.r, this.mainColor.g, this.mainColor.b, this.cameraTrail.material.GetColor("_TintColor").a * this.mainColor.a));
+        if (light != null)
+            light.color = new Color(currentColor.r, currentColor.g, currentColor.b, lightColorA * currentColor.a);
+
+        for (int i = 0; this.trailRenderer != null && i < this.trailRenderer.colors.GetLength(0); i++)
+            this.trailRenderer.colors[i] = new Color(currentColor.r, currentColor.g, currentColor.b, this.trailRendererA[i] * currentColor.a);
+        if (this.cameraTrail != null)
+            this.cameraTrail.material.SetColor("_TintColor", new Color(currentColor.r, currentColor.g, currentColor.b, this.cameraTrailA * currentColor.a));
     }
 
 
@@ -153,11 +167,21 @@ public class DriverController : MonoBehaviour
         this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
         this.cameraTrail = this.GetComponentInChildren<TrailRenderer>();
         this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
+        this.meshRenderer = this.GetComponentInChildren<MeshRenderer>();
+
+        Light light = this.GetComponentInChildren<Light>();
+        this.lightColorA = light.color.a;
+        this.trailRendererA = new float[this.trailRenderer.colors.GetLength(0)];
+        for (int i = 0; i < this.trailRenderer.colors.GetLength(0); i++)
+            this.trailRendererA[i] = this.trailRenderer.colors[i].a;
+        this.cameraTrailA = this.cameraTrail.material.GetColor("_TintColor").a;
 
         if (this.arenaSettings != null)
             this.gridSize = this.arenaSettings.gridSize;
 
         this.trailCollisionObject = new GameObject("Trail Collision");
+        TrailCollision trailCollision = this.trailCollisionObject.AddComponent<TrailCollision>();
+        trailCollision.owner = this;
 
         this.UpdateColors();
 
@@ -194,9 +218,52 @@ public class DriverController : MonoBehaviour
 	// Update is called once per frame
     void Update()
     {
+        if (this.killed && this.networkView.isMine)
+        {
+            this.killTimer -= Time.deltaTime;
+            if (this.killTimer <= 0.0f)
+            {
+                if (Network.connections.Length > 0)
+                    UnityEngine.Network.Destroy(this.gameObject);
+                else
+                    UnityEngine.Object.Destroy(this.gameObject);
+            }
+        }
+
+        if (this.meshRenderer != null)
+        {
+            if (this.invincibleTimer > 0.0f)
+            {
+                this.invincibleTimer -= Time.deltaTime;
+                float modulo = this.invincibleTimer % 0.1f;
+                if (modulo > 0.05f)
+                    this.meshRenderer.enabled = false;
+                else
+                    this.meshRenderer.enabled = true;
+            }
+            else
+                this.meshRenderer.enabled = true;
+        }
+
+        if (this.harmlessTimer > 0.0f)
+        {
+            if (this.trailCollisionObject != null)
+                this.trailCollisionObject.SetActive(false);
+            this.harmlessTimer -= Time.deltaTime;
+            this.updateColor = true;
+        }
+        else if (this.trailCollisionObject != null)
+            this.trailCollisionObject.SetActive(true);
+
+        if (this.updateColor)
+        {
+            this.UpdateColors();
+            this.updateColor = false;
+        }
+
         if (!(this.killed))
         {
-            if (this.invincible)
+            if (this.invincibleTimer > 0.0f)
                 this.gameObject.layer = DriverController.layerDriverInvincible;
             else
                 this.gameObject.layer = DriverController.layerDriver;
@@ -210,57 +277,62 @@ public class DriverController : MonoBehaviour
             Vector3 gravityRayEnd = gravityRayStart + (this.gravityDirection * (this.characterController.height + 0.1f));
 
             // Get player action
+
+            if (this.networkView.isMine)
+            {
+
 #if UNITY_STANDALONE || UNITY_EDITOR
 
-            if (this.playerAction == PlayerAction.None)
-            {
-                if (Input.GetButtonDown("Left"))
+                if (this.playerAction == PlayerAction.None)
                 {
-                    this.playerAction = PlayerAction.TurnLeft;
+                    if (Input.GetButtonDown("Left"))
+                    {
+                        this.playerAction = PlayerAction.TurnLeft;
+                    }
+                    else if (Input.GetButtonDown("Right"))
+                    {
+                        this.playerAction = PlayerAction.TurnRight;
+                    }
+                    else if (Input.GetButtonDown("Item"))
+                    {
+                        this.playerAction = PlayerAction.UseItem;
+                    }
+                    else if (Input.GetButtonDown("Cancel"))
+                    {
+                        Application.Quit();
+                    }
                 }
-                else if (Input.GetButtonDown("Right"))
-                {
-                    this.playerAction = PlayerAction.TurnRight;
-                }
-                else if (Input.GetButtonDown("Item"))
-                {
-                    this.playerAction = PlayerAction.UseItem;
-                }
-                else if (Input.GetButtonDown("Cancel"))
-                {
-                    Application.Quit();
-                }
-            }
 
 #endif
 
-            foreach (Touch touch in Input.touches)
-            {
-                if (this.fingerId >= 0 && touch.fingerId != this.fingerId)
-                    continue;
-
-                if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude / touch.deltaTime >= this.swipeSpeed && this.fingerId != touch.fingerId)
+                foreach (Touch touch in Input.touches)
                 {
-                    float direction = 1000.0f;
-                    if (touch.deltaPosition.x != 0.0f)
-                        direction = touch.deltaPosition.y / touch.deltaPosition.x;
+                    if (this.fingerId >= 0 && touch.fingerId != this.fingerId)
+                        continue;
 
-                    if (direction > -1.0f && direction < 1.0f)
+                    if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude / touch.deltaTime >= this.swipeSpeed && this.fingerId != touch.fingerId)
                     {
-                        if (touch.deltaPosition.x < 0.0f)
-                            this.playerAction = PlayerAction.TurnLeft;
-                        else
-                            this.playerAction = PlayerAction.TurnRight;
+                        float direction = 1000.0f;
+                        if (touch.deltaPosition.x != 0.0f)
+                            direction = touch.deltaPosition.y / touch.deltaPosition.x;
+
+                        if (direction > -1.0f && direction < 1.0f)
+                        {
+                            if (touch.deltaPosition.x < 0.0f)
+                                this.playerAction = PlayerAction.TurnLeft;
+                            else
+                                this.playerAction = PlayerAction.TurnRight;
+                        }
+                        else if (touch.deltaPosition.y < 0.0f)
+                            this.playerAction = PlayerAction.UseItem;
+
+                        this.fingerId = touch.fingerId;
                     }
-                    else if (touch.deltaPosition.y < 0.0f)
-                        this.playerAction = PlayerAction.UseItem;
 
-                    this.fingerId = touch.fingerId;
-                }
-
-                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled && this.fingerId != touch.fingerId)
-                {
-                    this.fingerId = -1;
+                    if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled && this.fingerId != touch.fingerId)
+                    {
+                        this.fingerId = -1;
+                    }
                 }
             }
 
@@ -268,7 +340,6 @@ public class DriverController : MonoBehaviour
             if (this.playerAction == PlayerAction.UseItem)
             {
                 this.playerAction = PlayerAction.None;
-                this.invincible = !(this.invincible);
             }
 
             RaycastHit raycastHit;
@@ -325,7 +396,7 @@ public class DriverController : MonoBehaviour
                     this.playerAction = PlayerAction.None;
                 }
 
-                if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable && !(this.invincible))
+                if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable && !(this.invincibleTimer > 0.0f))
                 {
                     this.Kill();
                 }
@@ -403,12 +474,15 @@ public class DriverController : MonoBehaviour
                 }
                 else
                 {
-                    this.colliderList[i].collider.enabled = true;
-                    this.colliderList[i].localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
-                    this.colliderList[i].position = this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f));
-                    if (lookDirection.sqrMagnitude > 0)
-                        this.colliderList[i].rotation = Quaternion.LookRotation(lookDirection, this.nodeList[i].normal);
-                    currentCollider++;
+                    if (this.colliderList[i] != null)
+                    {
+                        this.colliderList[i].collider.enabled = true;
+                        this.colliderList[i].localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
+                        this.colliderList[i].position = this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f));
+                        if (lookDirection.sqrMagnitude > 0)
+                            this.colliderList[i].rotation = Quaternion.LookRotation(lookDirection, this.nodeList[i].normal);
+                        currentCollider++;
+                    }
                 }
             }
 
@@ -445,31 +519,73 @@ public class DriverController : MonoBehaviour
     {
         if (!(this.killed))
         {
-            this.mainColor = new Color(this.mainColor.r * 0.35f, this.mainColor.g * 0.35f, this.mainColor.b * 0.35f, this.mainColor.a * 0.1f);
-            this.UpdateColors();
+            this.networkView.RPC("KillRPC", RPCMode.All);
+        }
+    }
 
+
+    [RPC]
+    void KillRPC()
+    {
+        if (this.killed)
+            return;
+
+        this.killed = true;
+
+        this.harmlessTimer = 100.0f;
+        this.UpdateColors();
+
+        if (this.trailRenderer != null)
             this.trailRenderer.gameObject.transform.parent = null;
+        if (this.cameraTrail != null)
             this.cameraTrail.gameObject.transform.parent = null;
 
-            UnityEngine.Object explosion = UnityEngine.Object.Instantiate(this.explosionPrefab, this.transform.position, this.transform.rotation);
-            ParticleSystem particleSystem = ((Transform)(explosion)).gameObject.GetComponent<ParticleSystem>();
-            particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
-            particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
-            particleSystem = ((Transform)(explosion)).gameObject.GetComponentsInChildren<ParticleSystem>()[1];
-            particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
-            particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
-            UnityEngine.Object.Destroy(((Transform)(explosion)).gameObject, 3.0f);
+        UnityEngine.Object explosion = UnityEngine.Object.Instantiate(this.explosionPrefab, this.transform.position, this.transform.rotation);
+        ParticleSystem particleSystem = ((Transform)(explosion)).gameObject.GetComponent<ParticleSystem>();
+        particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
+        particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
+        particleSystem = ((Transform)(explosion)).gameObject.GetComponentsInChildren<ParticleSystem>()[1];
+        particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
+        particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
+        UnityEngine.Object.Destroy(((Transform)(explosion)).gameObject, 3.0f);
 
+        if (this.trailRenderer != null)
+        {
             UnityEngine.Object.Destroy(this.trailRenderer.GetTrail(), this.trailRenderer.lifeTime);
             UnityEngine.Object.Destroy(this.trailRenderer.gameObject, this.trailRenderer.lifeTime);
-            UnityEngine.Object.Destroy(this.cameraTrail.gameObject, this.cameraTrail.time);
-            UnityEngine.Object.Destroy(this.GetComponentInChildren<MeshRenderer>().gameObject);
-            UnityEngine.Object.Destroy(this.GetComponentInChildren<Light>().gameObject);
-            UnityEngine.Object.Destroy(this.trailCollisionObject);
-            UnityEngine.Object.Destroy(this.gameObject, 3.0f);
-
-            this.killed = true;
+            this.trailRenderer = null;
         }
+        if (this.cameraTrail != null)
+        {
+            UnityEngine.Object.Destroy(this.cameraTrail.gameObject, this.cameraTrail.time);
+            this.cameraTrail = null;
+        }
+
+        if (this.meshRenderer != null)
+        {
+            UnityEngine.Object.Destroy(this.meshRenderer.gameObject);
+            this.meshRenderer = null;
+        }
+
+        Light childObject = this.GetComponentInChildren<Light>();
+        if (childObject != null)
+            UnityEngine.Object.Destroy(childObject.gameObject);
+
+        for (int i = 0; i < this.colliderList.Count; i++)
+        {
+            if (this.colliderList[i] != null)
+            {
+                this.colliderList[i].collider.enabled = false;
+                this.colliderList[i] = null;
+            }
+        }
+        if (this.trailCollisionObject != null)
+        {
+            UnityEngine.Object.Destroy(this.trailCollisionObject);
+            this.trailCollisionObject = null;
+        }
+
+        this.characterController.enabled = false;
     }
     
     
@@ -477,9 +593,9 @@ public class DriverController : MonoBehaviour
     // On trigger enter
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.tag == this.trailCollisionSegment.tag)
+        if (collider.tag == this.trailCollisionSegment.tag || collider.tag == this.tag)
         {
-            if (this.invincible || this.killed)
+            if (this.invincibleTimer > 0.0f || this.killed)
                 return;
 
             if (collider.gameObject.transform.parent == this.trailCollisionObject.transform)
@@ -499,6 +615,21 @@ public class DriverController : MonoBehaviour
             }
 
             this.Kill();
+
+            // Check if driver is crashing into other driver and kill both
+            DriverController otherDriver = null;
+            if (collider.tag == this.tag)
+                otherDriver = collider.gameObject.GetComponent<DriverController>();
+            else if (collider.tag == this.trailCollisionSegment.tag)
+                otherDriver = collider.gameObject.transform.parent.GetComponent<TrailCollision>().owner;
+            
+            if (otherDriver != null)
+            {
+                if (otherDriver.invincibleTimer <= 0.0f && (otherDriver.transform.position - this.transform.position).magnitude <= 1.0f)
+                {
+                    otherDriver.Kill();
+                }
+            }
         }
     }
 
@@ -506,5 +637,82 @@ public class DriverController : MonoBehaviour
     void OnTriggerStay(Collider collider)
     {
         this.OnTriggerEnter(collider);
+    }
+
+    // Send data over network
+    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
+    {
+        float colorR = 0.0f;
+        float colorG = 0.0f;
+        float colorB = 0.0f;
+        float colorA = 0.0f;
+        Vector3 position = Vector3.zero;
+        Quaternion rotation = Quaternion.identity;
+        int totalNodes = 0;
+        Vector3 nodePos = Vector3.zero;
+        Vector3 nodeNormal = Vector3.zero;
+
+        if (stream.isWriting)
+        {
+            colorR = this.mainColor.r;
+            colorG = this.mainColor.g;
+            colorB = this.mainColor.b;
+            colorA = this.mainColor.a;
+            stream.Serialize(ref colorR);
+            stream.Serialize(ref colorG);
+            stream.Serialize(ref colorB);
+            stream.Serialize(ref colorA);
+            stream.Serialize(ref this.moveDirection);
+            stream.Serialize(ref this.gravityDirection);
+            position = this.transform.position;
+            stream.Serialize(ref position);
+            rotation = this.transform.rotation;
+            stream.Serialize(ref rotation);
+            stream.Serialize(ref this.killed);
+            stream.Serialize(ref this.invincibleTimer);
+
+            totalNodes = this.nodeList.Count;
+            stream.Serialize(ref totalNodes);
+            for (int i = 0; i < this.nodeList.Count; i++)
+            {
+                nodePos = this.nodeList[i].position;
+                stream.Serialize(ref nodePos);
+                nodeNormal = this.nodeList[i].normal;
+                stream.Serialize(ref nodeNormal);
+            }
+        }
+        else
+        {
+            // Receiving data...
+            stream.Serialize(ref colorR);
+            stream.Serialize(ref colorG);
+            stream.Serialize(ref colorB);
+            stream.Serialize(ref colorA);
+            Color currentColor = new Color(colorR, colorG, colorB, colorA);
+            if (!(this.mainColor.Equals(currentColor)))
+            {
+                this.mainColor = currentColor;
+                this.updateColor = true;
+            }
+            stream.Serialize(ref this.moveDirection);
+            stream.Serialize(ref this.gravityDirection);
+            stream.Serialize(ref position);
+            this.transform.position = position;
+            stream.Serialize(ref rotation);
+            this.transform.rotation = rotation;
+            stream.Serialize(ref this.killed);
+            stream.Serialize(ref this.invincibleTimer);
+
+            stream.Serialize(ref totalNodes);
+            for (int i = 0; i < totalNodes; i++)
+            {
+                stream.Serialize(ref nodePos);
+                stream.Serialize(ref nodeNormal);
+                if (i < this.nodeList.Count)
+                    this.nodeList[i] = new PathNode(nodePos, nodeNormal);
+                else
+                    this.nodeList.Add(new PathNode(nodePos, nodeNormal));
+            }
+        }
     }
 }

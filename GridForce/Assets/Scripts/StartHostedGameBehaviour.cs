@@ -13,6 +13,6 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 
 	void OnMouseDown()
     {
-        UnityEngine.Object newObject = UnityEngine.Network.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity, 0);
+        UnityEngine.Network.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity, 0);
 	}
 }
