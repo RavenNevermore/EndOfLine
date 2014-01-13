@@ -34,6 +34,7 @@ public class DriverController : MonoBehaviour
     private Vector3 gravityDirection;       // Character gravity
     private float gridSize = 1.0f;          // Grid size
     private List<PathNode> nodeList = new List<PathNode>();     // List of previous path nodes
+    private List<PathNode> newNodes = new List<PathNode>();     // All new nodes (for smoothly displaying remote player's trail)
     private PlayerAction playerAction = PlayerAction.None;      // Defines player's action
     private Vector3 cameraPos = Vector3.zero;         // The camera's current position relative to the driver
     private int fingerId = -1;      // Id of first finger touching screen
@@ -183,6 +184,12 @@ public class DriverController : MonoBehaviour
         TrailCollision trailCollision = this.trailCollisionObject.AddComponent<TrailCollision>();
         trailCollision.owner = this;
 
+        if (!(this.networkView.isMine))
+        {            
+            this.cameraTrail.transform.parent = this.trailCollisionObject.transform;
+            this.trailRenderer.transform.parent = this.trailCollisionObject.transform;
+        }
+
         this.UpdateColors();
 
         // Snap player to a close node point on grid
@@ -210,6 +217,8 @@ public class DriverController : MonoBehaviour
             nodePos = raycastHit.transform.TransformDirection(nodePos);
 
             this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up));
+            if (Network.connections.Length > 0 && this.networkView.isMine)
+                this.newNodes.Add(new PathNode(this.transform.position, raycastHit.transform.up));
         };
 	}
 
@@ -218,18 +227,6 @@ public class DriverController : MonoBehaviour
 	// Update is called once per frame
     void Update()
     {
-        if (this.killed && (Network.connections.Length <= 0 || this.networkView.isMine))
-        {
-            this.killTimer -= Time.deltaTime;
-            if (this.killTimer <= 0.0f)
-            {
-                if (Network.connections.Length > 0)
-                    UnityEngine.Network.Destroy(this.gameObject);
-                else
-                    UnityEngine.Object.Destroy(this.gameObject);
-            }
-        }
-
         if (this.meshRenderer != null)
         {
             if (this.invincibleTimer > 0.0f)
@@ -263,13 +260,41 @@ public class DriverController : MonoBehaviour
 
         if (!(this.killed))
         {
+            if (!(this.networkView.isMine))
+            {
+                if (this.newNodes.Count > 0)
+                {
+                    Vector3 direction;
+                    if (this.cameraTrail != null)
+                    {
+                        direction = this.newNodes[0].position - this.cameraTrail.transform.position;
+                        this.cameraTrail.transform.rotation = Quaternion.LookRotation(direction, this.newNodes[0].normal);
+                        this.cameraTrail.transform.position = this.newNodes[0].position;
+                    }
+                    if (this.trailRenderer != null)
+                    {
+                        direction = this.newNodes[0].position - this.trailRenderer.transform.position;
+                        this.trailRenderer.transform.rotation = Quaternion.LookRotation(direction, this.newNodes[0].normal);
+                        this.trailRenderer.transform.position = this.newNodes[0].position;
+                    }
+                    this.newNodes.RemoveAt(0);
+                }
+            }
+            else
+            {
+                this.cameraTrail.transform.parent = this.transform;
+                this.trailRenderer.transform.parent = this.transform;
+            }
+
             if (this.invincibleTimer > 0.0f)
                 this.gameObject.layer = DriverController.layerDriverInvincible;
             else
                 this.gameObject.layer = DriverController.layerDriver;
 
-            this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
-            this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
+            if (this.trailRenderer != null)
+                this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
+            if (this.cameraTrail != null)
+                this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
 
             Vector3 totalMovement = Vector3.zero;
 
@@ -351,6 +376,8 @@ public class DriverController : MonoBehaviour
                 {
                     // Change direction if a wall was detected
                     this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection + this.moveDirection).normalized));
+                    if (Network.connections.Length > 0 && this.networkView.isMine)
+                        this.newNodes.Add(new PathNode(this.transform.position, (-this.gravityDirection + this.moveDirection).normalized));
 
                     Vector3 temp = -this.moveDirection;
                     this.moveDirection = this.gravityDirection;
@@ -383,11 +410,15 @@ public class DriverController : MonoBehaviour
                             this.moveDirection = Vector3.Cross(this.gravityDirection, this.moveDirection);
                             this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
                             this.nodeList.Add(nextNode);
+                            if (Network.connections.Length > 0 && this.networkView.isMine)
+                                this.newNodes.Add(new PathNode(nodeOnDriver, nextNode.normal));
                             break;
                         case PlayerAction.TurnRight:
                             this.moveDirection = Vector3.Cross(this.moveDirection, this.gravityDirection);
                             this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
                             this.nodeList.Add(nextNode);
+                            if (Network.connections.Length > 0 && this.networkView.isMine)
+                                this.newNodes.Add(new PathNode(nodeOnDriver, nextNode.normal));
                             break;
                         default:
                             break;
@@ -514,6 +545,18 @@ public class DriverController : MonoBehaviour
 
             targetPos = this.cameraAngleShift.x * this.transform.right + this.cameraAngleShift.y * this.transform.up + this.cameraAngleShift.z * this.transform.forward;
             this.cameraTransform.rotation = Quaternion.LookRotation(-this.cameraPos + targetPos, this.transform.up);
+        }
+
+        if (this.killed && (Network.connections.Length <= 0 || this.networkView.isMine))
+        {
+            this.killTimer -= Time.deltaTime;
+            if (this.killTimer <= 0.0f)
+            {
+                if (Network.connections.Length > 0)
+                    UnityEngine.Network.Destroy(this.gameObject);
+                else
+                    UnityEngine.Object.Destroy(this.gameObject);
+            }
         }
     }
 
@@ -688,6 +731,21 @@ public class DriverController : MonoBehaviour
                 nodeNormal = this.nodeList[i].normal;
                 stream.Serialize(ref nodeNormal);
             }
+
+            totalNodes = this.newNodes.Count + 1;
+            stream.Serialize(ref totalNodes);
+            for (int i = 0; i < this.newNodes.Count; i++)
+            {
+                nodePos = this.newNodes[i].position;
+                stream.Serialize(ref nodePos);
+                nodeNormal = this.newNodes[i].normal;
+                stream.Serialize(ref nodeNormal);
+            }
+            nodePos = this.transform.position;
+            stream.Serialize(ref nodePos);
+            nodeNormal = this.transform.up;
+            stream.Serialize(ref nodeNormal);
+            this.newNodes.Clear();
         }
         else
         {
@@ -712,7 +770,6 @@ public class DriverController : MonoBehaviour
             stream.Serialize(ref this.invincibleTimer);
 
             stream.Serialize(ref totalNodes);
-
             for (int i = 0; i < totalNodes; i++)
             {
                 stream.Serialize(ref nodePos);
@@ -724,6 +781,14 @@ public class DriverController : MonoBehaviour
             }
             while (this.nodeList.Count > totalNodes)
                 this.nodeList.RemoveAt(this.nodeList.Count - 1);
+
+            stream.Serialize(ref totalNodes);
+            for (int i = 0; i < totalNodes; i++)
+            {
+                stream.Serialize(ref nodePos);
+                stream.Serialize(ref nodeNormal);
+                this.newNodes.Add(new PathNode(nodePos, nodeNormal));
+            }
         }
     }
 
@@ -731,6 +796,8 @@ public class DriverController : MonoBehaviour
     void OnNetworkInstantiate(NetworkMessageInfo info)
     {
         if (!(this.networkView.isMine))
+        {
             this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
+        }
     }
 }
