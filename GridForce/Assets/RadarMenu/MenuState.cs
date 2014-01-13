@@ -62,7 +62,7 @@ public class MenuState : MonoBehaviour {
 	}
 
 	[RPC]
-	void setServerDetails(string servername, string arenaname){
+	void SetServerDetails(string servername, string arenaname){
 		if (null == servername || "".Equals(servername.Trim())
 		    && null == arenaname || "".Equals(arenaname.Trim()))
 			return;
@@ -79,9 +79,11 @@ public class MenuState : MonoBehaviour {
     }
 
 
-    void OnPlayerConnected(NetworkPlayer player){
-		Debug.Log("Sending game details to player: "+player);
-		this.networkView.RPC("setServerDetails", player, this.hostName, this.arenaName);
+    void OnPlayerConnected(NetworkPlayer player)
+    {
+		Debug.Log("Sending game details to player: " + player);
+        if (this.networkView != null)
+		    this.networkView.RPC("SetServerDetails", player, this.hostName, this.arenaName);
     }
 
 

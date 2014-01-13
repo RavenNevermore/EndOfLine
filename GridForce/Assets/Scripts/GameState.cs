@@ -30,7 +30,7 @@ public class GameState : MonoBehaviour
         this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
         this.networkView.group = 0;
 
-        for (int i = 0; i < this.arenaSettings.spawnPoints.Count; i++)
+        for (int i = 0; i < 4; i++)
             this.spawnPointList.Add(i);
         for (int i = 0; i < colorArray.GetLength(0); i++)
             this.colorList.Add(colorArray[i]);

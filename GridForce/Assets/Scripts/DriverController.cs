@@ -474,7 +474,7 @@ public class DriverController : MonoBehaviour
                 }
                 else
                 {
-                    if (this.colliderList[i] != null)
+                    if (this.colliderList.Count > i && this.colliderList[i] != null)
                     {
                         this.colliderList[i].collider.enabled = true;
                         this.colliderList[i].localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
