@@ -155,7 +155,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 9d9979d356f54487186f914a168e7d67, type: 2}
+  - {fileID: 2100000, guid: 8ae625edbd732894894aabefcce80e2a, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -308,7 +308,7 @@ MonoBehaviour:
   cameraDistance: {x: 0, y: 2, z: -8}
   cameraAngleShift: {x: 0, y: 1, z: 0}
   swipeSpeed: 1500
-  mainColor: {r: .0758621693, g: 1, b: 0, a: 1}
+  mainColor: {r: .501960814, g: .501960814, b: .501960814, a: 1}
   updateColor: 1
 --- !u!143 &14300000
 CharacterController:

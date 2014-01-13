@@ -375,7 +375,7 @@ public class DriverController : MonoBehaviour
 
                 float nodeDistance = (this.baseSpeed * this.moveDirection * Time.deltaTime).magnitude - (nodeOnDriver - this.transform.position).magnitude;
 
-                if (nodeDistance >= 0 && (nextNode.position - this.transform.position).magnitude <= this.gridSize)
+                if (nextNode.position != this.nodeList[this.nodeList.Count - 1].position && nodeDistance >= 0 && (nextNode.position - this.transform.position).magnitude <= this.gridSize)
                 {
                     switch (this.playerAction)
                     {
@@ -632,7 +632,7 @@ public class DriverController : MonoBehaviour
             
             if (otherDriver != null)
             {
-                if (otherDriver.invincibleTimer <= 0.0f && (otherDriver.transform.position - this.transform.position).magnitude <= 1.0f)
+                if (otherDriver.invincibleTimer <= 0.0f && (otherDriver.transform.position - this.transform.position).magnitude <= 0.9f)
                 {
                     otherDriver.Kill();
                 }
@@ -661,6 +661,7 @@ public class DriverController : MonoBehaviour
 
         if (stream.isWriting)
         {
+            // Sending data...
             colorR = this.mainColor.r;
             colorG = this.mainColor.g;
             colorB = this.mainColor.b;
@@ -711,6 +712,7 @@ public class DriverController : MonoBehaviour
             stream.Serialize(ref this.invincibleTimer);
 
             stream.Serialize(ref totalNodes);
+
             for (int i = 0; i < totalNodes; i++)
             {
                 stream.Serialize(ref nodePos);
@@ -720,6 +722,8 @@ public class DriverController : MonoBehaviour
                 else
                     this.nodeList.Add(new PathNode(nodePos, nodeNormal));
             }
+            while (this.nodeList.Count > totalNodes)
+                this.nodeList.RemoveAt(this.nodeList.Count - 1);
         }
     }
 
