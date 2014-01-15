@@ -16,6 +16,8 @@ public class MenuState : MonoBehaviour {
 
 	public string color;
 
+    public string playerName = "PLAYER NAME";
+
 	public void startGame()
     {
 		NetworkConnectionError connectionError;

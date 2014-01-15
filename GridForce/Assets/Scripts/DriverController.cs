@@ -18,6 +18,8 @@ public class DriverController : MonoBehaviour
     public float swipeSpeed = 1500.0f;     // Speed of touch input swipe
     public Color mainColor = new Color(0.0f, 0.0f, 0.9f);    // Main color of light and trail
     public bool updateColor = true;     // Whether to update player's color
+    public int playerIndex = 0;    // This driver's player index
+    public GameState.PlayerData[] playersRef = null;    // Array of players
 
     private const int layerDrivable = 8;     // Layer of drivable plane
     private const int layerNonDrivable = 9;    // Layer of non drivable plane
@@ -365,7 +367,7 @@ public class DriverController : MonoBehaviour
 
                 float nodeDistance = (this.baseSpeed * this.moveDirection * Time.deltaTime).magnitude - (nodeOnDriver - this.transform.position).magnitude;
 
-                if (nextNode.position != this.nodeList[this.nodeList.Count - 1].position && nodeDistance >= 0 && (nextNode.position - this.transform.position).magnitude <= this.gridSize)
+                if ((this.nodeList.Count <= 0 || nextNode.position != this.nodeList[this.nodeList.Count - 1].position) && nodeDistance >= 0 && (nextNode.position - this.transform.position).magnitude <= this.gridSize)
                 {
                     switch (this.playerAction)
                     {
@@ -388,7 +390,7 @@ public class DriverController : MonoBehaviour
 
                 if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable && !(this.invincibleTimer > 0.0f))
                 {
-                    this.Kill();
+                    this.Kill(-1);
                 }
 
                 //Debug.DrawLine(this.transform.position + (this.moveDirection * 0.4f), this.transform.position + (this.moveDirection * 0.6f), Color.red);
@@ -400,7 +402,7 @@ public class DriverController : MonoBehaviour
                     // Change direction or kill if a wall was detected
                     if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
                     {
-                        this.Kill();
+                        this.Kill(-1);
                     }
                     else
                     {
@@ -491,7 +493,7 @@ public class DriverController : MonoBehaviour
                 this.characterController.Move(totalMovement * Time.deltaTime);
 
             if (this.transform.position.magnitude > this.arenaSettings.maxDistance)
-                this.Kill();
+                this.Kill(-2);
         }
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), this.rotationSpeed * Time.deltaTime);
@@ -521,25 +523,33 @@ public class DriverController : MonoBehaviour
 
 
     // Kill driver
-    void Kill()
+    void Kill(int killer)
     {
         if (!(this.killed))
         {
             if (Network.connections.Length > 0)
-                this.networkView.RPC("KillRPC", RPCMode.All);
+                this.networkView.RPC("KillRPC", RPCMode.All, killer);
             else
-                this.KillRPC();
+                this.KillRPC(killer);
         }
     }
 
 
     [RPC]
-    void KillRPC()
+    void KillRPC(int killer)
     {
         if (this.killed)
             return;
 
         this.killed = true;
+
+        if ((Network.connections.Length <= 0 || Network.isServer) && this.playersRef != null)
+        {
+            if (killer != this.playerIndex && killer >= 0 && this.playersRef.GetLength(0) > killer)
+                this.playersRef[killer].score += 1;
+            if (killer != -2 && this.playersRef.GetLength(0) > this.playerIndex)
+                this.playersRef[this.playerIndex].score -= 1;
+        }
 
         this.harmlessTimer = 100.0f;
         this.UpdateColors();
@@ -623,22 +633,28 @@ public class DriverController : MonoBehaviour
                 }
             }
 
-            this.Kill();
-
-            // Check if driver is crashing into other driver and kill both
             DriverController otherDriver = null;
             if (collider.tag == this.tag)
                 otherDriver = collider.gameObject.GetComponent<DriverController>();
             else if (collider.tag == this.trailCollisionSegment.tag)
                 otherDriver = collider.gameObject.transform.parent.GetComponent<TrailCollision>().owner;
-            
+
+            int killer = -1;
+            if (otherDriver != null)
+                killer = otherDriver.playerIndex;
+
+            this.Kill(killer);
+
+            // Check if driver is crashing into other driver and kill both
+
             if (otherDriver != null)
             {
                 if (otherDriver.invincibleTimer <= 0.0f && (otherDriver.transform.position - this.transform.position).magnitude <= 0.9f)
                 {
-                    otherDriver.Kill();
+                    otherDriver.Kill(this.playerIndex);
                 }
             }
+                
         }
     }
 
@@ -664,6 +680,7 @@ public class DriverController : MonoBehaviour
         if (stream.isWriting)
         {
             // Sending data...
+            stream.Serialize(ref this.playerIndex);
             colorR = this.mainColor.r;
             colorG = this.mainColor.g;
             colorB = this.mainColor.b;
@@ -694,6 +711,7 @@ public class DriverController : MonoBehaviour
         else
         {
             // Receiving data...
+            stream.Serialize(ref this.playerIndex);
             stream.Serialize(ref colorR);
             stream.Serialize(ref colorG);
             stream.Serialize(ref colorB);
@@ -734,6 +752,9 @@ public class DriverController : MonoBehaviour
         if (!(this.networkView.isMine))
         {
             this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
+            GameState gameState = GameObject.FindWithTag("GameState").GetComponent<GameState>();
+            this.playerIndex = gameState.playerIndex;
+            this.playersRef = gameState.players;
         }
     }
 }

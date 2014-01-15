@@ -929,6 +929,7 @@ MonoBehaviour:
   arenaName: Testarena5
   vehicleName: 
   color: 
+  playerName: PLAYER NAME
 --- !u!4 &623721123
 Transform:
   m_ObjectHideFlags: 0

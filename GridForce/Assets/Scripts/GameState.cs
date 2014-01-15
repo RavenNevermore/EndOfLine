@@ -20,13 +20,17 @@ public class GameState : MonoBehaviour
     };
     private List<Color> colorList = new List<Color>();   // Randomized color list
     private List<int> spawnPointList = new List<int>();  // List of randomized points
+    public PlayerData[] players = null;  // Players
 
+    public int playerIndex = 0;    // This player's index
+    public string playerName = "";    // This player's name
     private int spawnPoint = 0;    // This player's initial spawn point
     private Color playerColor = new Color(0.5f, 0.5f, 0.5f, 1.0f);  // This player's color
 
     // Use this for initialization
     void Start()
     {
+        this.playerName = GameObject.Find("state").GetComponent<MenuState>().playerName;
         this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
         this.networkView.group = 0;
 
@@ -40,7 +44,8 @@ public class GameState : MonoBehaviour
 
         if (Network.connections.Length <= 0)
         {
-            this.AssignVariables(Mathf.Min(this.spawnPointList[0], this.arenaSettings.spawnPoints.Count - 1), colorList[0].r, colorList[0].g, colorList[0].b, colorList[0].a);
+            this.AssignVariables(1, 0, Mathf.Min(this.spawnPointList[0], this.arenaSettings.spawnPoints.Count - 1), colorList[0].r, colorList[0].g, colorList[0].b, colorList[0].a);
+            this.AssignPlayerData(0, this.playerName, this.playerColor.r, this.playerColor.g, this.playerColor.b, this.playerColor.a);
             this.StartGameRPC();
         }
 	}
@@ -48,6 +53,11 @@ public class GameState : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        for (int i = 0; this.players != null && i < this.players.GetLength(0); i++)
+        {
+            this.players[i].Update();
+        }
+
         if (this.gameStarted && this.currentPlayerObject == null)
         {
             this.createDriverObject(Random.Range(0, this.arenaSettings.spawnPoints.Count - 1), this.playerColor);
@@ -69,6 +79,8 @@ public class GameState : MonoBehaviour
         driver.cameraTransform = this.arenaSettings.cameraTransform;
         driver.mainColor = this.playerColor;
         driver.updateColor = true;
+        driver.playerIndex = this.playerIndex;
+        driver.playersRef = this.players;
         this.currentPlayerObject = ((Transform)(newObject));
     }
 
@@ -77,24 +89,46 @@ public class GameState : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        this.AssignVariables(Mathf.Min(this.spawnPointList[0], this.arenaSettings.spawnPoints.Count - 1), colorList[0].r, colorList[0].g, colorList[0].b, colorList[0].a);
+        this.AssignVariables(Network.connections.Length + 1, 0, Mathf.Min(this.spawnPointList[0], this.arenaSettings.spawnPoints.Count - 1), colorList[0].r, colorList[0].g, colorList[0].b, colorList[0].a);
 
         int i = 0;        
         foreach (NetworkPlayer player in Network.connections)
         {
             i++;
-            this.networkView.RPC("AssignVariables", player, Mathf.Min(this.spawnPointList[i], this.arenaSettings.spawnPoints.Count - 1), colorList[i].r, colorList[i].g, colorList[i].b, colorList[i].a);
+            this.networkView.RPC("AssignVariables", player, Network.connections.Length + 1, i, Mathf.Min(this.spawnPointList[i], this.arenaSettings.spawnPoints.Count - 1), colorList[i].r, colorList[i].g, colorList[i].b, colorList[i].a);
         }
+
+        yield return new WaitForSeconds(0.1f);
+
+        this.networkView.RPC("RequestPlayerData", RPCMode.All);
+
+        yield return new WaitForSeconds(0.1f);
 
         this.networkView.RPC("StartGameRPC", RPCMode.All);
     }
 
     // Assign player-specific variables
     [RPC]
-    void AssignVariables(int spawnPoint, float colorR, float colorG, float colorB, float colorA)
+    void AssignVariables(int numPlayers, int playerIndex, int spawnPoint, float colorR, float colorG, float colorB, float colorA)
     {
+        this.players = new PlayerData[numPlayers];
+        this.playerIndex = playerIndex;
         this.spawnPoint = spawnPoint;
         this.playerColor = new Color(colorR, colorG, colorB, colorA);
+    }
+
+    // Request player names
+    [RPC]
+    void RequestPlayerData()
+    {
+        this.networkView.RPC("AssignPlayerData", RPCMode.All, this.playerIndex, this.playerName, this.playerColor.r, this.playerColor.g, this.playerColor.b, this.playerColor.a);
+    }
+
+    // Assign player names
+    [RPC]
+    void AssignPlayerData(int playerIndex, string playerName, float colorR, float colorG, float colorB, float colorA)
+    {
+        this.players[playerIndex] = new PlayerData(playerIndex, playerName, new Color(colorR, colorG, colorB, colorA));
     }
 
     // Start game remote call
@@ -113,6 +147,61 @@ public class GameState : MonoBehaviour
     {
         if (Network.isServer)
             StartCoroutine(this.StartGame());
+    }
+
+    // Contains information on a player
+    public struct PlayerData
+    {
+        public int playerIndex;
+        public string name;
+        public int score;
+        private GUIText playerNameText;
+        private GUIText playerScoreText;
+
+        public PlayerData(int playerIndex, string name, Color color)
+        {
+            this.playerIndex = playerIndex;
+            this.name = name;
+            this.score = 0;
+
+            this.playerNameText = GameObject.Find("Player " + (this.playerIndex + 1).ToString()).GetComponent<GUIText>();
+            this.playerScoreText = GameObject.Find("Player " + (this.playerIndex + 1).ToString() + " Score").GetComponent<GUIText>();
+            this.playerNameText.color = color;
+            this.playerScoreText.color = color;
+            this.playerNameText.text = this.name;
+            this.playerScoreText.text = score.ToString();
+        }
+
+        public void Update()
+        {
+            if (this.playerNameText != null && this.playerScoreText != null)
+            {
+                this.playerNameText.text = this.name;
+                this.playerScoreText.text = score.ToString();
+            }
+        }
+    }
+
+    // Synchronize data
+    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
+    {
+        if (this.players == null)
+            return;
+
+        int numPlayers = 0;
+        if (stream.isWriting)
+        {
+            numPlayers = this.players.GetLength(0);
+            stream.Serialize(ref numPlayers);
+            for (int i = 0; i < numPlayers; i++)
+                stream.Serialize(ref this.players[i].score);
+        }
+        else
+        {
+            stream.Serialize(ref numPlayers);
+            for (int i = 0; i < numPlayers; i++)
+                stream.Serialize(ref this.players[i].score);
+        }
     }
 }
 
