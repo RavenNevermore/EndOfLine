@@ -10,7 +10,6 @@ public class StartHostedGameBehaviour : MonoBehaviour {
     {
 		Input.simulateMouseWithTouches = true;
 
-		//MenuState menuState = GameObject.Find("Arena").GetComponent<MenuState>();
 		TextMesh text = this.GetComponentInChildren<TextMesh>();
 
 		text.text = "Your IP is " + Network.player.ipAddress + ".\nStart Game!"; 
@@ -22,5 +21,7 @@ public class StartHostedGameBehaviour : MonoBehaviour {
             UnityEngine.Network.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity, 0);
         else
             UnityEngine.Object.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity);
+
+        GameObject.Find("state").GetComponent<MenuState>().gameStarted = true;
 	}
 }

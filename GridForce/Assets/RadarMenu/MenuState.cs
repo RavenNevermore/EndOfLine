@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class MenuState : MonoBehaviour
@@ -16,9 +17,15 @@ public class MenuState : MonoBehaviour
 
     public string playerName = "PLAYER NAME";
 
+    public GameObject playerDisconnectedNotification = null;
+
+    private int numConnections = 0;
+    public bool gameStarted = false;
+
 	public void startGame()
     {
 		NetworkConnectionError connectionError;
+        Network.maxConnections = 3;
 
 		if (this.type == MenuState.GameType.JOIN)
         {
@@ -33,8 +40,6 @@ public class MenuState : MonoBehaviour
         else
         {
 			this.initGameState();
-
-
 	        
 	        MenuState menuState = GameObject.Find("state").GetComponent<MenuState>();
 
@@ -52,9 +57,7 @@ public class MenuState : MonoBehaviour
 	        {
 	            Debug.Log("Connecting to server " + menuState.hostIp + " at port number " + menuState.portNumber.ToString());
 	            connectionError = Network.Connect(menuState.hostIp, menuState.portNumber);
-	        }*/
-
-	        
+	        }*/	        
 		}
 	}
 
@@ -81,12 +84,15 @@ public class MenuState : MonoBehaviour
 
     void OnFailedToConnect(NetworkConnectionError error)
     {
-        Debug.LogError("-> Server error...");
+        Debug.LogWarning("Connection to server failed");
+        Application.LoadLevel("ConnectionFailed");
     }
 
 
     void OnPlayerConnected(NetworkPlayer player)
     {
+        this.numConnections++;
+
 		Debug.Log("Sending game details to player: " + player);
         if (this.networkView != null)
 		    this.networkView.RPC("SetServerDetails", player, this.hostName, this.arenaName);
@@ -95,5 +101,33 @@ public class MenuState : MonoBehaviour
 
     void OnPlayerDisconnected(NetworkPlayer player)
     {
+        this.numConnections--;
+
+        if (this.numConnections <= 0 && this.gameStarted)
+        {
+            Debug.LogWarning("All players dissconnected");
+            Application.LoadLevel("AllConnectionsLost");
+            this.gameStarted = false;
+        }
+
+        try
+        {
+            Debug.LogWarning("Player " + player.ipAddress + " dissconnected from the server");
+            UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.playerDisconnectedNotification, Vector3.zero, Quaternion.identity);
+            ((GameObject)(newObject)).GetComponentInChildren<GUIText>().text = "PLAYER " + player.ipAddress + " DISCONNECTED FROM THE SERVER...";
+            DontDestroyOnLoad(newObject);
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    void OnDisconnectedFromServer(NetworkDisconnection info)
+    {
+        if (!(Network.isServer))
+        {
+            Debug.LogWarning("Disconnected from server");
+            Application.LoadLevel("ConnectionLost");
+        }
     }
 }

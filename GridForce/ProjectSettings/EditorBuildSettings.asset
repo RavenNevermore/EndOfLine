@@ -15,3 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Testarena2.unity
   - enabled: 1
     path: Assets/Scenes/Testarena5.unity
+  - enabled: 1
+    path: Assets/Scenes/ConnectionLost.unity
+  - enabled: 1
+    path: Assets/Scenes/ConnectionFailed.unity
+  - enabled: 1
+    path: Assets/Scenes/AllConnectionsLost.unity
