@@ -390,7 +390,7 @@ public class DriverController : MonoBehaviour
                     this.playerAction = PlayerAction.None;
                 }
 
-                if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable && !(this.invincibleTimer > 0.0f))
+                if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
                 {
                     this.Kill(-1);
                 }
