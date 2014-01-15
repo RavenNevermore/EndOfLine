@@ -27,10 +27,14 @@ public class GameState : MonoBehaviour
     private int spawnPoint = 0;    // This player's initial spawn point
     private Color playerColor = new Color(0.5f, 0.5f, 0.5f, 1.0f);  // This player's color
 
+    public int selectedMesh = 1;
+
     // Use this for initialization
     void Start()
     {
-        this.playerName = GameObject.Find("state").GetComponent<MenuState>().playerName;
+        MenuState menuState = GameObject.Find("state").GetComponent<MenuState>();
+        this.playerName = menuState.playerName;
+        this.selectedMesh = menuState.vehicleSelection;
         this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
         this.networkView.group = 0;
 
@@ -81,6 +85,7 @@ public class GameState : MonoBehaviour
         driver.updateColor = true;
         driver.playerIndex = this.playerIndex;
         driver.playersRef = this.players;
+        driver.SetMesh(this.selectedMesh);
         this.currentPlayerObject = ((Transform)(newObject));
     }
 

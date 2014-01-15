@@ -362,7 +362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621445f7f22f04cada80b899b4f53cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicleName: vehicle01
+  vehicleSelection: 0
 --- !u!1 &244768027
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,11 +605,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 299231846}
-  m_LocalRotation: {x: -.5, y: -.5, z: .5, w: -.5}
-  m_LocalPosition: {x: -.0160000008, y: -0, z: .0724999979}
+  m_LocalRotation: {x: -3.09086232e-08, y: .707106829, z: -.707106829, w: 3.09086232e-08}
+  m_LocalPosition: {x: .0725000128, y: 0, z: .0140000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 694997521}
+  m_Father: {fileID: 1067097472}
 --- !u!102 &299231848
 TextMesh:
   serializedVersion: 3
@@ -681,7 +681,7 @@ Transform:
   m_LocalPosition: {x: -.00999999978, y: -.00999999978, z: .99000001}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
-  - {fileID: 1998541337}
+  - {fileID: 921693226}
   m_Father: {fileID: 780055517}
 --- !u!64 &552610882
 MeshCollider:
@@ -737,7 +737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621445f7f22f04cada80b899b4f53cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicleName: vehicle03
+  vehicleSelection: 2
 --- !u!1 &555413694
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,7 +823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621445f7f22f04cada80b899b4f53cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicleName: vehicle02
+  vehicleSelection: 1
 --- !u!1 &623721121
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,8 +857,7 @@ MonoBehaviour:
   hostIp: 
   portNumber: 21496
   arenaName: Testarena5
-  vehicleName: 
-  color: 
+  vehicleSelection: 0
   playerName: PLAYER NAME
 --- !u!4 &623721123
 Transform:
@@ -948,11 +947,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 643609109}
-  m_LocalRotation: {x: -1.15202333e-07, y: .707106769, z: -.707106888, w: -1.15202319e-07}
-  m_LocalPosition: {x: .0724999979, y: 0, z: -.0274999999}
+  m_LocalRotation: {x: -.5, y: -.50000006, z: .500000119, w: -.499999851}
+  m_LocalPosition: {x: .0255000051, y: -0, z: .0725000128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1067097472}
+  m_Father: {fileID: 694997521}
 --- !u!1 &689322804
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,7 +1106,7 @@ Transform:
   m_LocalPosition: {x: -.00999999978, y: .00999999978, z: .99000001}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
-  - {fileID: 299231847}
+  - {fileID: 643609112}
   m_Father: {fileID: 984143610}
 --- !u!1 &780055516
 GameObject:
@@ -1169,7 +1168,7 @@ Transform:
   m_LocalPosition: {x: -.00999999978, y: .00999999978, z: .99000001}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
-  - {fileID: 921693226}
+  - {fileID: 1998541337}
   m_Father: {fileID: 780055517}
 --- !u!64 &905970631
 MeshCollider:
@@ -1225,7 +1224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621445f7f22f04cada80b899b4f53cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vehicleName: vehicle04
+  vehicleSelection: 3
 --- !u!1 &915926129
 GameObject:
   m_ObjectHideFlags: 0
@@ -1311,11 +1310,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 921693225}
-  m_LocalRotation: {x: -.5, y: -.5, z: .5, w: -.5}
-  m_LocalPosition: {x: -.0160000008, y: 0, z: .0725000054}
+  m_LocalRotation: {x: 0, y: .707106829, z: -.707106829, w: 0}
+  m_LocalPosition: {x: .0725000203, y: 0, z: .0140000014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 905970630}
+  m_Father: {fileID: 552610881}
 --- !u!102 &921693227
 TextMesh:
   serializedVersion: 3
@@ -1473,7 +1472,7 @@ Transform:
   m_LocalPosition: {x: -.00999999978, y: -.00999999978, z: .99000001}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
-  - {fileID: 643609112}
+  - {fileID: 299231847}
   m_Father: {fileID: 984143610}
 --- !u!1 &1089197577
 GameObject:
@@ -3035,11 +3034,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1998541336}
-  m_LocalRotation: {x: 0, y: .707106829, z: -.707106829, w: 0}
-  m_LocalPosition: {x: .0725000203, y: -0, z: -.0275000017}
+  m_LocalRotation: {x: -.5, y: -.5, z: .5, w: -.5}
+  m_LocalPosition: {x: .0255000051, y: -0, z: .0725000426}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 552610881}
+  m_Father: {fileID: 905970630}
 --- !u!102 &1998541338
 TextMesh:
   serializedVersion: 3

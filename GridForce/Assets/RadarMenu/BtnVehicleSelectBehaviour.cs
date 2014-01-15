@@ -3,18 +3,21 @@ using System.Collections;
 
 public class BtnVehicleSelectBehaviour : AbstractMenuBehaviour {
 
-	public string vehicleName;
+	public int vehicleSelection = 0;
 
-	void Start(){
+	void Start()
+    {
 		TextMesh text = this.GetComponentInChildren<TextMesh>();
-		if (null != text){
-			text.text = this.vehicleName;
+		if (null != text)
+        {
+            text.text = "Vehicle " + (this.vehicleSelection + 1).ToString();
 		}
 	}
 
-	void OnMouseDown(){
-		this.gameState.vehicleName = this.vehicleName;
-		Debug.Log("Selected Vehicle: " + this.vehicleName);
+	void OnMouseDown()
+    {
+        this.gameState.vehicleSelection = this.vehicleSelection;
+        Debug.Log("Selected Vehicle: " + this.vehicleSelection);
 		this.gameState.startGame();
 	}
 }

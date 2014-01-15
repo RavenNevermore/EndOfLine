@@ -31,7 +31,7 @@ public class DriverController : MonoBehaviour
     private CharacterController characterController;        // Character controller
     private TimedTrailRenderer trailRenderer;      // This object's trail renderer
     private TrailRenderer cameraTrail;      // This object's trail renderer for the camera
-    private MeshRenderer meshRenderer;      // This object's mesh renderer
+    private GameObject vehicleMesh;      // This object's mesh
     private Vector3 moveDirection;          // Character move direction
     private Vector3 gravityDirection;       // Character gravity
     private float gridSize = 1.0f;          // Grid size
@@ -49,6 +49,8 @@ public class DriverController : MonoBehaviour
     private float lightColorA = 1.0f;       // Light's original alpha value
     private float[] trailRendererA = null;    // Trail renderer's original alpha values
     private float cameraTrailA = 1.0f;      // Camera trail's original alpha value
+
+    public GameObject[] meshList = null;   // List of all meshes
 
 
     // Defines a path node
@@ -169,7 +171,7 @@ public class DriverController : MonoBehaviour
         this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
         this.cameraTrail = this.GetComponentInChildren<TrailRenderer>();
         this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
-        this.meshRenderer = this.GetComponentInChildren<MeshRenderer>();
+        this.vehicleMesh = this.transform.Find("VehicleMeshes").gameObject;
 
         Light light = this.GetComponentInChildren<Light>();
         this.lightColorA = light.color.a;
@@ -220,19 +222,19 @@ public class DriverController : MonoBehaviour
 	// Update is called once per frame
     void Update()
     {
-        if (this.meshRenderer != null)
+        if (this.vehicleMesh != null)
         {
             if (this.invincibleTimer > 0.0f)
             {
                 this.invincibleTimer -= Time.deltaTime;
                 float modulo = this.invincibleTimer % 0.1f;
                 if (modulo > 0.05f)
-                    this.meshRenderer.enabled = false;
+                    this.vehicleMesh.SetActive(false);
                 else
-                    this.meshRenderer.enabled = true;
+                    this.vehicleMesh.SetActive(true);
             }
             else
-                this.meshRenderer.enabled = true;
+                this.vehicleMesh.SetActive(true);
         }
 
         if (this.harmlessTimer > 0.0f)
@@ -522,6 +524,24 @@ public class DriverController : MonoBehaviour
     }
 
 
+    // Select this driver's mesh
+    public void SetMesh(int meshIndex)
+    {
+        if (Network.connections.Length > 0)
+            this.networkView.RPC("SetMeshRPC", RPCMode.All, meshIndex);
+        else
+            this.SetMeshRPC(meshIndex);
+    }
+
+
+    [RPC]
+    void SetMeshRPC(int meshIndex)
+    {
+        if (meshIndex >= 0 && meshIndex < this.meshList.GetLength(0))
+            this.meshList[meshIndex].SetActive(true);
+    }
+
+
     // Kill driver
     void Kill(int killer)
     {
@@ -580,10 +600,10 @@ public class DriverController : MonoBehaviour
             this.cameraTrail = null;
         }
 
-        if (this.meshRenderer != null)
+        if (this.vehicleMesh != null)
         {
-            UnityEngine.Object.Destroy(this.meshRenderer.gameObject);
-            this.meshRenderer = null;
+            UnityEngine.Object.Destroy(this.vehicleMesh);
+            this.vehicleMesh = null;
         }
 
         Light childObject = this.GetComponentInChildren<Light>();

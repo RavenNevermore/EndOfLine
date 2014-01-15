@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MenuState : MonoBehaviour {
-
+public class MenuState : MonoBehaviour
+{
 	public enum GameType {HOST, JOIN};
 
 	public GameType type;
@@ -12,9 +12,7 @@ public class MenuState : MonoBehaviour {
 
 	public string arenaName;
 
-	public string vehicleName;
-
-	public string color;
+    public int vehicleSelection = 0;
 
     public string playerName = "PLAYER NAME";
 
@@ -22,15 +20,18 @@ public class MenuState : MonoBehaviour {
     {
 		NetworkConnectionError connectionError;
 
-		if (this.type == MenuState.GameType.JOIN){
+		if (this.type == MenuState.GameType.JOIN)
+        {
 			Debug.Log("Connecting to server " + this.hostIp + " at port number " + this.portNumber.ToString());
 			connectionError = Network.Connect(this.hostIp, this.portNumber);
 			//this.networkView.RPC("getArenaName", RPCMode.Server, this.arenaName);
-			if (connectionError != NetworkConnectionError.NoError){
+			if (connectionError != NetworkConnectionError.NoError)
+            {
 				this.OnFailedToConnect(connectionError);
 			}
-		} else {
-
+		}
+        else
+        {
 			this.initGameState();
 
 
@@ -42,7 +43,8 @@ public class MenuState : MonoBehaviour {
 	            Debug.Log("Starting new server");
 	            connectionError = Network.InitializeServer(32, menuState.portNumber, false);
 
-				if (connectionError != NetworkConnectionError.NoError){
+				if (connectionError != NetworkConnectionError.NoError)
+                {
 					this.OnFailedToConnect(connectionError);
 				}
 	        }
@@ -56,7 +58,8 @@ public class MenuState : MonoBehaviour {
 		}
 	}
 
-	void initGameState(){
+	void initGameState()
+    {
 		Debug.Log("Starting game for " + this.arenaName);
 		
 		DontDestroyOnLoad(this);
@@ -64,7 +67,8 @@ public class MenuState : MonoBehaviour {
 	}
 
 	[RPC]
-	void SetServerDetails(string servername, string arenaname){
+	void SetServerDetails(string servername, string arenaname)
+    {
 		if (null == servername || "".Equals(servername.Trim())
 		    && null == arenaname || "".Equals(arenaname.Trim()))
 			return;
