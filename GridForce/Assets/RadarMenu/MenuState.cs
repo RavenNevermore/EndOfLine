@@ -31,33 +31,22 @@ public class MenuState : MonoBehaviour
         {
 			Debug.Log("Connecting to server " + this.hostIp + " at port number " + this.portNumber.ToString());
 			connectionError = Network.Connect(this.hostIp, this.portNumber);
-			//this.networkView.RPC("getArenaName", RPCMode.Server, this.arenaName);
-			if (connectionError != NetworkConnectionError.NoError)
-            {
-				this.OnFailedToConnect(connectionError);
-			}
 		}
         else
         {
-			this.initGameState();
-	        
-	        MenuState menuState = GameObject.Find("state").GetComponent<MenuState>();
+			this.initGameState();	        
 
-	        if (menuState.type == MenuState.GameType.HOST)
+	        if (this.type == MenuState.GameType.HOST)
 	        {
 	            Debug.Log("Starting new server");
-	            connectionError = Network.InitializeServer(32, menuState.portNumber, false);
+                connectionError = Network.InitializeServer(32, this.portNumber, false);
 
-				if (connectionError != NetworkConnectionError.NoError)
+                if (connectionError != NetworkConnectionError.NoError)
                 {
-					this.OnFailedToConnect(connectionError);
-				}
-	        }
-	        /*else
-	        {
-	            Debug.Log("Connecting to server " + menuState.hostIp + " at port number " + menuState.portNumber.ToString());
-	            connectionError = Network.Connect(menuState.hostIp, menuState.portNumber);
-	        }*/	        
+                    Debug.LogWarning("Server initialisation failed");
+                    Application.LoadLevel("ServerInitFailed");
+                }
+	        }      
 		}
 	}
 
