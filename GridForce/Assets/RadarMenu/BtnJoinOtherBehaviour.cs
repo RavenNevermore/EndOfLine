@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Net;
 using System.Collections;
 
 public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
@@ -101,6 +102,26 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
     {
         if (!(this.connecting))
         {
+            Debug.Log("Joining " + this.ipToJoin);
+
+            this.gameState.type = MenuState.GameType.JOIN;
+
+            this.gameState.hostName = "unknown";
+
+            this.gameState.hostIp = this.ipToJoin;
+
+            try
+            {
+                this.gameState.hostIp = IPAddress.Parse(this.gameState.hostIp).ToString();
+            }
+            catch (Exception)
+            {
+                this.gameState.hostIp = "0.0.0.0";
+            }
+
+            if (this.gameState.hostIp.Contains(":"))
+                this.gameState.hostIp = "0.0.0.0";
+
             try
             {
                 UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.notificationPrefab, Vector3.zero, Quaternion.identity);
@@ -125,14 +146,6 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 
         UnityEngine.Object.Destroy(this.notificationInstance);
         this.notificationInstance = null;
-
-        Debug.Log("Joining " + this.ipToJoin);
-
-        this.gameState.type = MenuState.GameType.JOIN;
-
-        this.gameState.hostName = "unknown";
-
-        this.gameState.hostIp = this.ipToJoin;
 
         this.enableGui = false;
         this.ipToJoin = "";

@@ -29,6 +29,12 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
     {
         if (!(this.connecting))
         {
+            this.gameState.type = MenuState.GameType.JOIN;
+
+            this.gameState.hostName = this.hostName;
+
+            this.gameState.hostIp = this.hostIp;
+
             try
             {
                 UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.notificationPrefab, Vector3.zero, Quaternion.identity);
@@ -56,12 +62,6 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
 
         UnityEngine.Object.Destroy(this.notificationInstance);
         this.notificationInstance = null;
-
-        this.gameState.type = MenuState.GameType.JOIN;
-
-        this.gameState.hostName = this.hostName;
-
-        this.gameState.hostIp = this.hostIp;
 
         this.switchToMenu("03_select_vehicle");
     }
