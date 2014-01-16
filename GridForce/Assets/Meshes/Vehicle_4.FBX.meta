@@ -1,60 +1,65 @@
 fileFormatVersion: 2
-guid: d41236de0e36e284cb684d9e3d370066
+guid: 424c507d73d3e744da7ce0ac1037a396
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: Box001
-    100002: Torus001
-    100004: Torus002
-    100006: Torus003
-    100008: Torus004
-    100010: //RootNode
-    100012: Box002
-    100014: Torus005
-    100016: Torus006
-    100018: Torus007
-    100020: Torus008
-    400000: Box001
-    400002: Torus001
-    400004: Torus002
-    400006: Torus003
-    400008: Torus004
-    400010: //RootNode
-    400012: Box002
-    400014: Torus005
-    400016: Torus006
-    400018: Torus007
-    400020: Torus008
-    2300000: Box001
-    2300002: Torus001
-    2300004: Torus002
-    2300006: Torus003
-    2300008: Torus004
-    2300010: Box002
-    2300012: Torus005
-    2300014: Torus006
-    2300016: Torus007
-    2300018: Torus008
-    3300000: Box001
-    3300002: Torus001
-    3300004: Torus002
-    3300006: Torus003
-    3300008: Torus004
-    3300010: Box002
-    3300012: Torus005
-    3300014: Torus006
-    3300016: Torus007
-    3300018: Torus008
-    4300000: Box001
-    4300002: Torus001
-    4300004: Torus002
-    4300006: Torus003
-    4300008: Torus004
-    4300010: Torus005
-    4300012: Torus006
-    4300014: Torus007
-    4300016: Torus008
-    4300018: Box002
+    100000: Box008
+    100002: Box009
+    100004: Box010
+    100006: Box011
+    100008: Box012
+    100010: Box013
+    100012: Box014
+    100014: Torus009
+    100016: Torus010
+    100018: Torus011
+    100020: Torus012
+    100022: //RootNode
+    400000: Box008
+    400002: Box009
+    400004: Box010
+    400006: Box011
+    400008: Box012
+    400010: Box013
+    400012: Box014
+    400014: Torus009
+    400016: Torus010
+    400018: Torus011
+    400020: Torus012
+    400022: //RootNode
+    2300000: Box008
+    2300002: Box009
+    2300004: Box010
+    2300006: Box011
+    2300008: Box012
+    2300010: Box013
+    2300012: Box014
+    2300014: Torus009
+    2300016: Torus010
+    2300018: Torus011
+    2300020: Torus012
+    3300000: Box008
+    3300002: Box009
+    3300004: Box010
+    3300006: Box011
+    3300008: Box012
+    3300010: Box013
+    3300012: Box014
+    3300014: Torus009
+    3300016: Torus010
+    3300018: Torus011
+    3300020: Torus012
+    4300000: Box008
+    4300002: Torus009
+    4300004: Torus010
+    4300006: Torus011
+    4300008: Box009
+    4300010: Box010
+    4300012: Torus012
+    4300014: Box011
+    4300016: Box012
+    4300018: Box013
+    4300020: Box014
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -75,7 +80,7 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: .00999999978
-    meshCompression: 3
+    meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
     swapUVChannels: 0
