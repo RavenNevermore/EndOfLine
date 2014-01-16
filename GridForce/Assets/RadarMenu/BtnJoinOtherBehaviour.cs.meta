@@ -2,7 +2,8 @@ fileFormatVersion: 2
 guid: ce65922d5bbd74021ad709fe6ef7ae33
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - notificationPrefab: {fileID: 100000, guid: 28de142a153c6834084af25ca0beb2c4, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

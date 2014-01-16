@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MenuState : MonoBehaviour
 {
@@ -17,46 +18,67 @@ public class MenuState : MonoBehaviour
 
     public string playerName = "PLAYER NAME";
 
-    public GameObject playerDisconnectedNotification = null;
+    public GameObject serverNotification = null;
 
     private int numConnections = 0;
     public bool gameStarted = false;
 
-	public void startGame()
+    private Dictionary<NetworkPlayer, bool> playersReady = new Dictionary<NetworkPlayer, bool>();
+
+	public void StartGame()
     {
 		NetworkConnectionError connectionError;
         Network.maxConnections = 3;
 
-		if (this.type == MenuState.GameType.JOIN)
+		if (this.type == MenuState.GameType.HOST)
         {
-			Debug.Log("Connecting to server " + this.hostIp + " at port number " + this.portNumber.ToString());
-			connectionError = Network.Connect(this.hostIp, this.portNumber);
+            this.InitGameState();
+
+            Debug.Log("Starting new server");
+            connectionError = Network.InitializeServer(32, this.portNumber, false);
+
+            if (connectionError != NetworkConnectionError.NoError)
+            {
+                Debug.LogWarning("Server initialisation failed");
+                Application.LoadLevel("ServerInitFailed");
+            }
 		}
         else
-        {
-			this.initGameState();	        
-
-	        if (this.type == MenuState.GameType.HOST)
-	        {
-	            Debug.Log("Starting new server");
-                connectionError = Network.InitializeServer(32, this.portNumber, false);
-
-                if (connectionError != NetworkConnectionError.NoError)
-                {
-                    Debug.LogWarning("Server initialisation failed");
-                    Application.LoadLevel("ServerInitFailed");
-                }
-	        }      
-		}
+            this.ClientReady();
 	}
 
-	void initGameState()
+
+    public void ConnectAsClient()
+    {
+        Debug.Log("Connecting to server " + this.hostIp + " at port number " + this.portNumber.ToString());
+        Network.Connect(this.hostIp, this.portNumber);
+    }
+
+
+	void InitGameState()
     {
 		Debug.Log("Starting game for " + this.arenaName);
 		
 		DontDestroyOnLoad(this);
 		Application.LoadLevel(this.arenaName);
 	}
+
+    public void ClientReady()
+    {
+        this.InitGameState();
+
+        if (this.networkView != null)
+            this.networkView.RPC("ClientReadyRPC", RPCMode.Server, Network.player);
+    }
+
+
+    public bool AllPlayersReady()
+    {
+        foreach (KeyValuePair<NetworkPlayer, bool> pair in this.playersReady)
+            if (!(pair.Value)) return false;
+
+        return true;
+    }
 
 	[RPC]
 	void SetServerDetails(string servername, string arenaname)
@@ -68,8 +90,16 @@ public class MenuState : MonoBehaviour
 		this.arenaName = arenaname;
 		this.hostName = servername;
 		Debug.Log("Server details set from Network: " + this.hostName + " - " + this.arenaName);
-		this.initGameState();
 	}
+
+    [RPC]
+    void ClientReadyRPC(NetworkPlayer player)
+    {
+        if (this.playersReady.ContainsKey(player))
+            this.playersReady[player] = true;
+        else
+            this.playersReady.Add(player, true);
+    }
 
     void OnFailedToConnect(NetworkConnectionError error)
     {
@@ -80,7 +110,21 @@ public class MenuState : MonoBehaviour
 
     void OnPlayerConnected(NetworkPlayer player)
     {
+        if (!(this.playersReady.ContainsKey(player)))
+            this.playersReady.Add(player, false);
+
         this.numConnections++;
+
+        try
+        {
+            Debug.LogWarning("Player " + player.ipAddress + " connected to the server");
+            UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.serverNotification, Vector3.zero, Quaternion.identity);
+            ((GameObject)(newObject)).GetComponentInChildren<GUIText>().text = "PLAYER " + player.ipAddress + " CONNECTED TO THE SERVER...";
+            DontDestroyOnLoad(newObject);
+        }
+        catch (Exception)
+        {
+        }
 
 		Debug.Log("Sending game details to player: " + player);
         if (this.networkView != null)
@@ -90,6 +134,9 @@ public class MenuState : MonoBehaviour
 
     void OnPlayerDisconnected(NetworkPlayer player)
     {
+        if (this.playersReady.ContainsKey(player))
+            this.playersReady.Remove(player);
+
         this.numConnections--;
 
         if (this.numConnections <= 0 && this.gameStarted)
@@ -102,7 +149,7 @@ public class MenuState : MonoBehaviour
         try
         {
             Debug.LogWarning("Player " + player.ipAddress + " dissconnected from the server");
-            UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.playerDisconnectedNotification, Vector3.zero, Quaternion.identity);
+            UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.serverNotification, Vector3.zero, Quaternion.identity);
             ((GameObject)(newObject)).GetComponentInChildren<GUIText>().text = "PLAYER " + player.ipAddress + " DISCONNECTED FROM THE SERVER...";
             DontDestroyOnLoad(newObject);
         }
@@ -116,7 +163,7 @@ public class MenuState : MonoBehaviour
         if (!(Network.isServer))
         {
             Debug.LogWarning("Disconnected from server");
-            Application.LoadLevel("ConnectionLost");
+                Application.LoadLevel("ConnectionLost");
         }
     }
 }

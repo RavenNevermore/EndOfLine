@@ -18,6 +18,6 @@ public class BtnVehicleSelectBehaviour : AbstractMenuBehaviour {
     {
         this.gameState.vehicleSelection = this.vehicleSelection;
         Debug.Log("Selected Vehicle: " + this.vehicleSelection);
-		this.gameState.startGame();
+        this.gameState.StartGame();
 	}
 }

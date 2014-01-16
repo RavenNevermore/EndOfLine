@@ -859,8 +859,8 @@ MonoBehaviour:
   arenaName: Testarena5
   vehicleSelection: 0
   playerName: PLAYER NAME
-  playerDisconnectedNotification: {fileID: 100000, guid: ead1cf2eedd0b6f488a73c72f18145ef,
-    type: 2}
+  serverNotification: {fileID: 100000, guid: 2ca64a7fcd10ab44cbeb9a28ac3e28d5, type: 2}
+  gameStarted: 0
 --- !u!4 &623721123
 Transform:
   m_ObjectHideFlags: 0
@@ -1562,6 +1562,7 @@ MonoBehaviour:
   boxHeight: 100
   borderWidth: 0
   guiBackground: {r: .404411793, g: .404411793, b: .404411793, a: .400000006}
+  notificationPrefab: {fileID: 100000, guid: 28de142a153c6834084af25ca0beb2c4, type: 2}
 --- !u!1001 &1135898980
 Prefab:
   m_ObjectHideFlags: 0
@@ -2216,6 +2217,7 @@ MonoBehaviour:
   hostName: Marvin
   hostIp: 127.0.0.1
   otherPlayers: 7
+  notificationPrefab: {fileID: 100000, guid: 28de142a153c6834084af25ca0beb2c4, type: 2}
 --- !u!1 &1453687591
 GameObject:
   m_ObjectHideFlags: 0

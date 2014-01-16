@@ -157,6 +157,7 @@ MonoBehaviour:
   hostName: Celine's iPad
   hostIp: 1.2.3.4
   otherPlayers: 0
+  notificationPrefab: {fileID: 100000, guid: 28de142a153c6834084af25ca0beb2c4, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

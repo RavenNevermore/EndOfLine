@@ -2,7 +2,10 @@ fileFormatVersion: 2
 guid: 3be85152d2c99bc44b995c6036dbae7a
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - menuCamera: {instanceID: 0}
+  - notificationPrefab: {fileID: 100000, guid: 28de142a153c6834084af25ca0beb2c4, type: 2}
+  - notificationInstance: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

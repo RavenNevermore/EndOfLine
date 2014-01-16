@@ -8,8 +8,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400000}
+  - 114: {fileID: 11400000}
   m_Layer: 0
-  m_Name: PlayerDisconnectedNotification
+  m_Name: OnScreenNotification
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24,7 +25,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 400002}
   - 132: {fileID: 13200000}
-  - 114: {fileID: 11400000}
   m_Layer: 0
   m_Name: Notification
   m_TagString: Untagged
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100002}
+  m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63fb2677a8cade44e8ad0d0fdbde92c1, type: 3}
@@ -75,7 +75,7 @@ GUIText:
   m_GameObject: {fileID: 100002}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: -> A PLAYER DISCONNECTED...
+  m_Text: AN UNKNOWN ERROR OCCURED...
   m_Anchor: 6
   m_Alignment: 0
   m_PixelOffset: {x: 0, y: 0}

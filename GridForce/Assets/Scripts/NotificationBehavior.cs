@@ -8,6 +8,7 @@ public class NotificationBehavior : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        UnityEngine.Object.Destroy(this.gameObject, this.timeOnScreen);	
+        if (timeOnScreen > 0.0f)
+            UnityEngine.Object.Destroy(this.gameObject, this.timeOnScreen);	
 	}
 }

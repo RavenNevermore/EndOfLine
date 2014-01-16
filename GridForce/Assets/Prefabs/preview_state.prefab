@@ -316,6 +316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   previewState: {fileID: 100008}
   gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
+  notificationPrefab: {fileID: 100000, guid: 2ca64a7fcd10ab44cbeb9a28ac3e28d5, type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -341,6 +342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   previewState: {fileID: 100008}
   gameStatePrefab: {fileID: 0}
+  notificationPrefab: {fileID: 0}
 --- !u!124 &12400000
 Behaviour:
   m_ObjectHideFlags: 1
