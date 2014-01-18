@@ -140,7 +140,9 @@ public class GameState : MonoBehaviour
     [RPC]
     void StartGameRPC()
     {
-        GameObject.Find("preview_state").SetActive(false);
+        GameObject previewState = GameObject.Find("preview_state");
+        if (previewState != null)
+            previewState.SetActive(false);
         this.arenaSettings.cameraTransform.gameObject.SetActive(true);
 
         this.gameStarted = true;
