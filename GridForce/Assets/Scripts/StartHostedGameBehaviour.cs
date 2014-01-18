@@ -7,17 +7,18 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 	public GameObject previewState;
     public GameObject gameStatePrefab = null;
     public GameObject notificationPrefab = null;
-    private MenuState menuState = null;
+    public MenuState menuState = null;
 
 	void Start ()
     {
-        menuState = GameObject.Find("state").GetComponent<MenuState>();
+		Debug.Log("My menustate is : " + menuState);
 
 		Input.simulateMouseWithTouches = true;
 
 		TextMesh text = this.GetComponentInChildren<TextMesh>();
 
 		text.text = "Your IP is " + Network.player.ipAddress + ".\nStart Game!"; 
+
 	}
 
 	void OnMouseDown()
@@ -37,11 +38,13 @@ public class StartHostedGameBehaviour : MonoBehaviour {
             return;
         }
 
+		GameObject gameState = null;
         if (Network.connections.Length > 0)
-            UnityEngine.Network.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity, 0);
+            gameState = (GameObject) UnityEngine.Network.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity, 0);
         else
-            UnityEngine.Object.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity);
+			gameState = (GameObject) UnityEngine.Object.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity);
 
-        menuState.gameStarted = true;
+		gameState.GetComponent<GameState>().menuState = this.menuState;
+        this.menuState.gameStarted = true;
 	}
 }

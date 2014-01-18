@@ -10,6 +10,16 @@ public class GameInitializer : MonoBehaviour {
 	public GameObject previewHostObject;
 	public GameObject previewClientObject;
 
+	void setMenuStateOnObject(GameObject obj, MenuState state){
+		if (null == obj)
+			return;
+
+		StartHostedGameBehaviour starter = obj.GetComponent<StartHostedGameBehaviour>();
+		if (null != starter){
+			starter.menuState = state;
+		}
+	}
+
 	// Use this for initialization
 	void Start ()
     {
@@ -18,6 +28,8 @@ public class GameInitializer : MonoBehaviour {
 		if (null == lastMenuState)
 			lastMenuState = this.debugMenuState;
 		Debug.Log("Menu State: "+lastMenuState);
+		this.setMenuStateOnObject(this.previewHostObject, lastMenuState);
+		this.setMenuStateOnObject(this.previewClientObject, lastMenuState);
 
 		if (null == lastMenuState)
 			this.previewState.SetActive(false);

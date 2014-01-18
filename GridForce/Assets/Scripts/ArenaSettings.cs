@@ -9,6 +9,8 @@ public class ArenaSettings : MonoBehaviour
     public List<Transform> spawnPoints = new List<Transform>();
     public Transform cameraTransform = null;      // Camera transform
 
+	public float trailLengthMultiplyer = 1.0f;
+
     // Use this for initialization
 	void Start ()
     {

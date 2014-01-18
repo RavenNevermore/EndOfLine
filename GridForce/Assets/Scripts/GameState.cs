@@ -9,6 +9,8 @@ public class GameState : MonoBehaviour
     public Transform driverGameObject = null;     // Driver game object
     private bool gameStarted = false;
 
+	public MenuState menuState;
+
     private Transform currentPlayerObject = null;   // Current player object
 
     public static Color[] colorArray = new Color[]    // List of possible colors
@@ -32,10 +34,14 @@ public class GameState : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        MenuState menuState = GameObject.Find("state").GetComponent<MenuState>();
+
+		if (null == menuState)
+        	menuState = GameObject.Find("state").GetComponent<MenuState>();
+
         this.playerName = menuState.playerName;
         this.selectedMesh = menuState.vehicleSelection;
         this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
+
         this.networkView.group = 0;
 
         for (int i = 0; i < 4; i++)

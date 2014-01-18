@@ -161,6 +161,8 @@ public class DriverController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		this.baseTrailLength = this.baseTrailLength * this.arenaSettings.trailLengthMultiplyer;
+
         this.characterController = this.gameObject.GetComponent<CharacterController>();
         if (this.cameraTransform != null)
             this.cameraPos = this.cameraDistance.x * this.transform.right + this.cameraDistance.y * this.transform.up + this.cameraDistance.z * this.transform.forward;
