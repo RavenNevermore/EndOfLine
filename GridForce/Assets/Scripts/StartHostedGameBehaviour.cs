@@ -44,6 +44,13 @@ public class StartHostedGameBehaviour : MonoBehaviour {
         else
 			gameState = (GameObject) UnityEngine.Object.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity);
 
+        GameObject[] itemBoxes = GameObject.FindGameObjectsWithTag("ItemBox");
+        foreach (GameObject itemBox in itemBoxes)
+        {
+            ItemBoxBehavior itemBoxScript = itemBox.GetComponent<ItemBoxBehavior>();
+            itemBoxScript.ReInstantiate();
+        }
+
 		gameState.GetComponent<GameState>().menuState = this.menuState;
         this.menuState.gameStarted = true;
 	}

@@ -1517,10 +1517,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trailCollisionSegment: {fileID: 400000, guid: ff9bcb9f8e7b58e4faebd417a990ef70,
     type: 2}
+  itemBoxPrefab: {fileID: 400000, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
   explosionPrefab: {fileID: 400000, guid: f75468363e2394440a081e9c175e6c93, type: 2}
   arenaSettings: {fileID: 0}
   cameraTransform: {fileID: 0}
   baseSpeed: 20
+  boostSpeed: 30
+  boostDuration: 5
+  killBoostDuration: 1.5
   baseTrailLength: 20
   rotationSpeed: 15
   cameraDistance: {x: 0, y: 2, z: -8}

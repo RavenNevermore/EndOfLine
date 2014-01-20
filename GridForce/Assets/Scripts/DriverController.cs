@@ -7,10 +7,14 @@ using System;
 public class DriverController : MonoBehaviour
 {
     public Transform trailCollisionSegment = null;    // Game object that represents collision segment
+    public Transform itemBoxPrefab = null;      // Item box prefab
     public Transform explosionPrefab = null;     // Which effect to use for the explosion
     public ArenaSettings arenaSettings = null;      // Arena settings
     public Transform cameraTransform = null;    // The camera's transform
     public float baseSpeed = 20.0f;     // Base drive speed
+    public float boostSpeed = 30.0f;    // Speed when on boost
+    public float boostDuration = 5.0f;    // Duration of boost
+    public float killBoostDuration = 1.5f;  // Duration of kill boost
     public float baseTrailLength = 20.0f;   // Base length of trail
     public float rotationSpeed = 15.0f;  // Rotation speed when changing orientation
     public Vector3 cameraDistance = new Vector3(0.0f, 2.0f, -8.0f);     // The camera's default position relative to the driver
@@ -45,6 +49,9 @@ public class DriverController : MonoBehaviour
     private float harmlessTimer = 3.0f;         // Driver can't hurt other players
     private GameObject trailCollisionObject;    // Trail collisions' parent game object
     private float killTimer = 3.0f;     // Seconds until object is destroyed
+    private float boostTime = 0.0f;     // Remaining time of boost
+    private float currentSpeed = 0.0f;  // The current speed
+    public ItemType heldItem = ItemType.None;  // The currently held item
 
     private float lightColorA = 1.0f;       // Light's original alpha value
     private float[] trailRendererA = null;    // Trail renderer's original alpha values
@@ -143,6 +150,8 @@ public class DriverController : MonoBehaviour
     private void UpdateColors()
     {
         Color currentColor = this.mainColor;
+        if (this.boostTime > 0.0f)
+            currentColor = new Color(1.0f, 0.8f, 0.05f, currentColor.a);
         if (this.harmlessTimer > 0.0f)
             currentColor = new Color(currentColor.r * 0.35f, currentColor.g * 0.35f, currentColor.b * 0.35f, currentColor.a * 0.1f);
 
@@ -170,9 +179,9 @@ public class DriverController : MonoBehaviour
         this.gravityDirection = -this.transform.up;
 
         this.trailRenderer = this.GetComponentInChildren<TimedTrailRenderer>();
-        this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
+        this.trailRenderer.lifeTime = (this.baseTrailLength / this.currentSpeed) * this.gridSize;
         this.cameraTrail = this.GetComponentInChildren<TrailRenderer>();
-        this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
+        this.cameraTrail.time = (this.baseTrailLength / this.currentSpeed) * this.gridSize;
         this.vehicleMesh = this.transform.Find("VehicleMeshes").gameObject;
 
         Light light = this.GetComponentInChildren<Light>();
@@ -263,9 +272,9 @@ public class DriverController : MonoBehaviour
                 this.gameObject.layer = DriverController.layerDriver;
 
             if (this.trailRenderer != null)
-                this.trailRenderer.lifeTime = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
+                this.trailRenderer.lifeTime = (this.baseTrailLength / this.currentSpeed) * this.gridSize;
             if (this.cameraTrail != null)
-                this.cameraTrail.time = (this.baseTrailLength / this.baseSpeed) * this.gridSize;
+                this.cameraTrail.time = (this.baseTrailLength / this.currentSpeed) * this.gridSize;
 
             Vector3 totalMovement = Vector3.zero;
 
@@ -336,6 +345,28 @@ public class DriverController : MonoBehaviour
             if (this.playerAction == PlayerAction.UseItem)
             {
                 this.playerAction = PlayerAction.None;
+
+                switch (this.heldItem)
+                {
+                    case ItemType.Boost:
+                        this.boostTime = this.boostDuration;
+                        break;
+                }
+
+                this.heldItem = ItemType.None;
+            }
+
+            // Set driving speed
+            if (this.boostTime > 0.0f)
+            {
+                this.updateColor = true;
+                this.currentSpeed = this.boostSpeed;
+                this.boostTime -= Time.deltaTime;
+            }
+            else
+            {
+                this.updateColor = true;
+                this.currentSpeed = this.baseSpeed;
             }
 
             RaycastHit raycastHit;
@@ -355,7 +386,7 @@ public class DriverController : MonoBehaviour
                 }
 
                 // Apply gravity
-                totalMovement += this.gravityDirection * this.baseSpeed;
+                totalMovement += this.gravityDirection * this.currentSpeed;
             }
             else
             {
@@ -369,7 +400,7 @@ public class DriverController : MonoBehaviour
                 nodeOnDriver = this.transform.TransformDirection(nodeOnDriver);
                 this.transform.rotation = transformRotation;
 
-                float nodeDistance = (this.baseSpeed * this.moveDirection * Time.deltaTime).magnitude - (nodeOnDriver - this.transform.position).magnitude;
+                float nodeDistance = (this.currentSpeed * this.moveDirection * Time.deltaTime).magnitude - (nodeOnDriver - this.transform.position).magnitude;
 
                 if ((this.nodeList.Count <= 0 || nextNode.position != this.nodeList[this.nodeList.Count - 1].position) && nodeDistance >= 0 && (nextNode.position - this.transform.position).magnitude <= this.gridSize)
                 {
@@ -419,7 +450,7 @@ public class DriverController : MonoBehaviour
                 }
 
                 // Apply driving speed
-                totalMovement += (this.baseSpeed * this.moveDirection);
+                totalMovement += (this.currentSpeed * this.moveDirection);
             }
 
             // Clean up node list
@@ -486,6 +517,9 @@ public class DriverController : MonoBehaviour
             {
                 this.colliderList[i].collider.enabled = false;
             }
+
+            for (int i = 0; i < this.nodeList.Count; i++)
+                Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f, Color.green);
 
             this.nodeList.RemoveAt(this.nodeList.Count - 1);
             if (inserted && !removed)
@@ -628,6 +662,16 @@ public class DriverController : MonoBehaviour
 
         this.characterController.enabled = false;
     }
+
+
+    void GetRandomItem(ItemBoxBehavior itemBoxScript)
+    {
+        if (this.heldItem == ItemType.None)
+        {
+            itemBoxScript.SetInactive();
+            this.heldItem = ItemType.Boost;
+        }
+    }
     
     
     
@@ -678,6 +722,12 @@ public class DriverController : MonoBehaviour
             }
                 
         }
+
+        if (collider.tag == this.itemBoxPrefab.tag)
+        {
+            if (Network.connections.Length <= 0 || this.networkView.isMine)
+                this.GetRandomItem(collider.gameObject.GetComponent<ItemBoxBehavior>());
+        }
     }
 
     // On trigger stay
@@ -703,6 +753,8 @@ public class DriverController : MonoBehaviour
         {
             // Sending data...
             stream.Serialize(ref this.playerIndex);
+            stream.Serialize(ref this.boostTime);
+            stream.Serialize(ref this.currentSpeed);
             colorR = this.mainColor.r;
             colorG = this.mainColor.g;
             colorB = this.mainColor.b;
@@ -734,6 +786,8 @@ public class DriverController : MonoBehaviour
         {
             // Receiving data...
             stream.Serialize(ref this.playerIndex);
+            stream.Serialize(ref this.boostTime);
+            stream.Serialize(ref this.currentSpeed);
             stream.Serialize(ref colorR);
             stream.Serialize(ref colorG);
             stream.Serialize(ref colorB);
@@ -779,4 +833,11 @@ public class DriverController : MonoBehaviour
             this.playersRef = gameState.players;
         }
     }
+}
+
+
+public enum ItemType
+{
+    None,
+    Boost
 }

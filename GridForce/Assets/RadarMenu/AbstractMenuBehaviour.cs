@@ -20,7 +20,7 @@ public class AbstractMenuBehaviour : MonoBehaviour {
 
 	public MenuState gameState {
 		get {
-			GameObject state = GameObject.Find("state");
+			GameObject state = GameObject.Find("MenuState");
 			return state.GetComponent<MenuState>();
 		}
 	}

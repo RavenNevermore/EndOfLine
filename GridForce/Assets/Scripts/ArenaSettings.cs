@@ -15,9 +15,12 @@ public class ArenaSettings : MonoBehaviour
 	void Start ()
     {
         // Set tiling for all children
-        MeshRenderer[] allChildren = this.GetComponentsInChildren <MeshRenderer>();
+        MeshRenderer[] allChildren = this.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer child in allChildren)
-            child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
+        {
+            if (child.gameObject.tag == "Drivable" || child.gameObject.tag == "NonDrivable")
+                child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
+        }
 	}
 
     // On drawing gizmos
@@ -26,8 +29,11 @@ public class ArenaSettings : MonoBehaviour
         #if UNITY_EDITOR
 
         MeshRenderer[] allChildren = this.GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer child in allChildren)
+        foreach (MeshRenderer child in allChildren)
+        {
+            if (child.gameObject.tag == "Drivable" || child.gameObject.tag == "NonDrivable")
                 child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
+        }
 
         #endif
     }

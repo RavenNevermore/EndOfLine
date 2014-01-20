@@ -27,7 +27,7 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
     {
         this.parentObject = this.transform.parent.gameObject;
 
-        this.menuState = GameObject.Find("state").GetComponent<MenuState>();
+        this.menuState = GameObject.Find("MenuState").GetComponent<MenuState>();
 
 		this.guiPosition = new Rect(
 			Screen.width / 2 - this.boxWidth / 2,
