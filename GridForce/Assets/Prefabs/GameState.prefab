@@ -27,12 +27,12 @@ GameObject:
   - 4: {fileID: 400002}
   - 131: {fileID: 13100000}
   m_Layer: 0
-  m_Name: Item Texture
+  m_Name: Item Boost Texture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &100004
 GameObject:
   m_ObjectHideFlags: 1
@@ -403,9 +403,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arenaSettings: {fileID: 0}
   driverGameObject: {fileID: 400006, guid: 718ba9e196792d840bb894d17ff7947a, type: 2}
+  menuState: {fileID: 0}
   playerIndex: 0
   playerName: Player
   selectedMesh: 1
+  boostItemGfx: {fileID: 100002}
 --- !u!131 &13100000
 GUITexture:
   m_ObjectHideFlags: 1
@@ -413,7 +415,7 @@ GUITexture:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100002}
   m_Enabled: 1
-  m_Texture: {fileID: 2800000, guid: 8e3ff3e27ca4bc54dda56e89e0550dfa, type: 3}
+  m_Texture: {fileID: 2800000, guid: 1774629f9f38cb74bb5e4a10d1e97769, type: 3}
   m_Color: {r: .5, g: .5, b: .5, a: .5}
   m_PixelInset:
     serializedVersion: 2
@@ -432,8 +434,8 @@ GUITexture:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_Enabled: 1
-  m_Texture: {fileID: 2800000, guid: c89c9b4566b9a3d46a3fe761ccf23363, type: 3}
-  m_Color: {r: .200000048, g: 1, b: 0, a: .501960814}
+  m_Texture: {fileID: 2800000, guid: 9a93cc745ac08104e88a2337e7bd6bb0, type: 3}
+  m_Color: {r: 1, g: 0, b: 0, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
     x: 24

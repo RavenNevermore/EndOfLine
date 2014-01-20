@@ -18,7 +18,7 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
     {
         this.parentObject = this.transform.parent.gameObject;
 
-        this.menuState = GameObject.Find("state").GetComponent<MenuState>();
+        this.menuState = GameObject.Find("MenuState").GetComponent<MenuState>();
 
 		TextMesh text = this.GetComponentInChildren<TextMesh>();
 		text.text = this.hostName + "(" + this.otherPlayers + ")";

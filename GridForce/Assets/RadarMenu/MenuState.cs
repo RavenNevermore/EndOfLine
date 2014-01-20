@@ -25,6 +25,15 @@ public class MenuState : MonoBehaviour
 
     private Dictionary<NetworkPlayer, bool> playersReady = new Dictionary<NetworkPlayer, bool>();
 
+    void Start()
+    {
+        if (GameObject.Find("MenuState") != this.gameObject)
+        {
+            UnityEngine.Object.Destroy(this.gameObject.GetComponent<NetworkView>());
+            UnityEngine.Object.Destroy(this);
+        }
+    }
+
 	public void StartGame()
     {
 		NetworkConnectionError connectionError;

@@ -31,12 +31,15 @@ public class GameState : MonoBehaviour
 
     public int selectedMesh = 1;
 
+    public GameObject boostItemGfx = null;
+
+
     // Use this for initialization
     void Start()
     {
 
 		if (null == menuState)
-        	menuState = GameObject.Find("state").GetComponent<MenuState>();
+            menuState = GameObject.Find("MenuState").GetComponent<MenuState>();
 
         this.playerName = menuState.playerName;
         this.selectedMesh = menuState.vehicleSelection;
@@ -71,6 +74,20 @@ public class GameState : MonoBehaviour
         if (this.gameStarted && this.currentPlayerObject == null)
         {
             this.createDriverObject(Random.Range(0, this.arenaSettings.spawnPoints.Count - 1), this.playerColor);
+        }
+
+        if (this.currentPlayerObject != null)
+        {
+            switch (this.currentPlayerObject.GetComponent<DriverController>().heldItem)
+            {
+                case ItemType.None:
+                    this.boostItemGfx.SetActive(false);
+                    break;
+
+                case ItemType.Boost:
+                    this.boostItemGfx.SetActive(true);
+                    break;
+            }
         }
     }
 
