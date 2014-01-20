@@ -1653,6 +1653,7 @@ MonoBehaviour:
   borderWidth: 0
   guiBackground: {r: .404411793, g: .404411793, b: .404411793, a: .400000006}
   notificationPrefab: {fileID: 100000, guid: 28de142a153c6834084af25ca0beb2c4, type: 2}
+  guiSkin: {fileID: 11400000, guid: 9da96b6befbef794f96e007cbfc7df0f, type: 2}
 --- !u!1001 &1135898980
 Prefab:
   m_ObjectHideFlags: 0
@@ -3334,6 +3335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc4a0148f0eeee64c9b3bbd16bd2ccd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  guiSkin: {fileID: 11400000, guid: 453571c0302533d4cb5fc2ccba618bc5, type: 2}
 --- !u!4 &2082067031
 Transform:
   m_ObjectHideFlags: 0

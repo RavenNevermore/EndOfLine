@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD:GridForce/Assets/ArtTestmap/Textures/diffuseMAP_floor_190114_alpha.bmp.meta
-guid: 10b6c54301ca55e498f8c695a3d1df8f
-=======
-guid: 11854d63292ae6c4baf1aa2cd82faf7e
->>>>>>> 06ed0a81e6edcd510e645416cfac00e18c2e26c5:GridForce/Assets/ArtTestmap/Textures/diffuseMAP_floor_190114_alpha.bmp.meta
+guid: 77b26c598da8267458d5010cf66d0c2d
 TextureImporter:
   serializedVersion: 2
   mipmaps:

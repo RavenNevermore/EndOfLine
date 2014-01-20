@@ -13,6 +13,7 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
     public GameObject notificationPrefab = null;
     private GameObject notificationInstance = null;
     private GameObject parentObject = null;
+    public GUISkin guiSkin = null;
 
 	Rect guiPosition;
 	Rect textFieldPosition;
@@ -70,6 +71,8 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 
 	void OnGUI()
     {
+        GUI.skin = this.guiSkin;
+
 		if (!this.enableGui || this.connecting)
 			return;
 
@@ -82,7 +85,7 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 
 		GUI.backgroundColor = this.guiBackground;
 
-		GUI.Box(this.guiPosition, "Enter the Ip of a Host.");
+		GUI.Box(this.guiPosition, "Please enter the host's IP address:");
 
 		this.ipToJoin = GUI.TextField(this.textFieldPosition, this.ipToJoin, 15);
 
