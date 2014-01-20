@@ -31,17 +31,17 @@ public class ErrorState : MonoBehaviour
     {
         if (this.displayConsole)
         {
-            if (this.consoleYPos > Screen.height - this.consoleHeight)
+            if (this.consoleYPos > Screen.height - this.consoleHeight - 5)
             {
                 this.consoleYPos -= Time.deltaTime * 600;
-                if (this.consoleYPos <= Screen.height - this.consoleHeight)
-                    this.consoleYPos = Screen.height - this.consoleHeight;
+                if (this.consoleYPos <= Screen.height - this.consoleHeight - 5)
+                    this.consoleYPos = Screen.height - this.consoleHeight - 5;
             }
-            else if (this.consoleYPos < Screen.height - this.consoleHeight)
+            else if (this.consoleYPos < Screen.height - this.consoleHeight - 5)
             {
                 this.consoleYPos += Time.deltaTime * 600;
-                if (this.consoleYPos >= Screen.height - this.consoleHeight)
-                    this.consoleYPos = Screen.height - this.consoleHeight;
+                if (this.consoleYPos >= Screen.height - this.consoleHeight - 5)
+                    this.consoleYPos = Screen.height - this.consoleHeight - 5;
             }
         }
         else
@@ -62,7 +62,7 @@ public class ErrorState : MonoBehaviour
     {
         GUI.skin = this.guiSkin;
 
-        GUI.BeginGroup(new Rect(0, this.consoleYPos, this.consoleWidth, this.consoleHeight));
+        GUI.BeginGroup(new Rect(5, this.consoleYPos, this.consoleWidth, this.consoleHeight));
 
         GUI.Box(new Rect(0, this.consoleHeight - this.boxHeight, this.consoleWidth - 105, this.boxHeight), this.errorText);
         
