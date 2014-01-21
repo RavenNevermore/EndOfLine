@@ -7,11 +7,12 @@ public class ErrorState : MonoBehaviour
     public GUISkin guiSkin = null;
 
     private bool displayConsole = false;
+    private float autoClose = 0.0f;
     private float consoleYPos = 0;
     private int consoleWidth = 355;
     private int consoleHeight = 100;
     private int boxHeight = 60;
-    private string errorText = "";
+    private List<ErrorLine> consoleLines = new List<ErrorLine>();
     private List<ErrorGuiButton> buttonList = new List<ErrorGuiButton>();
 
 	// Use this for initialization
@@ -25,10 +26,12 @@ public class ErrorState : MonoBehaviour
             UnityEngine.Object.Destroy(this.gameObject);
 
         //this.Clear();
-        //this.SetErrorMessage("Connecting...\nError: Connection to Server failed");
+        //this.AddLine("Connecting...", false);
+        //this.AddLine("Connection to server failed", true);
+        //this.AddLine("Connecting...", false);
         //this.AddButton("Cancel", null);
         //this.AddButton("Retry", null);
-        //this.Show();
+        //this.Show(5.0f);
 	}
 	
 	// Update is called once per frame
@@ -47,6 +50,12 @@ public class ErrorState : MonoBehaviour
                 this.consoleYPos += Time.deltaTime * 600;
                 if (this.consoleYPos >= Screen.height - this.consoleHeight - 5)
                     this.consoleYPos = Screen.height - this.consoleHeight - 5;
+            }
+            else if (this.autoClose > 0.0f)
+            {
+                this.autoClose -= Time.deltaTime;
+                if (this.autoClose <= 0.0f)
+                    this.Hide();
             }
         }
         else
@@ -69,8 +78,45 @@ public class ErrorState : MonoBehaviour
 
         GUI.BeginGroup(new Rect(5, this.consoleYPos, this.consoleWidth, this.consoleHeight));
 
-        GUI.Box(new Rect(0, this.consoleHeight - this.boxHeight, this.consoleWidth - 105, this.boxHeight), this.errorText);
-        GUI.Label(new Rect(0, this.consoleHeight - this.boxHeight, this.consoleWidth - 105, this.boxHeight), this.errorText);
+        GUI.Box(new Rect(0, this.consoleHeight - this.boxHeight, this.consoleWidth - 105, this.boxHeight), "");
+
+        float totalHeight = 0;
+        float lineHeight = 0;
+        for (int i = 0; i < this.consoleLines.Count; i++)
+        {
+            if (this.consoleLines[i].isError)
+                lineHeight = this.guiSkin.customStyles[0].lineHeight;
+            else
+                lineHeight = this.guiSkin.label.lineHeight;
+
+            totalHeight += lineHeight;
+
+            if (totalHeight >= this.boxHeight)
+            {
+                if (this.consoleLines[0].isError)
+                    lineHeight = this.guiSkin.customStyles[0].lineHeight;
+                else
+                    lineHeight = this.guiSkin.label.lineHeight;
+                this.consoleLines.RemoveAt(0);
+                i--;
+                totalHeight -= lineHeight;
+            }
+        }
+
+        float currentYPos = 0;
+        for (int i = 0; i < this.consoleLines.Count; i++)
+        {
+            if (this.consoleLines[i].isError)
+            {
+                GUI.Label(new Rect(0, this.consoleHeight - this.boxHeight + currentYPos, this.consoleWidth - 105, this.boxHeight - currentYPos), this.consoleLines[i].lineText, this.guiSkin.customStyles[0]);
+                currentYPos += this.guiSkin.customStyles[0].lineHeight;
+            }
+            else
+            {
+                GUI.Label(new Rect(0, this.consoleHeight - this.boxHeight + currentYPos, this.consoleWidth - 105, this.boxHeight - currentYPos), this.consoleLines[i].lineText, this.guiSkin.label);
+                currentYPos += this.guiSkin.label.lineHeight;
+            }
+        }
         
         bool active = (this.consoleYPos <= Screen.height - this.consoleHeight) && this.displayConsole;
         for (int i = 0; i < this.buttonList.Count; i++)
@@ -84,6 +130,13 @@ public class ErrorState : MonoBehaviour
     public void Show()
     {
         this.displayConsole = true;
+        this.autoClose = 0.0f;
+    }
+
+    public void Show(float autoClose)
+    {
+        this.displayConsole = true;
+        this.autoClose = autoClose;
     }
 
     public void Hide()
@@ -94,7 +147,12 @@ public class ErrorState : MonoBehaviour
     public void Clear()
     {
         this.buttonList.Clear();
-        this.errorText = "";
+        this.consoleLines.Clear();
+    }
+
+    public void ClearButtons()
+    {
+        this.buttonList.Clear();
     }
 
     public void AddButton(string buttonText, ErrorGuiButtonDelegate ButtonFunction)
@@ -106,9 +164,9 @@ public class ErrorState : MonoBehaviour
         this.buttonList.Add(guiButton);
     }
 
-    public void SetErrorMessage(string errorText)
+    public void AddLine(string lineText, bool isError)
     {
-        this.errorText = errorText;
+        this.consoleLines.Add(new ErrorLine(lineText, isError));
     }
 }
 
@@ -131,5 +189,17 @@ public struct ErrorGuiButton
     {
         if (GUI.Button(this.buttonRectangle, this.buttonText) && active && this.ButtonFunction != null)
             this.ButtonFunction();
+    }
+}
+
+public struct ErrorLine
+{
+    public string lineText;
+    public bool isError;
+
+    public ErrorLine(string lineText, bool isError)
+    {
+        this.lineText = lineText;
+        this.isError = isError;
     }
 }

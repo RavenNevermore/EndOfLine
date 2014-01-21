@@ -19,7 +19,10 @@ public class ArenaSettings : MonoBehaviour
         foreach (MeshRenderer child in allChildren)
         {
             if (child.gameObject.tag == "Drivable" || child.gameObject.tag == "NonDrivable")
+            {
                 child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
+                child.material.SetTextureScale("_BumpMap", new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize));
+            }
         }
 	}
 
@@ -32,7 +35,10 @@ public class ArenaSettings : MonoBehaviour
         foreach (MeshRenderer child in allChildren)
         {
             if (child.gameObject.tag == "Drivable" || child.gameObject.tag == "NonDrivable")
+            {
                 child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
+                child.material.SetTextureScale("_BumpMap", new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize));
+            }
         }
 
         #endif
