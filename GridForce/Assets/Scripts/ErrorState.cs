@@ -17,13 +17,18 @@ public class ErrorState : MonoBehaviour
 	// Use this for initialization
 	void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(this);
         this.consoleYPos = Screen.height;
 
-        this.SetErrorMessage("An error occured");
-        this.AddButton("Close", null);
-        this.AddButton("Retry", null);
-        this.Show();
+        GameObject[] errorStates = GameObject.FindGameObjectsWithTag("ErrorState");
+        if (errorStates.Length > 1)
+            UnityEngine.Object.Destroy(this.gameObject);
+
+        //this.Clear();
+        //this.SetErrorMessage("Connecting...\nError: Connection to Server failed");
+        //this.AddButton("Cancel", null);
+        //this.AddButton("Retry", null);
+        //this.Show();
 	}
 	
 	// Update is called once per frame
@@ -65,6 +70,7 @@ public class ErrorState : MonoBehaviour
         GUI.BeginGroup(new Rect(5, this.consoleYPos, this.consoleWidth, this.consoleHeight));
 
         GUI.Box(new Rect(0, this.consoleHeight - this.boxHeight, this.consoleWidth - 105, this.boxHeight), this.errorText);
+        GUI.Label(new Rect(0, this.consoleHeight - this.boxHeight, this.consoleWidth - 105, this.boxHeight), this.errorText);
         
         bool active = (this.consoleYPos <= Screen.height - this.consoleHeight) && this.displayConsole;
         for (int i = 0; i < this.buttonList.Count; i++)

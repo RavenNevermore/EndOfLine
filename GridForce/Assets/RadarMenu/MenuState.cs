@@ -32,6 +32,8 @@ public class MenuState : MonoBehaviour
         {
             UnityEngine.Object.Destroy(this.gameObject.GetComponent<NetworkView>());
             UnityEngine.Object.Destroy(this);
+            if (this.name == "MenuState")
+                UnityEngine.Object.Destroy(this.gameObject);
         }
     }
 

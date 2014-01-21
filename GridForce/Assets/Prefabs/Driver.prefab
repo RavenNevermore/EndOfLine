@@ -139,7 +139,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 95: {fileID: 9500000}
   m_Layer: 0
-  m_Name: Vehicle_1
+  m_Name: Vehicle_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -259,7 +259,7 @@ GameObject:
   - 23: {fileID: 2300012}
   - 95: {fileID: 9500004}
   m_Layer: 0
-  m_Name: Vehicle_2
+  m_Name: Vehicle_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -564,7 +564,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400030}
+  - {fileID: 400016}
   m_Father: {fileID: 400034}
 --- !u!4 &400014
 Transform:
@@ -576,7 +576,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400016}
+  - {fileID: 400030}
   m_Father: {fileID: 400034}
 --- !u!4 &400016
 Transform:
@@ -588,7 +588,7 @@ Transform:
   m_LocalPosition: {x: -0, y: -.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 400014}
+  m_Father: {fileID: 400012}
 --- !u!4 &400018
 Transform:
   m_ObjectHideFlags: 1
@@ -665,7 +665,7 @@ Transform:
   m_LocalPosition: {x: -0, y: -.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 400012}
+  m_Father: {fileID: 400014}
 --- !u!4 &400032
 Transform:
   m_ObjectHideFlags: 1
@@ -841,7 +841,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 8876129fb917aa04991126301c1bb39e, type: 2}
+  - {fileID: 2100000, guid: 02346de60d8eadb49b23fb5ecd7f522d, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -967,7 +967,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: 02346de60d8eadb49b23fb5ecd7f522d, type: 2}
+  - {fileID: 2100000, guid: 8876129fb917aa04991126301c1bb39e, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1213,7 +1213,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
-  m_Mesh: {fileID: 4300002, guid: 6042872ed55d45342b0d55053037ae21, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 63646472d276a9644bbc73b250bb640a, type: 3}
 --- !u!33 &3300002
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -1255,7 +1255,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100030}
-  m_Mesh: {fileID: 4300000, guid: 63646472d276a9644bbc73b250bb640a, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 6042872ed55d45342b0d55053037ae21, type: 3}
 --- !u!33 &3300014
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -1354,7 +1354,7 @@ Animator:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100016}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 6042872ed55d45342b0d55053037ae21, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 63646472d276a9644bbc73b250bb640a, type: 3}
   m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_ApplyRootMotion: 1
@@ -1382,7 +1382,7 @@ Animator:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100030}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 63646472d276a9644bbc73b250bb640a, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 6042872ed55d45342b0d55053037ae21, type: 3}
   m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_ApplyRootMotion: 1
