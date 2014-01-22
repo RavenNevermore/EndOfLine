@@ -19,3 +19,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Arena_2pl.unity
   - enabled: 1
     path: Assets/ArtTestmap/testmap1_art_190114.unity
+  - enabled: 1
+    path: Assets/Scenes/Arena_2pl_4.unity
+  - enabled: 1
+    path: Assets/Scenes/Arena_2pl_6.unity
+  - enabled: 1
+    path: Assets/Scenes/Arena_2pl_8.unity
