@@ -47,7 +47,8 @@ public class StartHostedGameBehaviour : MonoBehaviour {
         foreach (GameObject itemBox in itemBoxes)
         {
             ItemBoxBehavior itemBoxScript = itemBox.GetComponent<ItemBoxBehavior>();
-            itemBoxScript.ReInstantiate();
+            if (itemBoxScript != null)
+                itemBoxScript.ReInstantiate();
         }
 
 		UdpBroadcasting.destroyBeacon();
