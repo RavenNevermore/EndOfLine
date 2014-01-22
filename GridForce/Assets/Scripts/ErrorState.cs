@@ -100,12 +100,12 @@ public class ErrorState : MonoBehaviour
         {
             if (this.consoleLines[i].isError)
             {
-                GUI.Label(new Rect(0, this.consoleHeight - this.boxHeight + currentYPos, this.consoleWidth - 105, this.boxHeight - currentYPos), this.consoleLines[i].lineText, this.guiSkin.customStyles[0]);
+                GUI.Label(new Rect(0, this.consoleHeight - this.boxHeight + currentYPos - (this.guiSkin.customStyles[0].contentOffset.y * 2.0f), this.consoleWidth - 105 - (this.guiSkin.customStyles[0].contentOffset.x * 2.0f), this.boxHeight - currentYPos), this.consoleLines[i].lineText, this.guiSkin.customStyles[0]);
                 currentYPos += this.guiSkin.customStyles[0].lineHeight;
             }
             else
             {
-                GUI.Label(new Rect(0, this.consoleHeight - this.boxHeight + currentYPos, this.consoleWidth - 105, this.boxHeight - currentYPos), this.consoleLines[i].lineText, this.guiSkin.label);
+                GUI.Label(new Rect(0, this.consoleHeight - this.boxHeight + currentYPos - (this.guiSkin.label.contentOffset.y * 2.0f), this.consoleWidth - 105 - (this.guiSkin.label.contentOffset.x * 2.0f), this.boxHeight - currentYPos), this.consoleLines[i].lineText, this.guiSkin.label);
                 currentYPos += this.guiSkin.label.lineHeight;
             }
         }
@@ -159,7 +159,7 @@ public class ErrorState : MonoBehaviour
 
     public void AddLine(string lineText, bool isError)
     {
-        this.consoleLines.Add(new ErrorLine(lineText, isError));
+        this.consoleLines.Add(new ErrorLine("→ " + lineText, isError));
     }
 }
 

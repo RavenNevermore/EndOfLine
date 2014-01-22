@@ -71,7 +71,7 @@ public class MenuState : MonoBehaviour
             {
                 this.errorState.ClearButtons();
                 this.errorState.AddLine("Server started", false);
-                this.errorState.AddLine("Waiting for players", false);
+                this.errorState.AddLine("Waiting for players...", false);
                 this.errorState.Show(3.0f);
             }
 		}
