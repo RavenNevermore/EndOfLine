@@ -6,37 +6,34 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 
 	public GameObject previewState;
     public GameObject gameStatePrefab = null;
-    public GameObject notificationPrefab = null;
     public MenuState menuState = null;
+    public ErrorState errorState = null;
 
 	void Start ()
     {
+        this.errorState = GameObject.Find("ErrorState").GetComponent<ErrorState>();
+
 		Debug.Log("My menustate is : " + menuState);
 
 		Input.simulateMouseWithTouches = true;
 
 		TextMesh text = this.GetComponentInChildren<TextMesh>();
 
-		text.text = "Your IP is " + Network.player.ipAddress + ".\nStart Game!"; 
-
+		text.text = "Your IP is " + Network.player.ipAddress + ".\nStart Game!";
 	}
 
 	void OnMouseDown()
     {
         if (!(this.menuState.AllPlayersReady()))
         {
-            try
-            {
-                UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.notificationPrefab, Vector3.zero, Quaternion.identity);
-                ((GameObject)(newObject)).GetComponentInChildren<GUIText>().text = "NOT ALL PLAYERS ARE READY YET...";
-                DontDestroyOnLoad(newObject);
-            }
-            catch (Exception)
-            {
-            }
+            this.errorState.ClearButtons();
+            this.errorState.AddLine("Some players not ready...", false);
+            this.errorState.Show(3.0f);
 
             return;
         }
+
+        Network.maxConnections = Network.connections.Length;
 
 		GameObject gameState = null;
         if (Network.connections.Length > 0)

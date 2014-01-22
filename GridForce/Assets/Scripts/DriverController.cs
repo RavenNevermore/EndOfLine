@@ -52,6 +52,8 @@ public class DriverController : MonoBehaviour
     private float boostTime = 0.0f;     // Remaining time of boost
     private float currentSpeed = 0.0f;  // The current speed
     public ItemType heldItem = ItemType.None;  // The currently held item
+    private bool removedNode = false;       // Node was removed this frame
+    private bool insertedNode = false;      // Node was inserted this frame
 
     private float lightColorA = 1.0f;       // Light's original alpha value
     private float[] trailRendererA = null;    // Trail renderer's original alpha values
@@ -225,6 +227,7 @@ public class DriverController : MonoBehaviour
             nodePos = raycastHit.transform.TransformDirection(nodePos);
 
             this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up));
+            this.nodeList.Add(new PathNode(this.transform.position, -this.gravityDirection));
         };
 	}
 
@@ -266,6 +269,14 @@ public class DriverController : MonoBehaviour
 
         if (!(this.killed))
         {
+            if (this.nodeList.Count > 0)
+                this.nodeList.RemoveAt(this.nodeList.Count - 1);
+            if (this.insertedNode && !(this.removedNode))
+                this.nodeList.RemoveAt(0);
+
+            this.insertedNode = false;
+            this.removedNode = false;
+
             if (this.invincibleTimer > 0.0f)
                 this.gameObject.layer = DriverController.layerDriverInvincible;
             else
@@ -454,33 +465,35 @@ public class DriverController : MonoBehaviour
             }
 
             // Clean up node list
-            this.nodeList.Add(new PathNode(this.transform.position, -this.gravityDirection));
+            Vector3 positionGroundLevel = this.transform.position;
+            RaycastHit nodeGroundRaycast;
+            if (Physics.Linecast(this.transform.position, (this.transform.position - this.gravityDirection) * 5.0f, out nodeGroundRaycast, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+                positionGroundLevel = nodeGroundRaycast.point;
+            this.nodeList.Add(new PathNode(positionGroundLevel, -this.gravityDirection));
             float currentLength = 0.0f;
             float totalLength = 0.0f;
-            PathNode firstRemoved = new PathNode();
-            bool removed = false;
+            PathNode firstRemoved = this.nodeList[0];
 
             for (int i = this.nodeList.Count - 2; i >= 0; i--)
             {
                 currentLength += (this.nodeList[i].position - this.nodeList[i + 1].position).magnitude;
                 if (currentLength > this.baseTrailLength * this.gridSize)
                 {
-                    if (!removed)
+                    if (!(this.removedNode))
                         firstRemoved = this.nodeList[i];
                     this.nodeList.RemoveAt(i);
-                    removed = true;
+                    this.removedNode = true;
                 }
                 if (currentLength <= this.baseTrailLength * this.gridSize)
                     totalLength = currentLength;
             }
 
             Vector3 directionVector = (firstRemoved.position - this.nodeList[0].position).normalized;
-            bool inserted = false;
             if (totalLength < this.baseTrailLength * this.gridSize && currentLength > this.baseTrailLength * this.gridSize)
             {
                 float difference = (this.baseTrailLength * this.gridSize) - totalLength;
-                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), this.nodeList[0].normal));
-                inserted = true;
+                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), firstRemoved.normal));
+                this.insertedNode = true;
             }
 
             // Create new trail collision
@@ -520,10 +533,6 @@ public class DriverController : MonoBehaviour
 
             for (int i = 0; i < this.nodeList.Count; i++)
                 Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f, Color.green);
-
-            this.nodeList.RemoveAt(this.nodeList.Count - 1);
-            if (inserted && !removed)
-                this.nodeList.RemoveAt(0);
 
             // Player transformations
             totalMovement = new Vector3((float)(Math.Round(totalMovement.x, 1)), (float)(Math.Round(totalMovement.y, 1)), (float)(Math.Round(totalMovement.z, 1)));
@@ -692,7 +701,7 @@ public class DriverController : MonoBehaviour
                         lastEnabled = i;
                 }
 
-                for (int i = Math.Max(0, lastEnabled - 2); i < this.colliderList.Count; i++)
+                for (int i = Math.Max(0, lastEnabled - 2); i <= lastEnabled; i++)
                 {
                     if (collider.transform == this.colliderList[i].transform)
                         return;
@@ -712,7 +721,6 @@ public class DriverController : MonoBehaviour
             this.Kill(killer);
 
             // Check if driver is crashing into other driver and kill both
-
             if (otherDriver != null)
             {
                 if (otherDriver.invincibleTimer <= 0.0f && (otherDriver.transform.position - this.transform.position).magnitude <= 0.9f)

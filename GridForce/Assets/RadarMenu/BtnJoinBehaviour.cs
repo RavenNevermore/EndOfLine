@@ -7,15 +7,16 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
 	public Camera menuCamera;
 	public string hostName;
 	public string hostIp;
-	public int otherPlayers;
+    public int otherPlayers;
+    public ErrorState errorState = null;
     private MenuState menuState = null;
     private bool connecting = false;
-    public GameObject notificationPrefab = null;
-    private GameObject notificationInstance = null;
     private GameObject parentObject = null;
 
 	void Start()
     {
+        this.errorState = GameObject.Find("ErrorState").GetComponent<ErrorState>();
+
         this.parentObject = this.transform.parent.gameObject;
 
         this.menuState = GameObject.Find("MenuState").GetComponent<MenuState>();
@@ -35,15 +36,10 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
 
             this.gameState.hostIp = this.hostIp;
 
-            try
-            {
-                UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.notificationPrefab, Vector3.zero, Quaternion.identity);
-                this.notificationInstance = ((GameObject)(newObject));
-                this.notificationInstance.GetComponentInChildren<GUIText>().text = "CONNECTING TO SERVER...";
-            }
-            catch (Exception)
-            {
-            }
+            this.errorState.Clear();
+            this.errorState.AddLine("Connecting to " + this.hostIp + "...", false);
+            this.errorState.AddButton("Cancel", this.OnAbortedConnection);
+            this.errorState.Show();
 
             this.transform.parent = this.transform.parent.parent;
             this.parentObject.SetActive(false);
@@ -60,16 +56,32 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
         this.parentObject.SetActive(true);
         this.transform.parent = this.parentObject.transform;
 
-        UnityEngine.Object.Destroy(this.notificationInstance);
-        this.notificationInstance = null;
+        this.errorState.AddLine("Connected to " + this.hostIp, false);
+        this.errorState.ClearButtons();
+        this.errorState.Show(3.0f);
 
         this.switchToMenu("03_select_vehicle");
     }
 
     void OnFailedToConnect(NetworkConnectionError error)
     {
-        UnityEngine.Object.Destroy(this.notificationInstance);
-        this.notificationInstance = null;
+        this.errorState.AddLine("Failed to connect to " + this.hostIp, true);
+        this.errorState.ClearButtons();
+        this.errorState.Show(3.0f);
+        this.OnAbortedConnection();
+
         this.connecting = false;
+    }
+
+    void OnAbortedConnection()
+    {
+        this.connecting = false;
+
+        this.parentObject.SetActive(true);
+        this.transform.parent = this.parentObject.transform;
+
+        this.switchToMenu("01_select_gamemode");
+
+        Network.Disconnect(200);
     }
 }

@@ -10,10 +10,9 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 	public int borderWidth;
     public Color guiBackground;
     private MenuState menuState = null;
-    public GameObject notificationPrefab = null;
-    private GameObject notificationInstance = null;
     private GameObject parentObject = null;
     public GUISkin guiSkin = null;
+    public ErrorState errorState = null;
 
 	Rect guiPosition;
 	Rect textFieldPosition;
@@ -26,6 +25,8 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 
 	void Start()
     {
+        this.errorState = GameObject.Find("ErrorState").GetComponent<ErrorState>();
+
         this.parentObject = this.transform.parent.gameObject;
 
         this.menuState = GameObject.Find("MenuState").GetComponent<MenuState>();
@@ -125,15 +126,10 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
             if (this.gameState.hostIp.Contains(":"))
                 this.gameState.hostIp = "0.0.0.0";
 
-            try
-            {
-                UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.notificationPrefab, Vector3.zero, Quaternion.identity);
-                this.notificationInstance = ((GameObject)(newObject));
-                this.notificationInstance.GetComponentInChildren<GUIText>().text = "CONNECTING TO SERVER...";
-            }
-            catch (Exception)
-            {
-            }
+            this.errorState.Clear();
+            this.errorState.AddLine("Connecting to " + this.gameState.hostIp + "...", false);
+            this.errorState.AddButton("Cancel", this.OnAbortedConnection);
+            this.errorState.Show();
 
             this.connecting = true;
             this.menuState.ConnectAsClient();
@@ -147,8 +143,9 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
         this.parentObject.SetActive(true);
         this.transform.parent = this.parentObject.transform;
 
-        UnityEngine.Object.Destroy(this.notificationInstance);
-        this.notificationInstance = null;
+        this.errorState.AddLine("Connected to " + this.gameState.hostIp, false);
+        this.errorState.ClearButtons();
+        this.errorState.Show(3.0f);
 
         this.enableGui = false;
         this.ipToJoin = "";
@@ -158,8 +155,23 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 
     void OnFailedToConnect(NetworkConnectionError error)
     {
-        UnityEngine.Object.Destroy(this.notificationInstance);
-        this.notificationInstance = null;
+        this.errorState.AddLine("Failed to connect to " + this.gameState.hostIp, true);
+        this.errorState.ClearButtons();
+        this.errorState.Show(3.0f);
+        this.OnAbortedConnection();
+
         this.connecting = false;
+    }
+
+    void OnAbortedConnection()
+    {
+        this.connecting = false;
+
+        this.parentObject.SetActive(true);
+        this.transform.parent = this.parentObject.transform;
+
+        this.switchToMenu("01_select_gamemode");
+
+        Network.Disconnect(200);
     }
 }

@@ -24,14 +24,6 @@ public class ErrorState : MonoBehaviour
         GameObject[] errorStates = GameObject.FindGameObjectsWithTag("ErrorState");
         if (errorStates.Length > 1)
             UnityEngine.Object.Destroy(this.gameObject);
-
-        //this.Clear();
-        //this.AddLine("Connecting...", false);
-        //this.AddLine("Connection to server failed", true);
-        //this.AddLine("Connecting...", false);
-        //this.AddButton("Cancel", null);
-        //this.AddButton("Retry", null);
-        //this.Show(5.0f);
 	}
 	
 	// Update is called once per frame
@@ -159,8 +151,9 @@ public class ErrorState : MonoBehaviour
     {
         int xPos = this.consoleWidth - 100;
         int yPos = this.consoleHeight - 30 - (this.buttonList.Count * 30);
-        ErrorGuiButton guiButton = new ErrorGuiButton(new Rect(xPos, yPos, 100, 25), buttonText, ButtonFunction);
+        ErrorGuiButton guiButton = new ErrorGuiButton(new Rect(xPos, yPos, 100, 25), buttonText, null);
         guiButton.ButtonFunction += this.Hide;
+        guiButton.ButtonFunction += ButtonFunction;
         this.buttonList.Add(guiButton);
     }
 

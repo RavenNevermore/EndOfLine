@@ -860,7 +860,7 @@ MonoBehaviour:
   arenaName: 
   vehicleSelection: 0
   playerName: PLAYER NAME
-  serverNotification: {fileID: 100000, guid: 2ca64a7fcd10ab44cbeb9a28ac3e28d5, type: 2}
+  errorState: {fileID: 0}
   gameStarted: 0
 --- !u!4 &623721123
 Transform:
@@ -1096,7 +1096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Testarena5
+  arenaName: testmap1_art_190114
 --- !u!64 &694997518
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1652,8 +1652,8 @@ MonoBehaviour:
   boxHeight: 100
   borderWidth: 0
   guiBackground: {r: .404411793, g: .404411793, b: .404411793, a: .400000006}
-  notificationPrefab: {fileID: 100000, guid: 28de142a153c6834084af25ca0beb2c4, type: 2}
   guiSkin: {fileID: 11400000, guid: 9da96b6befbef794f96e007cbfc7df0f, type: 2}
+  errorState: {fileID: 0}
 --- !u!1001 &1135898980
 Prefab:
   m_ObjectHideFlags: 0
@@ -2308,7 +2308,7 @@ MonoBehaviour:
   hostName: Marvin
   hostIp: 127.0.0.1
   otherPlayers: 7
-  notificationPrefab: {fileID: 100000, guid: 28de142a153c6834084af25ca0beb2c4, type: 2}
+  errorState: {fileID: 0}
 --- !u!1 &1453687591
 GameObject:
   m_ObjectHideFlags: 0

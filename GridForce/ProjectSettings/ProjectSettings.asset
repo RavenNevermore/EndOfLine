@@ -74,6 +74,8 @@ PlayerSettings:
     16:9: 1
     Others: 1
   iPhoneBundleIdentifier: de.games-academy.GridForce
+  metroEnableIndependentInputSource: 0
+  metroEnableLowLatencyPresentationAPI: 0
   productGUID: 45cf1731a1c5b4ea2a01806bf577fe14
   iPhoneBundleVersion: 1.0
   AndroidBundleVersionCode: 1
@@ -185,6 +187,7 @@ PlayerSettings:
     SharedUserCertificates: 0
     VideosLibrary: 0
     WebCam: 0
+  metroUnprocessedPlugins: []
   metroCompilationOverrides: 1
   blackberryDeviceAddress: 
   blackberryDevicePassword: 

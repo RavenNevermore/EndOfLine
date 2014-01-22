@@ -14,7 +14,7 @@ public class BtnBackBehaviour : AbstractMenuBehaviour
 	void OnMouseDown()
     {
 		this.switchToMenu(this.lastMenu, false);
-        if (this.lastMenu == "01_select_gamemode" && Network.isClient && Network.connections.Length > 0)
-            Network.CloseConnection(Network.connections[0], true);
+        if (this.lastMenu == "01_select_gamemode")
+            Network.Disconnect(200);
 	}
 }
