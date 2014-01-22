@@ -37,7 +37,6 @@ public class GameState : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
 		if (null == menuState)
             menuState = GameObject.Find("MenuState").GetComponent<MenuState>();
 

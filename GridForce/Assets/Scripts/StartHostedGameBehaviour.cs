@@ -17,7 +17,13 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 
 		Debug.Log("My menustate is : " + menuState);
 
-		UdpBroadcasting.createBeacon();
+        try
+        {
+            UdpBroadcasting.createBeacon();
+        }
+        catch (Exception)
+        {
+        }
 
 		Input.simulateMouseWithTouches = true;
 
@@ -31,7 +37,7 @@ public class StartHostedGameBehaviour : MonoBehaviour {
         if (!(this.menuState.AllPlayersReady()))
         {
             this.errorState.ClearButtons();
-            this.errorState.AddLine("Some players not ready...", false);
+            this.errorState.AddLine("Some players not ready...", true);
             this.errorState.Show(3.0f);
 
             return;
@@ -53,7 +59,13 @@ public class StartHostedGameBehaviour : MonoBehaviour {
                 itemBoxScript.ReInstantiate();
         }
 
-		UdpBroadcasting.destroyBeacon();
+        try
+        {
+            UdpBroadcasting.destroyBeacon();
+        }
+        catch (Exception)
+        {
+        }
 
 		gameState.GetComponent<GameState>().menuState = this.menuState;
         this.menuState.gameStarted = true;
