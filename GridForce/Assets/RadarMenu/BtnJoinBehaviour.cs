@@ -56,7 +56,8 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
             this.errorState.Show();
 
             this.transform.parent = this.transform.parent.parent;
-            this.parentObject.SetActive(false);
+            if (this.parentObject != null)
+                this.parentObject.SetActive(false);
 
             this.connecting = true;
             this.menuState.ConnectAsClient();
