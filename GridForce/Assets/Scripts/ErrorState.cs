@@ -70,7 +70,15 @@ public class ErrorState : MonoBehaviour
 
         GUI.BeginGroup(new Rect(5, this.consoleYPos, this.consoleWidth, this.consoleHeight));
 
-        GUI.Label(new Rect(5, this.consoleHeight - this.boxHeight - 20, this.consoleWidth, 100), "Notifications", this.guiSkin.customStyles[1]);
+		if (null == this.guiSkin || 
+		    null == this.guiSkin.customStyles ||
+		    this.guiSkin.customStyles.Length < 2)
+			GUI.Label(new Rect(5, this.consoleHeight - this.boxHeight - 20, this.consoleWidth, 100), 
+			          "Notifications");
+		else
+        	GUI.Label(new Rect(5, this.consoleHeight - this.boxHeight - 20, this.consoleWidth, 100), 
+			          "Notifications", 
+			          this.guiSkin.customStyles[1]);
                 
         GUI.Box(new Rect(0, this.consoleHeight - this.boxHeight, this.consoleWidth - 105, this.boxHeight), "");
 
