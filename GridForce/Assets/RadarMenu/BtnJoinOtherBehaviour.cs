@@ -170,6 +170,8 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
         this.parentObject.SetActive(true);
         this.transform.parent = this.parentObject.transform;
 
+        this.enableGui = false;
+        this.switchToMenu("");
         this.switchToMenu("01_select_gamemode");
 
         Network.Disconnect(200);

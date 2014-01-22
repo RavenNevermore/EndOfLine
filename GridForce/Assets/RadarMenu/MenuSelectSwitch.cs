@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class MenuSelectSwitch : MonoBehaviour {
@@ -36,8 +37,8 @@ public class MenuSelectSwitch : MonoBehaviour {
 	}
 
 	void activateGameObject(GameObject obj){
-		obj.SetActive(true);
-		obj.SendMessage("OnMenuActivation");
+            obj.SetActive(true);
+            obj.SendMessage("OnMenuActivation");
 	}
 
 	void setReturnPathOnMenu(GameObject menu, string returnPath){
