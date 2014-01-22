@@ -15,6 +15,8 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 
 		Debug.Log("My menustate is : " + menuState);
 
+		UdpBroadcasting.createBeacon();
+
 		Input.simulateMouseWithTouches = true;
 
 		TextMesh text = this.GetComponentInChildren<TextMesh>();
@@ -47,6 +49,8 @@ public class StartHostedGameBehaviour : MonoBehaviour {
             ItemBoxBehavior itemBoxScript = itemBox.GetComponent<ItemBoxBehavior>();
             itemBoxScript.ReInstantiate();
         }
+
+		UdpBroadcasting.destroyBeacon();
 
 		gameState.GetComponent<GameState>().menuState = this.menuState;
         this.menuState.gameStarted = true;
