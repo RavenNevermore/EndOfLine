@@ -17,7 +17,12 @@ public class UdpBroadcasting : MonoBehaviour {
 
 
 	[DllImport("__Internal")]
-	private static extern int udp_callout(int port, int broadcast_port, string call_token);
+	private static extern int udp_create_sailor_socket(int port);
+
+	[DllImport("__Internal")]
+	private static extern int udp_callout_from_socket(int socket, 
+	                                                  int broadcast_port, 
+	                                                  string call_token);
 
 	[DllImport("__Internal")]
 	private static extern void close_sailors_ears(int socket);
@@ -29,6 +34,7 @@ public class UdpBroadcasting : MonoBehaviour {
 
 	private static string SAILOR = "EndOfTheLine";
 	private static string BEACON = "GridForce";
+	private static string DEVICE_NAME = "<unknown>";
 
 	private static bool sailorIsActive = false;
 	private static int sailorSocket;
@@ -84,12 +90,16 @@ public class UdpBroadcasting : MonoBehaviour {
 	}
 
 	public static void createBeacon(){
+		DEVICE_NAME = SystemInfo.deviceName;
+
 		if (!plattformIsDevice())
 			return;
 		
 		Loom.RunAsync(()=>{
 			Debug.Log("Creating Beacon.");
-			UdpBroadcasting.udp_create_beacon(1337, SAILOR, BEACON);
+			string answer = BEACON + "|";
+			answer += DEVICE_NAME;
+			UdpBroadcasting.udp_create_beacon(1337, SAILOR, answer);
 		});
 	}
 
@@ -112,6 +122,7 @@ public class UdpBroadcasting : MonoBehaviour {
 			UdpBroadcasting.sailorThread.Join();
 		if (plattformIsDevice())
 			UdpBroadcasting.close_sailors_ears(UdpBroadcasting.sailorSocket);
+		Debug.Log("I shoot the sailor!");
 	}
 
 	/**
@@ -130,14 +141,15 @@ public class UdpBroadcasting : MonoBehaviour {
 	}
 
 	private static Beacon sailorCallout(){
-		StringBuilder beaconIp = new StringBuilder();
-
+		StringBuilder beaconIp = new StringBuilder(255);
 		if (plattformIsDevice()){
 
 			if (UdpBroadcasting.udp_next_response(UdpBroadcasting.sailorSocket,
 			                                      BEACON,
 			                                      beaconIp)){
 				Debug.Log("Found a beacon at "+beaconIp);
+			} else {
+				return null;
 			}
 		} else {
 			beaconIp.Append("127.0.0.1|Pseudo Device");
@@ -150,18 +162,24 @@ public class UdpBroadcasting : MonoBehaviour {
 	}
 
 	public static void callAvailibleBeacons(){
+		if (plattformIsDevice()){
+			Debug.Log("Attempting to call beacons...");
+			
+			udp_callout_from_socket(sailorSocket, 1337, SAILOR);
+			Debug.Log("Callout complete at socket "+UdpBroadcasting.sailorSocket);
+		} else {
+			Debug.Log("Dummy callout!");
+		}
+	}
+
+	public static void startSailing(){
 		if (UdpBroadcasting.sailorIsActive){
 			Debug.Log("There is already a sailor out there!");
 			return;
 		}
 
 		if (plattformIsDevice()){
-			Debug.Log("Attempting to call beacons...");
-
-			UdpBroadcasting.sailorSocket = UdpBroadcasting.udp_callout(1338, 1337, SAILOR);
-			Debug.Log("Callout complete at socket "+UdpBroadcasting.sailorSocket);
-		} else {
-			Debug.Log("Dummy callout!");
+			UdpBroadcasting.sailorSocket = udp_create_sailor_socket(1338);
 		}
 
 		UdpBroadcasting.sailorIsActive = true;
@@ -169,16 +187,17 @@ public class UdpBroadcasting : MonoBehaviour {
 		UdpBroadcasting.sailorThread = Loom.RunAsync(()=>{
 			while (UdpBroadcasting.sailorIsActive){
 				Thread.Sleep(500);
-				//Debug.Log(".:.:.:.:");
-				Beacon beacon = UdpBroadcasting.sailorCallout();
-				//Beacon y = new Beacon();
-				//Debug.Log("Callout returned: "+beacon);
 
-				lock (_availibleBeacons) {
-					if (_availibleBeacons.ContainsKey(beacon)){
-						_availibleBeacons.Remove(beacon);
+				Beacon beacon = UdpBroadcasting.sailorCallout();
+				if (null != beacon){
+					Debug.Log("Got a beacon ->" + beacon);
+
+					lock (_availibleBeacons) {
+						if (_availibleBeacons.ContainsKey(beacon)){
+							_availibleBeacons.Remove(beacon);
+						}
+						_availibleBeacons.Add(beacon, now());
 					}
-					_availibleBeacons.Add(beacon, now());
 				}
 			}
 		});

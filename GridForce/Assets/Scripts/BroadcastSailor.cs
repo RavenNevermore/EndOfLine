@@ -17,7 +17,8 @@ public class BroadcastSailor : MonoBehaviour {
 	void OnMenuActivation () {
 		Debug.Log("Yay, we live!");
 		this.positionIndex = 0;
-		UdpBroadcasting.callAvailibleBeacons();
+		UdpBroadcasting.startSailing();
+
 	}
 	
 	// Update is called once per frame
@@ -28,8 +29,12 @@ public class BroadcastSailor : MonoBehaviour {
 		}
 		this.deltaT = 0;
 
+		UdpBroadcasting.callAvailibleBeacons();
+
 
 		HashSet<Beacon> beacons = UdpBroadcasting.availibleBeacons;
+		Debug.Log("* * * * "+beacons);
+
 		HashSet<Beacon> toRemove = new HashSet<Beacon>();
 		foreach (KeyValuePair<Beacon, GameObject> myBeacons in this.uiBeacons){
 			if (!beacons.Contains(myBeacons.Key)){

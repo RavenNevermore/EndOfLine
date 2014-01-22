@@ -15,15 +15,16 @@ public class StartHostedGameBehaviour : MonoBehaviour {
         if (errorStateObject != null)
             this.errorState = errorStateObject.GetComponent<ErrorState>();
 
-		Debug.Log("My menustate is : " + menuState);
+		Debug.Log("My menustate is : " + this.menuState);
 
-        try
-        {
-            UdpBroadcasting.createBeacon();
-        }
-        catch (Exception)
-        {
-        }
+		if (MenuState.GameType.HOST == this.menuState.type){
+	        try {
+	            UdpBroadcasting.createBeacon();
+				Debug.Log("Beacon is active!");
+	        } catch (Exception e) {
+				Debug.LogException(e);
+	        }
+		}
 
 		Input.simulateMouseWithTouches = true;
 
@@ -59,13 +60,14 @@ public class StartHostedGameBehaviour : MonoBehaviour {
                 itemBoxScript.ReInstantiate();
         }
 
-        try
-        {
-            UdpBroadcasting.destroyBeacon();
-        }
-        catch (Exception)
-        {
-        }
+		if (MenuState.GameType.HOST == this.menuState.type){
+	        try {
+	            UdpBroadcasting.destroyBeacon();
+				Debug.Log("Beacon has been taken down!");
+			} catch (Exception e) {
+				Debug.LogException(e);
+	        }
+		}
 
 		gameState.GetComponent<GameState>().menuState = this.menuState;
         this.menuState.gameStarted = true;
