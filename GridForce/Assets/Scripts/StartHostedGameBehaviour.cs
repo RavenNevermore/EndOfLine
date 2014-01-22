@@ -11,7 +11,9 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 
 	void Start ()
     {
-        this.errorState = GameObject.Find("ErrorState").GetComponent<ErrorState>();
+        GameObject errorStateObject = GameObject.Find("ErrorState");
+        if (errorStateObject != null)
+            this.errorState = errorStateObject.GetComponent<ErrorState>();
 
 		Debug.Log("My menustate is : " + menuState);
 

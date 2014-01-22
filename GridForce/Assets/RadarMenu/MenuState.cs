@@ -28,7 +28,9 @@ public class MenuState : MonoBehaviour
 
     void Start()
     {
-        this.errorState = GameObject.Find("ErrorState").GetComponent<ErrorState>();
+        GameObject errorStateObject = GameObject.Find("ErrorState");
+        if (errorStateObject != null)
+            this.errorState = errorStateObject.GetComponent<ErrorState>();
 
         GameObject otherMenuState = GameObject.Find("MenuState");
         if (otherMenuState != this.gameObject && otherMenuState != null)
