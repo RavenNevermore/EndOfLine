@@ -87,7 +87,7 @@ GameObject:
   - 23: {fileID: 2912819}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -115,7 +115,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 2089490858}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -174,6 +174,47 @@ Transform:
   - {fileID: 436936977}
   - {fileID: 909783535}
   m_Father: {fileID: 832051626}
+--- !u!21 &58347036
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &59804341
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +228,7 @@ GameObject:
   - 23: {fileID: 59804343}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -215,7 +256,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 58347036}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -356,6 +397,88 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_HDR: 0
   m_OcclusionCulling: 1
+--- !u!21 &313444351
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+--- !u!21 &354028975
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &436936976
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,6 +509,129 @@ Transform:
   - {fileID: 1649563180}
   - {fileID: 1912307211}
   m_Father: {fileID: 51291346}
+--- !u!21 &455378616
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_ceiling_drive (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: e67ab105c3ff4774e8e0cebf2c557464, type: 3}
+          m_Scale: {x: 40, y: 40}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 40, y: 40}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .202494472
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+--- !u!21 &455922704
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_drive (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
+          m_Scale: {x: 40, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 40, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .215352014
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+--- !u!21 &493002885
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_drive (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
+          m_Scale: {x: 40, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 40, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .215352014
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &509256427
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,7 +725,7 @@ GameObject:
   - 23: {fileID: 532988874}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -507,7 +753,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 578594963}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -562,6 +808,47 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 832051626}
+--- !u!21 &578594963
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &586771570
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,7 +879,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 783700501}
+  - {fileID: 1140157235}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -688,7 +975,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2011936841}
+  - {fileID: 455922704}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -758,7 +1045,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 1896890113}
+  - {fileID: 493002885}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -887,47 +1174,6 @@ MonoBehaviour:
   gameStatePrefab: {fileID: 0}
   menuState: {fileID: 0}
   errorState: {fileID: 0}
---- !u!21 &783700501
-Material:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: mat_wall_drive (Instance)
-  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: []
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
-          m_Scale: {x: 12, y: 40}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _BumpMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 12, y: 40}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: _Shininess
-        second: .215352014
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _SpecColor
-        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &795510739
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,7 +1187,7 @@ GameObject:
   - 23: {fileID: 795510741}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -969,7 +1215,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 313444351}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -998,13 +1244,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 795510739}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &818208520
+--- !u!21 &819285371
 Material:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: mat_ceiling_drive (Instance)
+  m_Name: mat_wall_drive (Instance) (Instance)
   m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
@@ -1015,21 +1261,21 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: e67ab105c3ff4774e8e0cebf2c557464, type: 3}
-          m_Scale: {x: 40, y: 40}
+          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
+          m_Scale: {x: 12, y: 40}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 40, y: 40}
+          m_Scale: {x: 12, y: 40}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
           name: _Shininess
-        second: .202494472
+        second: .215352014
     m_Colors:
       data:
         first:
@@ -1248,7 +1494,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 1740280500}
+  - {fileID: 819285371}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1318,6 +1564,47 @@ Transform:
   - {fileID: 1324722892}
   - {fileID: 1274188777}
   m_Father: {fileID: 51291346}
+--- !u!21 &919390793
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &969098791
 GameObject:
   m_ObjectHideFlags: 0
@@ -1393,7 +1680,7 @@ GameObject:
   - 23: {fileID: 997477264}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1421,7 +1708,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1733207712}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1450,6 +1737,47 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 997477262}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &1020534392
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1048108358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1463,7 +1791,7 @@ GameObject:
   - 23: {fileID: 1048108360}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1491,7 +1819,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1598982524}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1603,6 +1931,47 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 832051626}
+--- !u!21 &1140157235
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_drive (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
+          m_Scale: {x: 12, y: 40}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 12, y: 40}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .215352014
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1167493965
 GameObject:
   m_ObjectHideFlags: 0
@@ -1633,7 +2002,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 818208520}
+  - {fileID: 455378616}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1760,6 +2129,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 120299f2b0fdc4756bc79dab2f721d9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!21 &1196262244
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1274188776
 GameObject:
   m_ObjectHideFlags: 0
@@ -1773,7 +2183,7 @@ GameObject:
   - 23: {fileID: 1274188778}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1801,7 +2211,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 919390793}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1843,7 +2253,7 @@ GameObject:
   - 23: {fileID: 1324722893}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1871,7 +2281,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1020534392}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1900,6 +2310,47 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1324722891}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &1364486148
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1379932327
 GameObject:
   m_ObjectHideFlags: 0
@@ -1958,6 +2409,47 @@ Transform:
   - {fileID: 712976262}
   - {fileID: 586771574}
   m_Father: {fileID: 832051626}
+--- !u!21 &1504838560
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1520071617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1971,7 +2463,7 @@ GameObject:
   - 23: {fileID: 1520071619}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -1999,7 +2491,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1364486148}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2090,6 +2582,88 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!21 &1551676335
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+--- !u!21 &1598982524
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1608347649
 GameObject:
   m_ObjectHideFlags: 0
@@ -2133,7 +2707,7 @@ GameObject:
   - 23: {fileID: 1649563181}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -2161,7 +2735,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1504838560}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2190,6 +2764,47 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1649563179}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &1733207712
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1737886618
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,7 +2818,7 @@ GameObject:
   - 23: {fileID: 1737886620}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -2231,7 +2846,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 354028975}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2260,13 +2875,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1737886618}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &1740052931
+--- !u!21 &1760282870
 Material:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: mat_floor_drive (Instance)
+  m_Name: mat_wall_nodrive (Instance)
   m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
@@ -2277,28 +2892,21 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: 10b6c54301ca55e498f8c695a3d1df8f, type: 3}
-          m_Scale: {x: 40, y: 40}
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 40, y: 40}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _Detail
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 1, y: 1}
+          m_Scale: {x: 6, y: 12}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
           name: _Shininess
-        second: .220354751
+        second: .58266139
     m_Colors:
       data:
         first:
@@ -2308,13 +2916,13 @@ Material:
         first:
           name: _SpecColor
         second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
---- !u!21 &1740280500
+--- !u!21 &1765984656
 Material:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: mat_wall_drive (Instance)
+  m_Name: mat_wall_nodrive (Instance)
   m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
@@ -2325,21 +2933,21 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
-          m_Scale: {x: 12, y: 40}
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 12, y: 40}
+          m_Scale: {x: 6, y: 12}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
           name: _Shininess
-        second: .215352014
+        second: .58266139
     m_Colors:
       data:
         first:
@@ -2362,7 +2970,7 @@ GameObject:
   - 23: {fileID: 1833196976}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -2390,7 +2998,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1551676335}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2432,7 +3040,7 @@ GameObject:
   - 23: {fileID: 1875960345}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -2460,7 +3068,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1765984656}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2489,47 +3097,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1875960343}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &1896890113
-Material:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: mat_wall_drive (Instance)
-  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: []
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
-          m_Scale: {x: 40, y: 12}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _BumpMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 40, y: 12}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: _Shininess
-        second: .215352014
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _SpecColor
-        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1897132585
 GameObject:
   m_ObjectHideFlags: 0
@@ -2605,7 +3172,7 @@ GameObject:
   - 23: {fileID: 1912307212}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -2633,7 +3200,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1760282870}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2724,6 +3291,54 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+--- !u!21 &1917844817
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_floor_drive (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 10b6c54301ca55e498f8c695a3d1df8f, type: 3}
+          m_Scale: {x: 40, y: 40}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 40, y: 40}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Detail
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .220354751
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1001 &1938814635
 Prefab:
   m_ObjectHideFlags: 0
@@ -2856,7 +3471,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 1740052931}
+  - {fileID: 1917844817}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2896,47 +3511,6 @@ Transform:
   m_LocalScale: {x: 40, y: 1, z: 40}
   m_Children: []
   m_Father: {fileID: 1405639799}
---- !u!21 &2011936841
-Material:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: mat_wall_drive (Instance)
-  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: []
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
-          m_Scale: {x: 40, y: 12}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _BumpMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 40, y: 12}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: _Shininess
-        second: .215352014
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _SpecColor
-        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &2060500986
 GameObject:
   m_ObjectHideFlags: 0
@@ -2950,7 +3524,7 @@ GameObject:
   - 23: {fileID: 2060500988}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -2978,7 +3552,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 2066418110}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -3007,6 +3581,47 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2060500986}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &2066418110
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &2088155159
 GameObject:
   m_ObjectHideFlags: 0
@@ -3020,7 +3635,7 @@ GameObject:
   - 23: {fileID: 2088155161}
   m_Layer: 9
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: NonDrivable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -3048,7 +3663,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: d0c614b39b8ee8b41b04adcf611f041d, type: 2}
+  - {fileID: 1196262244}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -3077,3 +3692,44 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2088155159}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!21 &2089490858
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_nodrive (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: cca66a3eed9f8844eb65fb3e875ec9d4, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 12}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .58266139
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
