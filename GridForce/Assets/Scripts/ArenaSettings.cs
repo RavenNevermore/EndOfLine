@@ -6,6 +6,7 @@ public class ArenaSettings : MonoBehaviour
 {
     public float gridSize = 1.0f;
     public float maxDistance = 50.0f;
+    public float minSpawnPointDistance = 10.0f;
     public List<Transform> spawnPoints = new List<Transform>();
     public Transform cameraTransform = null;      // Camera transform
 

@@ -72,7 +72,7 @@ public class GameState : MonoBehaviour
 
         if (this.gameStarted && this.currentPlayerObject == null)
         {
-            this.createDriverObject(Random.Range(0, this.arenaSettings.spawnPoints.Count - 1), this.playerColor);
+            this.CreateDriverObject(this.FindFreeSpawnpoint(), this.playerColor);
         }
 
         if (this.currentPlayerObject != null)
@@ -92,7 +92,7 @@ public class GameState : MonoBehaviour
 
 
     // Instantiate a player object
-	void createDriverObject(int spawnpoint, Color playerColor)
+	void CreateDriverObject(int spawnpoint, Color playerColor)
     {
         int i = Mathf.Min(spawnpoint, this.arenaSettings.spawnPoints.Count - 1);
         UnityEngine.Object newObject = null;
@@ -109,6 +109,38 @@ public class GameState : MonoBehaviour
         driver.playersRef = this.players;
         driver.SetMesh(this.selectedMesh);
         this.currentPlayerObject = ((Transform)(newObject));
+    }
+
+    // Try to find a free spawn point or else return a random spawn point
+    int FindFreeSpawnpoint()
+    {
+        int spawnPoint = 0;
+
+        spawnPointList.Shuffle();
+        GameObject[] allDrivers = GameObject.FindGameObjectsWithTag("Driver");
+
+        bool foundFreeSpawnPoint = false;
+        for (int i = 0; i < this.spawnPointList.Count && !foundFreeSpawnPoint; i++)
+        {
+            int testSpawnPoint = this.spawnPointList[i];
+            bool isOccupied = false;
+            for (int j = 0; j < allDrivers.GetLength(0) && !isOccupied; j++)
+            {
+                if ((allDrivers[j].transform.position - this.arenaSettings.spawnPoints[testSpawnPoint].transform.position).magnitude < this.arenaSettings.minSpawnPointDistance)
+                    isOccupied = true;
+            }
+
+            if (!isOccupied)
+            {
+                spawnPoint = testSpawnPoint;
+                foundFreeSpawnPoint = true;
+            }
+        }
+
+        if (foundFreeSpawnPoint)
+            spawnPoint = Random.Range(0, this.arenaSettings.spawnPoints.Count - 1);
+
+        return spawnPoint;
     }
 
     // Start hosted game
@@ -168,7 +200,7 @@ public class GameState : MonoBehaviour
         this.arenaSettings.cameraTransform.gameObject.SetActive(true);
 
         this.gameStarted = true;
-        this.createDriverObject(this.spawnPoint, this.playerColor);
+        this.CreateDriverObject(this.spawnPoint, this.playerColor);
     }
 
     // Call when instantiated on network
@@ -177,6 +209,8 @@ public class GameState : MonoBehaviour
         if (Network.isServer)
             StartCoroutine(this.StartGame());
     }
+
+
 
     // Contains information on a player
     public struct PlayerData
