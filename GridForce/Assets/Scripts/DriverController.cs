@@ -339,7 +339,7 @@ public class DriverController : MonoBehaviour
                             else
                                 this.playerAction = PlayerAction.TurnRight;
                         }
-                        else if (touch.deltaPosition.y < 0.0f)
+                        else if (touch.deltaPosition.y > 0.0f)
                             this.playerAction = PlayerAction.UseItem;
 
                         this.fingerId = touch.fingerId;
