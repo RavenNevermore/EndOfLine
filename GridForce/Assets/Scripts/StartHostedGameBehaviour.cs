@@ -11,9 +11,20 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 
 	void Start ()
     {
-        this.errorState = GameObject.Find("ErrorState").GetComponent<ErrorState>();
+        GameObject errorStateObject = GameObject.Find("ErrorState");
+        if (errorStateObject != null)
+            this.errorState = errorStateObject.GetComponent<ErrorState>();
 
-		Debug.Log("My menustate is : " + menuState);
+		Debug.Log("My menustate is : " + this.menuState);
+
+		if (MenuState.GameType.HOST == this.menuState.type){
+	        try {
+	            UdpBroadcasting.createBeacon();
+				Debug.Log("Beacon is active!");
+	        } catch (Exception e) {
+				Debug.LogException(e);
+	        }
+		}
 
 		Input.simulateMouseWithTouches = true;
 
@@ -27,7 +38,7 @@ public class StartHostedGameBehaviour : MonoBehaviour {
         if (!(this.menuState.AllPlayersReady()))
         {
             this.errorState.ClearButtons();
-            this.errorState.AddLine("Some players not ready...", false);
+            this.errorState.AddLine("Some players not ready...", true);
             this.errorState.Show(3.0f);
 
             return;
@@ -45,8 +56,18 @@ public class StartHostedGameBehaviour : MonoBehaviour {
         foreach (GameObject itemBox in itemBoxes)
         {
             ItemBoxBehavior itemBoxScript = itemBox.GetComponent<ItemBoxBehavior>();
-            itemBoxScript.ReInstantiate();
+            if (itemBoxScript != null)
+                itemBoxScript.ReInstantiate();
         }
+
+		if (MenuState.GameType.HOST == this.menuState.type){
+	        try {
+	            UdpBroadcasting.destroyBeacon();
+				Debug.Log("Beacon has been taken down!");
+			} catch (Exception e) {
+				Debug.LogException(e);
+	        }
+		}
 
 		gameState.GetComponent<GameState>().menuState = this.menuState;
         this.menuState.gameStarted = true;

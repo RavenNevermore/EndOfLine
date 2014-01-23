@@ -28,7 +28,9 @@ public class MenuState : MonoBehaviour
 
     void Start()
     {
-        this.errorState = GameObject.Find("ErrorState").GetComponent<ErrorState>();
+        GameObject errorStateObject = GameObject.Find("ErrorState");
+        if (errorStateObject != null)
+            this.errorState = errorStateObject.GetComponent<ErrorState>();
 
         GameObject otherMenuState = GameObject.Find("MenuState");
         if (otherMenuState != this.gameObject && otherMenuState != null)
@@ -71,7 +73,7 @@ public class MenuState : MonoBehaviour
             {
                 this.errorState.ClearButtons();
                 this.errorState.AddLine("Server started", false);
-                this.errorState.AddLine("Waiting for players", false);
+                this.errorState.AddLine("Waiting for players...", false);
                 this.errorState.Show(3.0f);
             }
 		}
@@ -165,14 +167,15 @@ public class MenuState : MonoBehaviour
         if (this.gameStarted)
             Network.maxConnections = Network.connections.Length;
 
-        if (this.numConnections <= 0 && this.gameStarted)
+        if ((this.numConnections <= 0 || this.playersReady.Count <= 0) && this.gameStarted)
         {
-            Debug.LogWarning("All players dissconnected");
+            Debug.LogWarning("All players disconnected");
 
             this.gameStarted = false;
             Network.Disconnect(200);
 
             this.errorState.Clear();
+            this.errorState.AddLine("Player " + player.ipAddress + " disconnected", false);
             this.errorState.AddLine("All players disconnected", true);
             this.errorState.AddButton("Main Menu", this.ReturnToMainMenu);
             this.errorState.AddButton("Restart", this.HostGameRetry);

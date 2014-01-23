@@ -689,7 +689,7 @@ public class DriverController : MonoBehaviour
     {
         if (collider.tag == this.trailCollisionSegment.tag || collider.tag == this.tag)
         {
-            if (this.invincibleTimer > 0.0f || this.killed)
+            if (!((Network.connections.Length <= 0 || this.networkView.isMine)) || this.invincibleTimer > 0.0f || this.killed)
                 return;
 
             if (collider.gameObject.transform.parent == this.trailCollisionObject.transform)

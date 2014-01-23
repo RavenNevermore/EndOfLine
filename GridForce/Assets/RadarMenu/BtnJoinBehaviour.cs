@@ -21,8 +21,22 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
 
         this.menuState = GameObject.Find("MenuState").GetComponent<MenuState>();
 
+		this.resetName();
+	}
+
+	public void resetName(){
+		this.resetName(this.hostName, this.hostIp);
+	}
+
+	public void resetName(string hostName, string hostIp){
+		this.hostIp = hostIp;
+		this.hostName = hostName;
+		if (null == this.hostName || this.hostName.Trim().Equals(""))
+			this.hostName = hostIp;
+
 		TextMesh text = this.GetComponentInChildren<TextMesh>();
-		text.text = this.hostName + "(" + this.otherPlayers + ")";
+		text.text = this.hostName /*+ "(" + this.otherPlayers + ")"*/;
+
 	}
 	
 	
@@ -42,7 +56,8 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
             this.errorState.Show();
 
             this.transform.parent = this.transform.parent.parent;
-            this.parentObject.SetActive(false);
+            if (this.parentObject != null)
+                this.parentObject.SetActive(false);
 
             this.connecting = true;
             this.menuState.ConnectAsClient();
@@ -80,6 +95,7 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
         this.parentObject.SetActive(true);
         this.transform.parent = this.parentObject.transform;
 
+        this.switchToMenu("");
         this.switchToMenu("01_select_gamemode");
 
         Network.Disconnect(200);

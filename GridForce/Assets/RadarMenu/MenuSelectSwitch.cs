@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class MenuSelectSwitch : MonoBehaviour {
@@ -17,14 +18,15 @@ public class MenuSelectSwitch : MonoBehaviour {
 
 	void activateFirst(){
 		if (this.menuSelects.Length > 0)
-			this.menuSelects[0].SetActive(true);
+			this.activateGameObject(this.menuSelects[0]);
 	}
 
 	public void switchMenu(string nextMenu, string oldMenu){
 		Debug.Log("Switching to "+nextMenu+" from "+oldMenu);
 		foreach (GameObject select in this.menuSelects){
-			if (null != nextMenu && select.name.Equals(nextMenu)){
-				select.SetActive(true);
+			if (null != nextMenu && select.name.Equals(nextMenu) 
+			    		&& !select.activeSelf){
+				this.activateGameObject(select);
 				if (null != oldMenu)
 					this.setReturnPathOnMenu(select, oldMenu);
 
@@ -32,6 +34,11 @@ public class MenuSelectSwitch : MonoBehaviour {
 				select.SetActive(false);
 			}
 		}
+	}
+
+	void activateGameObject(GameObject obj){
+            obj.SetActive(true);
+            obj.SendMessage("OnMenuActivation");
 	}
 
 	void setReturnPathOnMenu(GameObject menu, string returnPath){

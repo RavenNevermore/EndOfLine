@@ -1523,9 +1523,9 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   baseSpeed: 20
   boostSpeed: 30
-  boostDuration: 5
+  boostDuration: 3
   killBoostDuration: 1.5
-  baseTrailLength: 20
+  baseTrailLength: 17
   rotationSpeed: 15
   cameraDistance: {x: 0, y: 2, z: -8}
   cameraAngleShift: {x: 0, y: 1, z: 0}
