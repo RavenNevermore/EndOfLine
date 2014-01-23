@@ -55,9 +55,9 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
             this.errorState.AddButton("Cancel", this.OnAbortedConnection);
             this.errorState.Show();
 
-            this.transform.parent = this.transform.parent.parent;
-            if (this.parentObject != null)
-                this.parentObject.SetActive(false);
+            this.transform.parent = this.transform.parent.parent.parent;
+            if (this.parentObject.transform.parent != null)
+                this.parentObject.transform.parent.gameObject.SetActive(false);
 
             this.connecting = true;
             this.menuState.ConnectAsClient();
@@ -68,7 +68,7 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
     {
         this.connecting = false;
 
-        this.parentObject.SetActive(true);
+        this.parentObject.transform.parent.gameObject.SetActive(true);
         this.transform.parent = this.parentObject.transform;
 
         this.errorState.AddLine("Connected to " + this.hostIp, false);
@@ -92,7 +92,7 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
     {
         this.connecting = false;
 
-        this.parentObject.SetActive(true);
+        this.parentObject.transform.parent.gameObject.SetActive(true);
         this.transform.parent = this.parentObject.transform;
 
         this.switchToMenu("");
