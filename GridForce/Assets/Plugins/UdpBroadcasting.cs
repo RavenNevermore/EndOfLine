@@ -9,7 +9,10 @@ using System.Threading;
 public class UdpBroadcasting : MonoBehaviour {
 
 	[DllImport("__Internal")]
-	private static extern void udp_create_beacon(int port, 
+	private static extern int udp_create_beacon(int port);
+
+	[DllImport("__Internal")]
+	private static extern void udp_use_beacon(int socket, 
 	                                             string listen_for_token, 
 	                                             string answer_with_token);
 	[DllImport("__Internal")]
@@ -37,7 +40,8 @@ public class UdpBroadcasting : MonoBehaviour {
 	private static string DEVICE_NAME = "<unknown>";
 
 	private static bool sailorIsActive = false;
-	private static int sailorSocket;
+	private static int sailorSocket = -1;
+	private static int beaconSocket = -1;
 	private static Thread sailorThread;
 
 	private static Dictionary<Beacon, long> _availibleBeacons = new Dictionary<Beacon, long>();
@@ -94,12 +98,18 @@ public class UdpBroadcasting : MonoBehaviour {
 
 		if (!plattformIsDevice())
 			return;
-		
+
+		if (-1 == UdpBroadcasting.beaconSocket){
+			Debug.Log("Creating new beacon");
+			UdpBroadcasting.beaconSocket = UdpBroadcasting.udp_create_beacon(1337);
+		}
+
 		Loom.RunAsync(()=>{
 			Debug.Log("Creating Beacon.");
 			string answer = BEACON + "|";
 			answer += DEVICE_NAME;
-			UdpBroadcasting.udp_create_beacon(1337, SAILOR, answer);
+			//TODO create beacon from existing socket
+			UdpBroadcasting.udp_use_beacon(UdpBroadcasting.beaconSocket, SAILOR, answer);
 		});
 	}
 
@@ -120,8 +130,9 @@ public class UdpBroadcasting : MonoBehaviour {
 		UdpBroadcasting.sailorIsActive = false;
 		if (null != UdpBroadcasting.sailorThread)
 			UdpBroadcasting.sailorThread.Join();
-		if (plattformIsDevice())
-			UdpBroadcasting.close_sailors_ears(UdpBroadcasting.sailorSocket);
+		//if (plattformIsDevice())
+		//	UdpBroadcasting.close_sailors_ears(UdpBroadcasting.sailorSocket);
+		//UdpBroadcasting.sailorSocket = -1;
 		Debug.Log("I shoot the sailor!");
 	}
 
@@ -179,7 +190,18 @@ public class UdpBroadcasting : MonoBehaviour {
 		}
 
 		if (plattformIsDevice()){
-			UdpBroadcasting.sailorSocket = udp_create_sailor_socket(1338);
+			if (-1 != UdpBroadcasting.sailorSocket){
+				Debug.Log("Using existing socket at "+UdpBroadcasting.sailorSocket);
+			} else {
+				int port = 1338;
+				int i = 0;
+				while (-1 == UdpBroadcasting.sailorSocket && i < 10){
+					Debug.Log("Creating sailor socket at port " + port);
+					UdpBroadcasting.sailorSocket = udp_create_sailor_socket(port);
+					port++;
+					i++;
+				}
+			}
 		}
 
 		UdpBroadcasting.sailorIsActive = true;
