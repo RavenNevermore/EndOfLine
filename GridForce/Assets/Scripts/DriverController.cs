@@ -155,7 +155,7 @@ public class DriverController : MonoBehaviour
         Color currentColor = this.mainColor;
         if (this.boostTime > 0.0f)
             currentColor = new Color(1.0f, 0.8f, 0.05f, currentColor.a);
-        if (this.harmlessTimer > 0.0f)
+        if (this.harmlessTimer > 0.0f && this.gameStarted)
             currentColor = new Color(currentColor.r * 0.35f, currentColor.g * 0.35f, currentColor.b * 0.35f, currentColor.a * 0.1f);
 
         Light light = this.GetComponentInChildren<Light>();
@@ -242,11 +242,14 @@ public class DriverController : MonoBehaviour
             if (this.invincibleTimer > 0.0f)
             {
                 this.invincibleTimer -= Time.deltaTime;
-                float modulo = this.invincibleTimer % 0.1f;
-                if (modulo > 0.05f)
-                    this.vehicleMesh.SetActive(false);
-                else
-                    this.vehicleMesh.SetActive(true);
+                if (this.gameStarted)
+                {
+                    float modulo = this.invincibleTimer % 0.1f;
+                    if (modulo > 0.05f)
+                        this.vehicleMesh.SetActive(false);
+                    else
+                        this.vehicleMesh.SetActive(true);
+                }
             }
             else
                 this.vehicleMesh.SetActive(true);
