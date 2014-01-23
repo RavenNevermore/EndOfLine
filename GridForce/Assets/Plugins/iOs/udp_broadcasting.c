@@ -52,7 +52,7 @@ int udp_create_sailor_socket(int port/*, int broadcast_port, const char* call_to
 
     int val = 1;
     struct timeval timeout;
-    timeout.tv_sec = 1;
+    timeout.tv_sec = 2;
     timeout.tv_usec = 0;
     setsockopt(s, SOL_SOCKET, SO_BROADCAST, &val, sizeof(val));
     setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
@@ -124,15 +124,33 @@ int udp_next_response(int socket, const char* beacon_token, char* responder_ip, 
 
 
 void close_sailors_ears(int socket){
-    shutdown(socket, 2);
+    int ret_val = shutdown(socket, SHUT_RDWR);
+#ifdef _UDP_DEBUG_
+    printf("Sailor socket [%d] closed: '%d'\n", socket, ret_val);
+    if (ret_val)
+        printf("\nERROR (%d: %s) WHILE CLOSING SOCKET!\n",
+               errno, strerror(errno));
+    fflush(stdout);
+#endif
 }
 
 /**
  * starts a UDP beacon, that can answer incomming broadcast calls.
  * Note: There can ever only be one beacon active, per machine.
  */
-void udp_create_beacon(int port, const char* listen_for_token,
-                       const char* answer_with_token){
+int udp_create_beacon(int port){
+
+
+    int s = bind_socket(INADDR_ANY, port);
+    if (0 > s) return -1;
+
+    return s;
+}
+
+void udp_use_beacon(int socket, const char* listen_for_token,
+                    const char* answer_with_token){
+
+
     if (beacon_active){
 #ifdef _UDP_DEBUG_
         printf("Beacon is already active!\n");
@@ -143,8 +161,12 @@ void udp_create_beacon(int port, const char* listen_for_token,
 
     beacon_active = TRUE;
 
-    int s = bind_socket(INADDR_ANY, port);
-    if (0 > s) return;
+    //int val = 1;
+    struct timeval timeout;
+    timeout.tv_sec = 2;
+    timeout.tv_usec = 0;
+    //setsockopt(s, SOL_SOCKET, SO_BROADCAST, &val, sizeof(val));
+    setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
 
     struct sockaddr_in callerAddress;
     socklen_t addrlen = sizeof(callerAddress);
@@ -153,10 +175,10 @@ void udp_create_beacon(int port, const char* listen_for_token,
     while (beacon_active){
         unsigned char buffer[ strlen(listen_for_token) ];
 #ifdef _UDP_DEBUG_
-        printf("Listening on Port %d\n", port);
+        printf("Listening on Socket %d\n", socket);
         fflush(stdout);
 #endif
-        long msgSize = recvfrom(s,
+        long msgSize = recvfrom(socket,
                                 buffer,
                                 strlen(listen_for_token),
                                 0,
@@ -182,13 +204,13 @@ void udp_create_beacon(int port, const char* listen_for_token,
             fflush(stdout);
 #endif
 
-            sendto(s, answer_with_token, strlen(answer_with_token), 0,
+            sendto(socket, answer_with_token, strlen(answer_with_token), 0,
                    (struct sockaddr *)&callerAddress, addrlen);
             
         }
     }
 
-    shutdown(s, 2);
+//    shutdown(s, 2);
 
 #ifdef _UDP_DEBUG_
     printf("Beacon shut down.\n");
