@@ -41,6 +41,7 @@ public class DriverController : MonoBehaviour
     private Vector3 gravityDirection;       // Character gravity
     private float gridSize = 1.0f;          // Grid size
     private List<PathNode> nodeList = new List<PathNode>();     // List of previous path nodes
+    private Dictionary<PathNode, Vector3> extendedNodeNormals = new Dictionary<PathNode, Vector3>();    // A dictionary of node normals
     private PlayerAction playerAction = PlayerAction.None;      // Defines player's action
     private Vector3 cameraPos = Vector3.zero;         // The camera's current position relative to the driver
     private int fingerId = -1;      // Id of first finger touching screen
@@ -398,6 +399,8 @@ public class DriverController : MonoBehaviour
                     this.moveDirection = this.gravityDirection;
                     this.gravityDirection = temp;
                     this.characterController.Move(((this.characterController.radius + 0.1f) * this.moveDirection));
+
+                    this.extendedNodeNormals.Add(this.nodeList[this.nodeList.Count - 1], -this.gravityDirection);
                 }
 
                 // Apply gravity
@@ -443,8 +446,6 @@ public class DriverController : MonoBehaviour
                     this.Kill(-1);
                 }
 
-                //Debug.DrawLine(this.transform.position + (this.moveDirection * 0.4f), this.transform.position + (this.moveDirection * 0.6f), Color.red);
-
 
                 // If player is not in the air, check if there is a wall ahead of him 
                 if (Physics.Linecast(this.transform.position, this.transform.position + (this.moveDirection * (this.characterController.radius + 0.1f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
@@ -461,6 +462,8 @@ public class DriverController : MonoBehaviour
                         Vector3 temp = this.moveDirection;
                         this.moveDirection = -this.gravityDirection;
                         this.gravityDirection = temp;
+
+                        this.extendedNodeNormals.Add(this.nodeList[this.nodeList.Count - 1], -this.gravityDirection);
                     }
                 }
 
@@ -477,6 +480,7 @@ public class DriverController : MonoBehaviour
             float currentLength = 0.0f;
             float totalLength = 0.0f;
             PathNode firstRemoved = this.nodeList[0];
+            Vector3 removedNormal = Vector3.zero;
 
             for (int i = this.nodeList.Count - 2; i >= 0; i--)
             {
@@ -484,7 +488,15 @@ public class DriverController : MonoBehaviour
                 if (currentLength > this.baseTrailLength * this.gridSize)
                 {
                     if (!(this.removedNode))
+                    {
                         firstRemoved = this.nodeList[i];
+                        if (this.extendedNodeNormals.ContainsKey(firstRemoved))
+                            removedNormal = this.extendedNodeNormals[firstRemoved];
+                        else
+                            removedNormal = firstRemoved.normal;
+                    }
+                    if (this.extendedNodeNormals.ContainsKey(this.nodeList[i]))
+                        this.extendedNodeNormals.Remove(this.nodeList[i]);
                     this.nodeList.RemoveAt(i);
                     this.removedNode = true;
                 }
@@ -496,7 +508,7 @@ public class DriverController : MonoBehaviour
             if (totalLength < this.baseTrailLength * this.gridSize && currentLength > this.baseTrailLength * this.gridSize)
             {
                 float difference = (this.baseTrailLength * this.gridSize) - totalLength;
-                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), firstRemoved.normal));
+                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), removedNormal));
                 this.insertedNode = true;
             }
 
@@ -534,9 +546,6 @@ public class DriverController : MonoBehaviour
             {
                 this.colliderList[i].collider.enabled = false;
             }
-
-            for (int i = 0; i < this.nodeList.Count; i++)
-                Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f, Color.green);
 
             // Player transformations
             totalMovement = new Vector3((float)(Math.Round(totalMovement.x, 1)), (float)(Math.Round(totalMovement.y, 1)), (float)(Math.Round(totalMovement.z, 1)));
