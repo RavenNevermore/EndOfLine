@@ -1024,7 +1024,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Testarena5
+  arenaName: Arena_for_2or3
 --- !u!64 &694997518
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1391,7 +1391,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &984143610
 Transform:
   m_ObjectHideFlags: 0
@@ -1438,7 +1438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Arena_2pl_8
+  arenaName: Arena_for_3or4_2
 --- !u!64 &1067097469
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1658,7 +1658,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1144772628
 Transform:
   m_ObjectHideFlags: 0
@@ -2195,7 +2195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Arena_2pl_4
+  arenaName: Arena_for_2
 --- !u!23 &1453687594
 Renderer:
   m_ObjectHideFlags: 0
@@ -2281,7 +2281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Arena_2pl_6
+  arenaName: Arena_for_3or4
 --- !u!64 &1522659116
 MeshCollider:
   m_ObjectHideFlags: 0
