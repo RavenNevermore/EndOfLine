@@ -24,6 +24,7 @@ public class DriverController : MonoBehaviour
     public bool updateColor = true;     // Whether to update player's color
     public int playerIndex = 0;    // This driver's player index
     public GameState.PlayerData[] playersRef = null;    // Array of players
+    public bool gameStarted = false;        // Has the game started yet?
 
     private const int layerDrivable = 8;     // Layer of drivable plane
     private const int layerNonDrivable = 9;    // Layer of non drivable plane
@@ -267,7 +268,7 @@ public class DriverController : MonoBehaviour
             this.updateColor = false;
         }
 
-        if (!(this.killed))
+        if (!(this.killed) && this.gameStarted)
         {
             if (this.nodeList.Count > 0)
                 this.nodeList.RemoveAt(this.nodeList.Count - 1);
@@ -760,6 +761,7 @@ public class DriverController : MonoBehaviour
         if (stream.isWriting)
         {
             // Sending data...
+            stream.Serialize(ref this.gameStarted);
             stream.Serialize(ref this.playerIndex);
             stream.Serialize(ref this.boostTime);
             stream.Serialize(ref this.currentSpeed);
@@ -793,6 +795,7 @@ public class DriverController : MonoBehaviour
         else
         {
             // Receiving data...
+            stream.Serialize(ref this.gameStarted);
             stream.Serialize(ref this.playerIndex);
             stream.Serialize(ref this.boostTime);
             stream.Serialize(ref this.currentSpeed);

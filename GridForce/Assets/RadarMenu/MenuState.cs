@@ -183,10 +183,19 @@ public class MenuState : MonoBehaviour
         }
         else
         {
-            this.errorState.ClearButtons();
-            this.errorState.AddLine("Player " + player.ipAddress + " disconnected", false);
-            this.errorState.Show(3.0f);
+            if (this.networkView != null)
+                this.networkView.RPC("PlayerDisconnectedNotification", RPCMode.All, player);
+            else
+                this.PlayerDisconnectedNotification(player);
         }
+    }
+
+    [RPC]
+    void PlayerDisconnectedNotification(NetworkPlayer player)
+    {
+        this.errorState.ClearButtons();
+        this.errorState.AddLine("Player " + player.ipAddress + " disconnected", false);
+        this.errorState.Show(3.0f);
     }
 
     void OnDisconnectedFromServer(NetworkDisconnection info)

@@ -7,7 +7,8 @@ public class GameState : MonoBehaviour
 {
     public ArenaSettings arenaSettings = null;    // Arena settings
     public Transform driverGameObject = null;     // Driver game object
-    private bool gameStarted = false;
+    private bool gameStarted = false;             // Has game started?
+    public bool countdownOver = false;            // Is countdown done?
 
 	public MenuState menuState;
 
@@ -108,7 +109,15 @@ public class GameState : MonoBehaviour
         driver.playerIndex = this.playerIndex;
         driver.playersRef = this.players;
         driver.SetMesh(this.selectedMesh);
+        driver.gameStarted = this.countdownOver;
         this.currentPlayerObject = ((Transform)(newObject));
+    }
+
+    public void CountdownOver()
+    {
+        this.countdownOver = true;
+        DriverController driver = this.currentPlayerObject.GetComponent<DriverController>();
+        driver.gameStarted = true;
     }
 
     // Try to find a free spawn point or else return a random spawn point

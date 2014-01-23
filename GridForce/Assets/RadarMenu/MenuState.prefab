@@ -46,7 +46,7 @@ MonoBehaviour:
   arenaName: 
   vehicleSelection: 0
   playerName: PLAYER NAME
-  serverNotification: {fileID: 100000, guid: 2ca64a7fcd10ab44cbeb9a28ac3e28d5, type: 2}
+  errorState: {fileID: 0}
   gameStarted: 0
 --- !u!148 &14800000
 NetworkView:
