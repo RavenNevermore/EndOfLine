@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BtnArenaSelectBehaviour : AbstractMenuBehaviour {
-
+public class BtnArenaSelectBehaviour : AbstractMenuBehaviour
+{
 	public string arenaName;
 
 	void Start()
@@ -10,7 +10,9 @@ public class BtnArenaSelectBehaviour : AbstractMenuBehaviour {
 		TextMesh text = this.GetComponentInChildren<TextMesh>();
 		if (null != text)
         {
-			text.text = this.arenaName;
+			text.text = this.arenaName.Substring(0, Mathf.Min(10, this.arenaName.Length));
+            if (text.text.Length < this.arenaName.Length)
+                text.text += "...";
 		}
 	}
 

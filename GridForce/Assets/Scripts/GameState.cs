@@ -231,15 +231,17 @@ public class GameState : MonoBehaviour
             this.playerScoreText = GameObject.Find("Player " + (this.playerIndex + 1).ToString() + " Score").GetComponent<GUIText>();
             this.playerNameText.color = color;
             this.playerScoreText.color = color;
-            this.playerNameText.text = this.name;
+            if (this.name.Length <= 11)
+                this.playerNameText.text = this.name;
+            else
+                this.playerNameText.text = this.name.Substring(0, 10) + "...";
             this.playerScoreText.text = score.ToString();
         }
 
         public void Update()
         {
-            if (this.playerNameText != null && this.playerScoreText != null)
+            if (this.playerScoreText != null)
             {
-                this.playerNameText.text = this.name;
                 this.playerScoreText.text = score.ToString();
             }
         }
