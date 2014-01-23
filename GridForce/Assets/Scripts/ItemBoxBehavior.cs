@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ItemBoxBehavior : MonoBehaviour
 {
-    public MeshRenderer meshRenderer = null;
+    public GameObject itemBoxMesh = null;
     public Collider itemBoxCollider = null;
     public float respawnTime = 10.0f;
     public ItemBoxBugFix itemBoxBugFix = null;
@@ -73,14 +73,14 @@ public class ItemBoxBehavior : MonoBehaviour
     {
         this.timeUntilRespawn = this.respawnTime;
 
-        this.meshRenderer.enabled = false;
+        this.itemBoxMesh.SetActive(false);
         this.itemBoxCollider.enabled = false;
     }
 
     // Activate item box
     public void SetActive()
     {
-        this.meshRenderer.enabled = true;
+        this.itemBoxMesh.SetActive(true);
         this.itemBoxCollider.enabled = true;
     }
 }
