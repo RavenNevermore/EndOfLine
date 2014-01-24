@@ -400,7 +400,9 @@ public class DriverController : MonoBehaviour
                     this.gravityDirection = temp;
                     this.characterController.Move(((this.characterController.radius + 0.1f) * this.moveDirection));
 
-                    this.extendedNodeNormals.Add(this.nodeList[this.nodeList.Count - 1], -this.gravityDirection);
+					PathNode node = this.nodeList[this.nodeList.Count - 1];
+					if (!(this.extendedNodeNormals.ContainsKey(node)))
+                    	this.extendedNodeNormals.Add(node, -this.gravityDirection);
                 }
 
                 // Apply gravity
@@ -463,7 +465,9 @@ public class DriverController : MonoBehaviour
                         this.moveDirection = -this.gravityDirection;
                         this.gravityDirection = temp;
 
-                        this.extendedNodeNormals.Add(this.nodeList[this.nodeList.Count - 1], -this.gravityDirection);
+						PathNode node = this.nodeList[this.nodeList.Count - 1];
+						if (!(this.extendedNodeNormals.ContainsKey(node)))
+                        	this.extendedNodeNormals.Add(node, -this.gravityDirection);
                     }
                 }
 
