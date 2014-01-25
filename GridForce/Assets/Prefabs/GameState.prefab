@@ -575,13 +575,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arenaSettings: {fileID: 0}
-  driverGameObject: {fileID: 400006, guid: 718ba9e196792d840bb894d17ff7947a, type: 2}
+  driverPrefab: {fileID: 400006, guid: 718ba9e196792d840bb894d17ff7947a, type: 2}
   countdownOver: 0
   menuState: {fileID: 0}
   playerIndex: 0
   playerName: Player
   selectedMesh: 1
   boostItemGfx: {fileID: 100002}
+  playerArrowPrefab: {fileID: 100000, guid: e0a7d668edfcfae4e8e55eca6f2e8c0a, type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

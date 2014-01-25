@@ -1644,6 +1644,7 @@ MonoBehaviour:
   guiBackground: {r: .404411793, g: .404411793, b: .404411793, a: .400000006}
   guiSkin: {fileID: 11400000, guid: 9da96b6befbef794f96e007cbfc7df0f, type: 2}
   errorState: {fileID: 0}
+  ipToJoin: 127.0.0.1
 --- !u!1001 &1135898980
 Prefab:
   m_ObjectHideFlags: 0

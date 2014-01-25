@@ -41,7 +41,6 @@ public class DriverController : MonoBehaviour
     private Vector3 gravityDirection;       // Character gravity
     private float gridSize = 1.0f;          // Grid size
     private List<PathNode> nodeList = new List<PathNode>();     // List of previous path nodes
-    private Dictionary<PathNode, Vector3> extendedNodeNormals = new Dictionary<PathNode, Vector3>();    // A dictionary of node normals
     private PlayerAction playerAction = PlayerAction.None;      // Defines player's action
     private Vector3 cameraPos = Vector3.zero;         // The camera's current position relative to the driver
     private int fingerId = -1;      // Id of first finger touching screen
@@ -69,11 +68,13 @@ public class DriverController : MonoBehaviour
     {
         public Vector3 position;
         public Vector3 normal;
+        public Vector3 nextNormal;
 
-        public PathNode(Vector3 position, Vector3 normal)
+        public PathNode(Vector3 position, Vector3 normal, Vector3 nextNormal)
         {
             this.position = position;
             this.normal = normal;
+            this.nextNormal = nextNormal;
         }
     }
 
@@ -91,7 +92,7 @@ public class DriverController : MonoBehaviour
     // Finds next path node on player's path
     private PathNode GetNextNode()
     {
-        PathNode pathNode = new PathNode(Vector3.zero, Vector3.up);
+        PathNode pathNode = new PathNode(Vector3.zero, Vector3.up, Vector3.up);
 
         RaycastHit raycastHit;
         if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
@@ -144,6 +145,7 @@ public class DriverController : MonoBehaviour
             // Convert to world space
             pathNode.position = raycastHit.transform.TransformDirection(localPos);
             pathNode.normal = -this.gravityDirection;
+            pathNode.nextNormal = -this.gravityDirection;
         };
 
         return pathNode;
@@ -228,8 +230,8 @@ public class DriverController : MonoBehaviour
             this.transform.position = raycastHit.transform.TransformDirection(localPos);
             nodePos = raycastHit.transform.TransformDirection(nodePos);
 
-            this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up));
-            this.nodeList.Add(new PathNode(this.transform.position, -this.gravityDirection));
+            this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up, raycastHit.transform.up));
+            this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up, raycastHit.transform.up));
         };
 	}
 
@@ -393,16 +395,12 @@ public class DriverController : MonoBehaviour
                 if (Physics.Linecast(this.transform.position - (this.gravityDirection * (this.characterController.height / 2.0f)), this.transform.position - (this.moveDirection * (this.characterController.radius + 3.0f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
                 {
                     // Change direction if a wall was detected
-                    this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection + this.moveDirection).normalized));
+                    this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection + this.moveDirection).normalized, this.moveDirection));
 
                     Vector3 temp = -this.moveDirection;
                     this.moveDirection = this.gravityDirection;
                     this.gravityDirection = temp;
                     this.characterController.Move(((this.characterController.radius + 0.1f) * this.moveDirection));
-
-					PathNode node = this.nodeList[this.nodeList.Count - 1];
-					if (!(this.extendedNodeNormals.ContainsKey(node)))
-                    	this.extendedNodeNormals.Add(node, -this.gravityDirection);
                 }
 
                 // Apply gravity
@@ -459,15 +457,11 @@ public class DriverController : MonoBehaviour
                     }
                     else
                     {
-                        this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection - this.moveDirection).normalized));
+                        this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection - this.moveDirection).normalized, -this.moveDirection));
 
                         Vector3 temp = this.moveDirection;
                         this.moveDirection = -this.gravityDirection;
                         this.gravityDirection = temp;
-
-						PathNode node = this.nodeList[this.nodeList.Count - 1];
-						if (!(this.extendedNodeNormals.ContainsKey(node)))
-                        	this.extendedNodeNormals.Add(node, -this.gravityDirection);
                     }
                 }
 
@@ -480,11 +474,10 @@ public class DriverController : MonoBehaviour
             RaycastHit nodeGroundRaycast;
             if (Physics.Linecast(this.transform.position, (this.transform.position - this.gravityDirection) * 5.0f, out nodeGroundRaycast, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
                 positionGroundLevel = nodeGroundRaycast.point;
-            this.nodeList.Add(new PathNode(positionGroundLevel, -this.gravityDirection));
+            this.nodeList.Add(new PathNode(positionGroundLevel, -this.gravityDirection, -this.gravityDirection));
             float currentLength = 0.0f;
             float totalLength = 0.0f;
             PathNode firstRemoved = this.nodeList[0];
-            Vector3 removedNormal = Vector3.zero;
 
             for (int i = this.nodeList.Count - 2; i >= 0; i--)
             {
@@ -494,13 +487,7 @@ public class DriverController : MonoBehaviour
                     if (!(this.removedNode))
                     {
                         firstRemoved = this.nodeList[i];
-                        if (this.extendedNodeNormals.ContainsKey(firstRemoved))
-                            removedNormal = this.extendedNodeNormals[firstRemoved];
-                        else
-                            removedNormal = firstRemoved.normal;
                     }
-                    if (this.extendedNodeNormals.ContainsKey(this.nodeList[i]))
-                        this.extendedNodeNormals.Remove(this.nodeList[i]);
                     this.nodeList.RemoveAt(i);
                     this.removedNode = true;
                 }
@@ -512,7 +499,7 @@ public class DriverController : MonoBehaviour
             if (totalLength < this.baseTrailLength * this.gridSize && currentLength > this.baseTrailLength * this.gridSize)
             {
                 float difference = (this.baseTrailLength * this.gridSize) - totalLength;
-                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), removedNormal));
+                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), firstRemoved.nextNormal, firstRemoved.nextNormal));
                 this.insertedNode = true;
             }
 
@@ -559,6 +546,9 @@ public class DriverController : MonoBehaviour
             if (this.transform.position.magnitude > this.arenaSettings.maxDistance)
                 this.Kill(-2);
         }
+
+        for (int i = 0; i < this.nodeList.Count; i++)
+            Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f, Color.green);
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), this.rotationSpeed * Time.deltaTime);
 
@@ -773,6 +763,7 @@ public class DriverController : MonoBehaviour
         int totalNodes = 0;
         Vector3 nodePos = Vector3.zero;
         Vector3 nodeNormal = Vector3.zero;
+        Vector3 nodeNextNormal = Vector3.zero;
 
         if (stream.isWriting)
         {
@@ -806,6 +797,8 @@ public class DriverController : MonoBehaviour
                 stream.Serialize(ref nodePos);
                 nodeNormal = this.nodeList[i].normal;
                 stream.Serialize(ref nodeNormal);
+                nodeNextNormal = this.nodeList[i].nextNormal;
+                stream.Serialize(ref nodeNextNormal);
             }
         }
         else
@@ -839,10 +832,11 @@ public class DriverController : MonoBehaviour
             {
                 stream.Serialize(ref nodePos);
                 stream.Serialize(ref nodeNormal);
+                stream.Serialize(ref nodeNextNormal);
                 if (i < this.nodeList.Count)
-                    this.nodeList[i] = new PathNode(nodePos, nodeNormal);
+                    this.nodeList[i] = new PathNode(nodePos, nodeNormal, nodeNextNormal);
                 else
-                    this.nodeList.Add(new PathNode(nodePos, nodeNormal));
+                    this.nodeList.Add(new PathNode(nodePos, nodeNormal, nodeNextNormal));
             }
             while (this.nodeList.Count > totalNodes)
                 this.nodeList.RemoveAt(this.nodeList.Count - 1);

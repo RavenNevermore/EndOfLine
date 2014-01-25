@@ -21,7 +21,7 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
     bool enableGui;
     private bool connecting = false;
 
-	string ipToJoin;
+	public string ipToJoin = "";
 
 	void Start()
     {
@@ -56,8 +56,6 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 			this.guiPosition.height / 3);
 
 		this.enableGui = false;
-
-		this.ipToJoin = "";
 	}
 
 	void OnMouseDown()
@@ -88,6 +86,7 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 
 		GUI.Box(this.guiPosition, "Please enter the host's IP address:");
 
+        GUI.SetNextControlName("IP Textfield");
 		this.ipToJoin = GUI.TextField(this.textFieldPosition, this.ipToJoin, 15);
 
 		if (GUI.Button(this.btnOkPosition, "OK"))
@@ -100,6 +99,8 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
 			this.enableGui = false;
 			this.ipToJoin = "";
 		}
+
+        GUI.FocusControl("IP Textfield");
 	}
 
 	void TryToConnect()

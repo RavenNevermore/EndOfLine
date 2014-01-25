@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 public class GameState : MonoBehaviour
 {
     public ArenaSettings arenaSettings = null;    // Arena settings
-    public Transform driverGameObject = null;     // Driver game object
+    public Transform driverPrefab = null;     // Driver game object
     private bool gameStarted = false;             // Has game started?
     public bool countdownOver = false;            // Is countdown done?
 
@@ -33,6 +33,8 @@ public class GameState : MonoBehaviour
     public int selectedMesh = 1;
 
     public GameObject boostItemGfx = null;
+    public GameObject playerArrowPrefab = null;
+    private PlayerArrowScript[] arrowGameObjects = null;
 
 
     // Use this for initialization
@@ -76,6 +78,32 @@ public class GameState : MonoBehaviour
             this.CreateDriverObject(this.FindFreeSpawnpoint(), this.playerColor);
         }
 
+        if (this.gameStarted)
+        {
+            GameObject[] drivers = GameObject.FindGameObjectsWithTag("Driver");
+            if (this.arrowGameObjects == null)
+            {
+                this.arrowGameObjects = new PlayerArrowScript[3];
+                for (int i = 0; i < this.arrowGameObjects.GetLength(0); i++)
+                    this.arrowGameObjects[i] = ((GameObject)(GameObject.Instantiate(this.playerArrowPrefab, this.currentPlayerObject.transform.position, Quaternion.identity))).GetComponent<PlayerArrowScript>();
+            }
+
+            for (int i = 0; i < this.arrowGameObjects.GetLength(0); i++)
+                this.arrowGameObjects[i].transform.position = this.currentPlayerObject.position;
+
+            int arrowIndex = 0;
+            for (int i = 0; i < drivers.GetLength(0); i++)
+            {
+                if (drivers[i].transform != this.currentPlayerObject)
+                {
+                    this.arrowGameObjects[arrowIndex].arrowColor = drivers[i].GetComponent<DriverController>().mainColor;
+                    this.arrowGameObjects[arrowIndex].target = drivers[i].transform;
+
+                    arrowIndex++;
+                }
+            }
+        }
+
         if (this.currentPlayerObject != null)
         {
             switch (this.currentPlayerObject.GetComponent<DriverController>().heldItem)
@@ -98,9 +126,9 @@ public class GameState : MonoBehaviour
         int i = Mathf.Min(spawnpoint, this.arenaSettings.spawnPoints.Count - 1);
         UnityEngine.Object newObject = null;
         if (Network.connections.Length > 0)
-            newObject = UnityEngine.Network.Instantiate(this.driverGameObject, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation, 0);
+            newObject = UnityEngine.Network.Instantiate(this.driverPrefab, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation, 0);
         else
-            newObject = UnityEngine.Object.Instantiate(this.driverGameObject, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation);
+            newObject = UnityEngine.Object.Instantiate(this.driverPrefab, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation);
 		DriverController driver = ((Transform)(newObject)).gameObject.GetComponent<DriverController>();
         driver.arenaSettings = this.arenaSettings;
         driver.cameraTransform = this.arenaSettings.cameraTransform;
