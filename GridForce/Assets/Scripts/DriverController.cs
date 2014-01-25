@@ -11,6 +11,7 @@ public class DriverController : MonoBehaviour
     public Transform explosionPrefab = null;     // Which effect to use for the explosion
     public ArenaSettings arenaSettings = null;      // Arena settings
     public Transform cameraTransform = null;    // The camera's transform
+    public DriverInput driverInput = null;    // Input for driver
     public float baseSpeed = 20.0f;     // Base drive speed
     public float boostSpeed = 30.0f;    // Speed when on boost
     public float boostDuration = 5.0f;    // Duration of boost
@@ -19,7 +20,6 @@ public class DriverController : MonoBehaviour
     public float rotationSpeed = 15.0f;  // Rotation speed when changing orientation
     public Vector3 cameraDistance = new Vector3(0.0f, 2.0f, -8.0f);     // The camera's default position relative to the driver
     public Vector3 cameraAngleShift = new Vector3(0.0f, 1.0f, 0.0f);      // The shift of camera angle after calculation
-    public float swipeSpeed = 1500.0f;     // Speed of touch input swipe
     public Color mainColor = new Color(0.0f, 0.0f, 0.9f);    // Main color of light and trail
     public bool updateColor = true;     // Whether to update player's color
     public int playerIndex = 0;    // This driver's player index
@@ -43,7 +43,6 @@ public class DriverController : MonoBehaviour
     private List<PathNode> nodeList = new List<PathNode>();     // List of previous path nodes
     private PlayerAction playerAction = PlayerAction.None;      // Defines player's action
     private Vector3 cameraPos = Vector3.zero;         // The camera's current position relative to the driver
-    private int fingerId = -1;      // Id of first finger touching screen
     private List<Transform> colliderList = new List<Transform>();   // List of colliders
     private bool killed = false;    // True when driver was killed
     private float invincibleTimer = 3.0f;       // Driver invincible
@@ -76,16 +75,6 @@ public class DriverController : MonoBehaviour
             this.normal = normal;
             this.nextNormal = nextNormal;
         }
-    }
-
-
-    // Defines player action
-    private enum PlayerAction
-    {
-        None,
-        TurnLeft,
-        TurnRight,
-        UseItem
     }
 
 
@@ -300,69 +289,15 @@ public class DriverController : MonoBehaviour
             Vector3 gravityRayEnd = gravityRayStart + (this.gravityDirection * (this.characterController.height + 0.1f));
 
             // Get player action
-
-            if (Network.connections.Length <= 0 || this.networkView.isMine)
-            {
-
-#if UNITY_STANDALONE || UNITY_EDITOR
-
-                if (this.playerAction == PlayerAction.None)
-                {
-                    if (Input.GetButtonDown("Left"))
-                    {
-                        this.playerAction = PlayerAction.TurnLeft;
-                    }
-                    else if (Input.GetButtonDown("Right"))
-                    {
-                        this.playerAction = PlayerAction.TurnRight;
-                    }
-                    else if (Input.GetButtonDown("Item"))
-                    {
-                        this.playerAction = PlayerAction.UseItem;
-                    }
-                    else if (Input.GetButtonDown("Cancel"))
-                    {
-                        Application.Quit();
-                    }
-                }
-
-#endif
-
-                foreach (Touch touch in Input.touches)
-                {
-                    if (this.fingerId >= 0 && touch.fingerId != this.fingerId)
-                        continue;
-
-                    if (touch.phase == TouchPhase.Moved && touch.deltaPosition.magnitude / touch.deltaTime >= this.swipeSpeed && this.fingerId != touch.fingerId)
-                    {
-                        float direction = 1000.0f;
-                        if (touch.deltaPosition.x != 0.0f)
-                            direction = touch.deltaPosition.y / touch.deltaPosition.x;
-
-                        if (direction > -1.0f && direction < 1.0f)
-                        {
-                            if (touch.deltaPosition.x < 0.0f)
-                                this.playerAction = PlayerAction.TurnLeft;
-                            else
-                                this.playerAction = PlayerAction.TurnRight;
-                        }
-                        else if (touch.deltaPosition.y > 0.0f)
-                            this.playerAction = PlayerAction.UseItem;
-
-                        this.fingerId = touch.fingerId;
-                    }
-
-                    if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled && this.fingerId != touch.fingerId)
-                    {
-                        this.fingerId = -1;
-                    }
-                }
-            }
+            if (this.driverInput != null)
+                this.playerAction = this.driverInput.playerAction;
 
             // Player used item
             if (this.playerAction == PlayerAction.UseItem)
             {
                 this.playerAction = PlayerAction.None;
+                if (this.driverInput != null)
+                    this.driverInput.playerAction = PlayerAction.None;
 
                 switch (this.heldItem)
                 {
@@ -439,6 +374,8 @@ public class DriverController : MonoBehaviour
                     }
 
                     this.playerAction = PlayerAction.None;
+                    if (this.driverInput != null)
+                        this.driverInput.playerAction = PlayerAction.None;
                 }
 
                 if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
@@ -546,9 +483,6 @@ public class DriverController : MonoBehaviour
             if (this.transform.position.magnitude > this.arenaSettings.maxDistance)
                 this.Kill(-2);
         }
-
-        for (int i = 0; i < this.nodeList.Count; i++)
-            Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f, Color.green);
 
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), this.rotationSpeed * Time.deltaTime);
 

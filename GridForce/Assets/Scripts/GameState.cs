@@ -73,6 +73,9 @@ public class GameState : MonoBehaviour
             this.players[i].Update();
         }
 
+        if (!(this.countdownOver))
+            this.GetComponent<DriverInput>().playerAction = PlayerAction.None;
+
         if (this.gameStarted && this.currentPlayerObject == null)
         {
             this.CreateDriverObject(this.FindFreeSpawnpoint(), this.playerColor);
@@ -138,6 +141,9 @@ public class GameState : MonoBehaviour
         driver.playersRef = this.players;
         driver.SetMesh(this.selectedMesh);
         driver.gameStarted = this.countdownOver;
+        DriverInput driverInput = this.GetComponent<DriverInput>();
+        driverInput.playerAction = PlayerAction.None;
+        driver.driverInput = driverInput;
         this.currentPlayerObject = ((Transform)(newObject));
     }
 

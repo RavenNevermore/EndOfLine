@@ -8,24 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/RadarMenu/MainMenu.unity
   - enabled: 1
-    path: Assets/Scenes/Arena_1.unity
-  - enabled: 1
-    path: Assets/Scenes/Arena_2.unity
-  - enabled: 1
-    path: Assets/Scenes/Testarena2.unity
-  - enabled: 1
-    path: Assets/Scenes/Testarena5.unity
-  - enabled: 1
-    path: Assets/Scenes/Arena_2pl.unity
-  - enabled: 1
-    path: Assets/ArtTestmap/testmap1_art_190114.unity
-  - enabled: 1
-    path: Assets/Scenes/Arena_2pl_4.unity
-  - enabled: 1
-    path: Assets/Scenes/Arena_2pl_6.unity
-  - enabled: 1
-    path: Assets/Scenes/Arena_2pl_8.unity
-  - enabled: 1
     path: Assets/Scenes/Arena_for_2or3.unity
   - enabled: 1
     path: Assets/Scenes/Arena_for_3or4.unity

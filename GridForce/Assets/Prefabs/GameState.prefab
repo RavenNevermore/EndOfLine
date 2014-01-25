@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   - 148: {fileID: 14800000}
+  - 114: {fileID: 11400012}
   m_Layer: 0
   m_Name: GameState
   m_TagString: GameState
@@ -650,6 +651,19 @@ MonoBehaviour:
   nextDigit: {fileID: 11400008}
   gameState: {fileID: 0}
   timePassed: 0
+--- !u!114 &11400012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fec14f2333e5a8418f3a0f9339f86dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swipeSpeed: 1500
+  playerAction: 0
 --- !u!131 &13100000
 GUITexture:
   m_ObjectHideFlags: 1
