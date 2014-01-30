@@ -1749,15 +1749,15 @@ MonoBehaviour:
   explosionPrefab: {fileID: 400000, guid: f75468363e2394440a081e9c175e6c93, type: 2}
   arenaSettings: {fileID: 0}
   cameraTransform: {fileID: 0}
+  driverInput: {fileID: 0}
   baseSpeed: 20
   boostSpeed: 30
   boostDuration: 3
   killBoostDuration: 1.5
   baseTrailLength: 17
   rotationSpeed: 15
-  cameraDistance: {x: 0, y: 2, z: -8}
-  cameraAngleShift: {x: 0, y: 1, z: 0}
-  swipeSpeed: 1500
+  cameraDistance: {x: 0, y: 1, z: -12}
+  cameraAngleShift: {x: 0, y: 2, z: 0}
   mainColor: {r: .501960814, g: .501960814, b: .501960814, a: 1}
   updateColor: 1
   playerIndex: 0

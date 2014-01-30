@@ -7,11 +7,19 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/RadarMenu/MainMenu.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arena_for_2or3.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arena_for_3or4.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arena_for_3or4_2.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arena_for_2.unity
+  - enabled: 1
+    path: Assets/Scenes/Arena_2pl.unity
+  - enabled: 1
+    path: Assets/Scenes/Arena_2pl_l.unity
+  - enabled: 1
+    path: Assets/Scenes/Arena_2pl_flat_s.unity
+  - enabled: 1
+    path: Assets/Scenes/Arena_2pl_flat.unity
