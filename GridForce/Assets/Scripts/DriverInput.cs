@@ -18,6 +18,7 @@ public class DriverInput : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+
 #if UNITY_STANDALONE || UNITY_EDITOR
 
         if (this.playerAction == PlayerAction.None)
@@ -52,7 +53,7 @@ public class DriverInput : MonoBehaviour
 			    	this.fingerId != touch.fingerId*/)
             {
 				TouchDirection direction = this.getTouchDirection(touch);
-				Debug.Log(this.lastDirection + " || " + direction);
+
 				if (null == this.lastDirection ||
 				    !this.lastDirection.Equals(direction)){
 					this.lastDirection = direction;
@@ -92,12 +93,12 @@ public class DriverInput : MonoBehaviour
 		if (delta > 0.5f){
 			this.lastDirection = TouchDirection.NONE;
 		}
+
 	}
 
 	TouchDirection getTouchDirection(Touch touch){
 		TouchDirection direction = TouchDirection.NONE;
 
-		Debug.Log("-- "+touch.deltaPosition.x+" --");
 		if (touch.deltaPosition.x != 0.0f){
 			float dirValue = touch.deltaPosition.y / touch.deltaPosition.x;
 
