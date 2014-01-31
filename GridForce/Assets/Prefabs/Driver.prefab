@@ -59,6 +59,7 @@ GameObject:
   - 143: {fileID: 14300000}
   - 114: {fileID: 11400002}
   - 148: {fileID: 14800000}
+  - 114: {fileID: 11400004}
   m_Layer: 10
   m_Name: Driver
   m_TagString: Driver
@@ -1610,15 +1611,15 @@ AudioSource:
   m_GameObject: {fileID: 100066}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: 096ca6a8616c945a095b06d923e1488f, type: 3}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: e6b79d6e34fd349b2a9648c56bcd21f4, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 3
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -1628,15 +1629,55 @@ AudioSource:
   rolloffCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - time: 0
+    - time: .00200000009
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -500.200928
+      outSlope: -500.200928
+      tangentMode: 0
+    - time: .0336134471
+      value: .503745317
+      inSlope: -125.050232
+      outSlope: -125.050232
+      tangentMode: 0
+    - time: .0416134484
+      value: .242509365
+      inSlope: -31.262558
+      outSlope: -31.262558
+      tangentMode: 0
+    - time: .049613446
+      value: .117509365
+      inSlope: -7.8156395
+      outSlope: -7.8156395
+      tangentMode: 0
+    - time: .0656134486
+      value: .0587546825
+      inSlope: -2.22526479
+      outSlope: -2.22526479
+      tangentMode: 0
+    - time: .0976134539
+      value: .0237593651
+      inSlope: -.488477468
+      outSlope: -.488477468
+      tangentMode: 0
+    - time: .128000006
+      value: .015625
+      inSlope: -.122119367
+      outSlope: -.122119367
+      tangentMode: 0
+    - time: .256000012
+      value: .0078125
+      inSlope: -.0305298418
+      outSlope: -.0305298418
+      tangentMode: 0
+    - time: .512000024
+      value: .00390625
+      inSlope: -.00763246045
+      outSlope: -.00763246045
       tangentMode: 0
     - time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      value: .00200000009
+      inSlope: -.00200079847
+      outSlope: -.00200079847
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1653,8 +1694,8 @@ AudioSource:
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - time: 0
-      value: 0
+    - time: .0336134471
+      value: .100842699
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1854,6 +1895,24 @@ MonoBehaviour:
   - {fileID: 100012}
   - {fileID: 100010}
   - {fileID: 100002}
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1561b865f63d4d02a0596f84d5edc3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turnSound: {fileID: 8200000}
+  soundClips:
+  - {fileID: 8300000, guid: e6b79d6e34fd349b2a9648c56bcd21f4, type: 3}
+  - {fileID: 8300000, guid: e6b79d6e34fd349b2a9648c56bcd21f4, type: 3}
+  - {fileID: 8300000, guid: e6b79d6e34fd349b2a9648c56bcd21f4, type: 3}
+  - {fileID: 8300000, guid: e6b79d6e34fd349b2a9648c56bcd21f4, type: 3}
+  - {fileID: 8300000, guid: e6b79d6e34fd349b2a9648c56bcd21f4, type: 3}
 --- !u!143 &14300000
 CharacterController:
   m_ObjectHideFlags: 1
