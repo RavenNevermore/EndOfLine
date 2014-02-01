@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class PlayerSounds : MonoBehaviour {
 
 	public AudioSource turnSound;
+	public AudioSource boostSound;
+
 	public AudioClip[] soundClips;
 
 	List<AudioSource> sources;
@@ -32,5 +34,12 @@ public class PlayerSounds : MonoBehaviour {
 			source.Play();
 			break;
 		}
+	}
+
+	public void OnPlayerUsedBoost(){
+		if (null == this.boostSound)
+			return;
+
+		this.boostSound.Play();
 	}
 }

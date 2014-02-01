@@ -303,6 +303,7 @@ public class DriverController : MonoBehaviour
                 {
                     case ItemType.Boost:
                         this.boostTime = this.boostDuration;
+						this.SendMessage("OnPlayerUsedBoost");
                         break;
                 }
 
