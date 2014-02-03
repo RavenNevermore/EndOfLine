@@ -17,9 +17,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Arena_for_2.unity
   - enabled: 1
     path: Assets/Scenes/Arena_2pl.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arena_2pl_l.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arena_2pl_flat_s.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Arena_2pl_flat.unity
+  - enabled: 1
+    path: Assets/Scenes/Final_1.unity
+  - enabled: 1
+    path: Assets/Scenes/Final_2.unity
+  - enabled: 1
+    path: Assets/Scenes/Final_3.unity
