@@ -35,6 +35,7 @@ public class DriverController : MonoBehaviour
 
     private CharacterController characterController;        // Character controller
     private OptimizedLineRenderer lineRenderer;      // This object's line renderer
+    private OptimizedLineRenderer lineRendererKilled;      // Line renderer when killed
     private GameObject vehicleMesh;      // This object's mesh
     private Vector3 moveDirection;          // Character move direction
     private Vector3 gravityDirection;       // Character gravity
@@ -53,6 +54,7 @@ public class DriverController : MonoBehaviour
     public ItemType heldItem = ItemType.None;  // The currently held item
     private bool removedNode = false;       // Node was removed this frame
     private bool insertedNode = false;      // Node was inserted this frame
+    private float killedTrailLength = 0.0f;     // Length of trail when killed
 
     private float lightColorA = 1.0f;       // Light's original alpha value
 
@@ -272,6 +274,8 @@ public class DriverController : MonoBehaviour
 
         if (!(this.killed) && this.gameStarted)
         {
+            this.killedTrailLength = this.baseTrailLength;
+
             if (this.nodeList.Count > 0)
                 this.nodeList.RemoveAt(this.nodeList.Count - 1);
             if (this.insertedNode && !(this.removedNode))
@@ -418,35 +422,7 @@ public class DriverController : MonoBehaviour
             }
 
             // Clean up node list
-            Vector3 groundPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(this.transform.position - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
-            this.nodeList.Add(new PathNode(groundPos, -this.gravityDirection, -this.gravityDirection, nodeColor));
-            float currentLength = 0.0f;
-            float totalLength = 0.0f;
-            PathNode firstRemoved = (PathNode)(this.nodeList[0]);
-
-            for (int i = this.nodeList.Count - 2; i >= 0; i--)
-            {
-                currentLength += (this.nodeList[i].position - this.nodeList[i + 1].position).magnitude;
-                if (currentLength > this.baseTrailLength * this.gridSize)
-                {
-                    if (!(this.removedNode))
-                    {
-                        firstRemoved = (PathNode)(this.nodeList[i]);
-                    }
-                    this.nodeList.RemoveAt(i);
-                    this.removedNode = true;
-                }
-                if (currentLength <= this.baseTrailLength * this.gridSize)
-                    totalLength = currentLength;
-            }
-
-            Vector3 directionVector = (firstRemoved.position - this.nodeList[0].position).normalized;
-            if (totalLength < this.baseTrailLength * this.gridSize && currentLength > this.baseTrailLength * this.gridSize)
-            {
-                float difference = (this.baseTrailLength * this.gridSize) - totalLength;
-                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), firstRemoved.nextNormal, firstRemoved.nextNormal, nodeColor));
-                this.insertedNode = true;
-            }
+            this.NodeListCleanup(this.baseTrailLength, nodeColor);
 
             // Create new trail collision
             int currentCollider = 0;
@@ -524,7 +500,49 @@ public class DriverController : MonoBehaviour
 
         if (this.killed)
         {
-            this.baseTrailLength = Math.Max(0, this.baseTrailLength - Time.deltaTime * 10.0f);
+            this.killedTrailLength = Math.Max(0, this.killedTrailLength - Time.deltaTime * 30.0f);
+            if (this.killedTrailLength <= 0.0f && this.lineRendererKilled != null)
+                this.lineRendererKilled.pointList = null;
+
+            this.NodeListCleanup(this.killedTrailLength, nodeColor);
+        }
+    }
+
+
+    // Clean up node list
+    private void NodeListCleanup(float trailLength, Color nodeColor)
+    {
+        Vector3 groundPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(this.transform.position - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
+        this.nodeList.Add(new PathNode(groundPos, -this.gravityDirection, -this.gravityDirection, nodeColor));
+        float currentLength = 0.0f;
+        float totalLength = 0.0f;
+        PathNode firstRemoved = (PathNode)(this.nodeList[0]);
+
+        for (int i = this.nodeList.Count - 2; i >= 0; i--)
+        {
+            currentLength += (this.nodeList[i].position - this.nodeList[i + 1].position).magnitude;
+            if (currentLength > trailLength * this.gridSize)
+            {
+                if (!(this.removedNode))
+                {
+                    firstRemoved = (PathNode)(this.nodeList[i]);
+                }
+                this.nodeList.RemoveAt(i);
+                this.removedNode = true;
+            }
+            if (currentLength <= trailLength * this.gridSize)
+                totalLength = currentLength;
+        }
+
+        if (!(this.killed))
+            this.killedTrailLength = currentLength;
+
+        Vector3 directionVector = (firstRemoved.position - this.nodeList[0].position).normalized;
+        if (totalLength < trailLength * this.gridSize && currentLength > trailLength * this.gridSize)
+        {
+            float difference = (trailLength * this.gridSize) - totalLength;
+            this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), firstRemoved.nextNormal, firstRemoved.nextNormal, nodeColor));
+            this.insertedNode = true;
         }
     }
 
@@ -594,6 +612,7 @@ public class DriverController : MonoBehaviour
         if (this.lineRenderer != null)
         {
             UnityEngine.Object.Destroy(this.lineRenderer.gameObject, this.killTimer);
+            this.lineRendererKilled = this.lineRenderer;
             this.lineRenderer = null;
         }
 

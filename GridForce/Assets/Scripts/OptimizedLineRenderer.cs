@@ -31,8 +31,17 @@ public class OptimizedLineRenderer : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (this.pointList.Count < 2)
+        if (this.pointList == null || this.pointList.Count < 2)
+        {
+            this.lineMesh.Clear();
+            this.lineMesh.vertices = new Vector3[0];
+            this.lineMesh.triangles = new int[0];
+            this.lineMesh.normals = new Vector3[0];
+            this.lineMesh.uv = new Vector2[0];
+            this.lineMesh.colors = new Color[0];
+
             return;
+        }
 
         Vector3[] meshVertices = new Vector3[(this.pointList.Count * 8) + 8];
         int[] meshTriangles = new int[((this.pointList.Count - 1) * 24) + 12];
