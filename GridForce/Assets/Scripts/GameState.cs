@@ -97,9 +97,11 @@ public class GameState : MonoBehaviour
             int arrowIndex = 0;
             for (int i = 0; i < drivers.GetLength(0); i++)
             {
-                if (drivers[i].transform != this.currentPlayerObject)
+                if (drivers[i] != null && drivers[i].transform != this.currentPlayerObject && this.arrowGameObjects[arrowIndex] != null)
                 {
-                    this.arrowGameObjects[arrowIndex].arrowColor = drivers[i].GetComponent<DriverController>().mainColor;
+                    DriverController driverController = drivers[i].GetComponent<DriverController>();
+                    if (driverController != null)
+                        this.arrowGameObjects[arrowIndex].arrowColor = driverController.mainColor;
                     this.arrowGameObjects[arrowIndex].target = drivers[i].transform;
 
                     arrowIndex++;

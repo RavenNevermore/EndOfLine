@@ -1,21 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &100000
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400000}
-  - 96: {fileID: 9600000}
-  m_Layer: 0
-  m_Name: CameraTrail
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &100002
 GameObject:
   m_ObjectHideFlags: 1
@@ -39,8 +23,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 400004}
-  - 114: {fileID: 11400000}
-  - 64: {fileID: 6400000}
+  - 114: {fileID: 11400004}
   m_Layer: 11
   m_Name: CollisionTrail
   m_TagString: TrailCollisionSegment
@@ -550,17 +533,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &400000
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .479999989, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400006}
 --- !u!4 &400002
 Transform:
   m_ObjectHideFlags: 1
@@ -594,7 +566,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400000}
   - {fileID: 400004}
   - {fileID: 400008}
   - {fileID: 400034}
@@ -1561,19 +1532,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100062}
   m_Mesh: {fileID: 4300000, guid: 424c507d73d3e744da7ce0ac1037a396, type: 3}
---- !u!64 &6400000
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_SmoothSphereCollisions: 0
-  m_Convex: 0
-  m_Mesh: {fileID: 0}
 --- !u!95 &9500000
 Animator:
   serializedVersion: 2
@@ -1630,48 +1588,6 @@ Animator:
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
---- !u!96 &9600000
-TrailRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_LightmapIndex: 255
-  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
-  m_Materials:
-  - {fileID: 2100000, guid: f6c3671ace70e004e81ffdc2b9401c56, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 0
-  m_LightProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortingLayerID: 0
-  m_Time: 1
-  m_StartWidth: .0500000007
-  m_EndWidth: .0500000007
-  m_Colors:
-    m_Color[0]:
-      serializedVersion: 2
-      rgba: 4294967295
-    m_Color[1]:
-      serializedVersion: 2
-      rgba: 4294901502
-    m_Color[2]:
-      serializedVersion: 2
-      rgba: 4294835709
-    m_Color[3]:
-      serializedVersion: 2
-      rgba: 4294769916
-    m_Color[4]:
-      serializedVersion: 2
-      rgba: 16514043
-  m_MinVertexDistance: .100000001
-  m_Autodestruct: 1
 --- !u!108 &10800000
 Light:
   m_ObjectHideFlags: 1
@@ -1707,31 +1623,6 @@ Light:
   m_ShadowAngle: 0
   m_IndirectIntensity: 1
   m_AreaSize: {x: 1, y: 1}
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5c0f79df3e91a74c8628a82972c3acb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: f6c3671ace70e004e81ffdc2b9401c56, type: 2}
-  emit: 1
-  lifeTime: 1
-  colors:
-  - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 1, g: 1, b: 1, a: 1}
-  widths:
-  - 1
-  maxAngle: 5
-  minVertexDistance: .100000001
-  maxVertexDistance: .100000001
-  optimizeAngleInterval: .100000001
-  optimizeDistanceInterval: 0
-  optimizeCount: 30
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1749,6 +1640,7 @@ MonoBehaviour:
   explosionPrefab: {fileID: 400000, guid: f75468363e2394440a081e9c175e6c93, type: 2}
   arenaSettings: {fileID: 0}
   cameraTransform: {fileID: 0}
+  driverInput: {fileID: 0}
   baseSpeed: 20
   boostSpeed: 30
   boostDuration: 3
@@ -1757,7 +1649,6 @@ MonoBehaviour:
   rotationSpeed: 15
   cameraDistance: {x: 0, y: 2, z: -8}
   cameraAngleShift: {x: 0, y: 1, z: 0}
-  swipeSpeed: 1500
   mainColor: {r: .501960814, g: .501960814, b: .501960814, a: 1}
   updateColor: 1
   playerIndex: 0
@@ -1768,6 +1659,19 @@ MonoBehaviour:
   - {fileID: 100012}
   - {fileID: 100010}
   - {fileID: 100002}
+--- !u!114 &11400004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bcd2630510694642ab591080fdc9758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: cea0b868aaada4144acf1f498d93eb53, type: 2}
+  baseLength: 1
 --- !u!143 &14300000
 CharacterController:
   m_ObjectHideFlags: 1
@@ -1775,8 +1679,8 @@ CharacterController:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   serializedVersion: 2
-  m_Height: .5
-  m_Radius: .25
+  m_Height: .300000012
+  m_Radius: .150000006
   m_SlopeLimit: 45
   m_StepOffset: .300000012
   m_SkinWidth: .0799999982

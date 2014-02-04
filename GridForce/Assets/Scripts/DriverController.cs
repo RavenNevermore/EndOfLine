@@ -34,13 +34,12 @@ public class DriverController : MonoBehaviour
     private const int layerDriverInvincible = 12;    // Layer of invincible driver
 
     private CharacterController characterController;        // Character controller
-    private TimedTrailRenderer trailRenderer;      // This object's trail renderer
-    private TrailRenderer cameraTrail;      // This object's trail renderer for the camera
+    private OptimizedLineRenderer lineRenderer;      // This object's line renderer
     private GameObject vehicleMesh;      // This object's mesh
     private Vector3 moveDirection;          // Character move direction
     private Vector3 gravityDirection;       // Character gravity
     private float gridSize = 1.0f;          // Grid size
-    private List<PathNode> nodeList = new List<PathNode>();     // List of previous path nodes
+    private List<OlrPoint> nodeList = new List<OlrPoint>();     // List of previous path nodes
     private PlayerAction playerAction = PlayerAction.None;      // Defines player's action
     private Vector3 cameraPos = Vector3.zero;         // The camera's current position relative to the driver
     private List<Transform> colliderList = new List<Transform>();   // List of colliders
@@ -56,24 +55,37 @@ public class DriverController : MonoBehaviour
     private bool insertedNode = false;      // Node was inserted this frame
 
     private float lightColorA = 1.0f;       // Light's original alpha value
-    private float[] trailRendererA = null;    // Trail renderer's original alpha values
-    private float cameraTrailA = 1.0f;      // Camera trail's original alpha value
 
     public GameObject[] meshList = null;   // List of all meshes
 
 
     // Defines a path node
-    public struct PathNode
+    public struct PathNode : OlrPoint
     {
-        public Vector3 position;
-        public Vector3 normal;
+        public Vector3 position { get { return this._position; } set { this._position = value; } }
+        public Vector3 normal { get { return this._normal; } set { this._normal = value; } }
+        public float height { get { return this._height; } set { this._height = value; } }
+        public float width { get { return this._width; } set { this._width = value; } }
+        public Color color { get { return this._color; } set { this._color = value; } }
+
+        private Vector3 _position;
+        private Vector3 _normal;
+        private float _height;
+        private float _width;
+        private Color _color;
         public Vector3 nextNormal;
 
-        public PathNode(Vector3 position, Vector3 normal, Vector3 nextNormal)
+        public PathNode(Vector3 position, Vector3 normal, Vector3 nextNormal, Color color)
         {
-            this.position = position;
-            this.normal = normal;
+            this._position = position;
+            this._normal = normal;
             this.nextNormal = nextNormal;
+
+            this._height = 1.0f;
+            this._width = 0.05f;
+            if (normal != nextNormal)
+                this._height = new Vector3(this._height, this._height, 0).magnitude;
+            this._color = color;
         }
     }
 
@@ -81,7 +93,7 @@ public class DriverController : MonoBehaviour
     // Finds next path node on player's path
     private PathNode GetNextNode()
     {
-        PathNode pathNode = new PathNode(Vector3.zero, Vector3.up, Vector3.up);
+        PathNode pathNode = new PathNode(Vector3.zero, Vector3.up, Vector3.up, Color.grey);
 
         RaycastHit raycastHit;
         if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
@@ -154,10 +166,8 @@ public class DriverController : MonoBehaviour
         if (light != null)
             light.color = new Color(currentColor.r, currentColor.g, currentColor.b, lightColorA * currentColor.a);
 
-        for (int i = 0; this.trailRenderer != null && i < this.trailRenderer.colors.GetLength(0); i++)
-            this.trailRenderer.colors[i] = new Color(currentColor.r, currentColor.g, currentColor.b, this.trailRendererA[i] * currentColor.a);
-        if (this.cameraTrail != null)
-            this.cameraTrail.material.SetColor("_TintColor", new Color(currentColor.r, currentColor.g, currentColor.b, this.cameraTrailA * currentColor.a));
+        for (int i = 0; this.lineRenderer != null && i < this.lineRenderer.pointList.Count; i++)
+            this.lineRenderer.pointList[i].color = new Color(currentColor.r, currentColor.g, currentColor.b, currentColor.a);
     }
 
 
@@ -173,18 +183,11 @@ public class DriverController : MonoBehaviour
         this.moveDirection = this.transform.forward;
         this.gravityDirection = -this.transform.up;
 
-        this.trailRenderer = this.GetComponentInChildren<TimedTrailRenderer>();
-        this.trailRenderer.lifeTime = (this.baseTrailLength / this.currentSpeed) * this.gridSize;
-        this.cameraTrail = this.GetComponentInChildren<TrailRenderer>();
-        this.cameraTrail.time = (this.baseTrailLength / this.currentSpeed) * this.gridSize;
+        this.lineRenderer = this.GetComponentInChildren<OptimizedLineRenderer>();
         this.vehicleMesh = this.transform.Find("VehicleMeshes").gameObject;
 
         Light light = this.GetComponentInChildren<Light>();
         this.lightColorA = light.color.a;
-        this.trailRendererA = new float[this.trailRenderer.colors.GetLength(0)];
-        for (int i = 0; i < this.trailRenderer.colors.GetLength(0); i++)
-            this.trailRendererA[i] = this.trailRenderer.colors[i].a;
-        this.cameraTrailA = this.cameraTrail.material.GetColor("_TintColor").a;
 
         if (this.arenaSettings != null)
             this.gridSize = this.arenaSettings.gridSize;
@@ -219,8 +222,8 @@ public class DriverController : MonoBehaviour
             this.transform.position = raycastHit.transform.TransformDirection(localPos);
             nodePos = raycastHit.transform.TransformDirection(nodePos);
 
-            this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up, raycastHit.transform.up));
-            this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up, raycastHit.transform.up));
+            this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up, raycastHit.transform.up, this.mainColor));
+            this.nodeList.Add(new PathNode(nodePos, raycastHit.transform.up, raycastHit.transform.up, this.mainColor));
         };
 	}
 
@@ -263,6 +266,10 @@ public class DriverController : MonoBehaviour
             this.updateColor = false;
         }
 
+        Color nodeColor = this.mainColor;
+        if (this.nodeList.Count > 0)
+            nodeColor = this.nodeList[0].color;
+
         if (!(this.killed) && this.gameStarted)
         {
             if (this.nodeList.Count > 0)
@@ -277,12 +284,7 @@ public class DriverController : MonoBehaviour
                 this.gameObject.layer = DriverController.layerDriverInvincible;
             else
                 this.gameObject.layer = DriverController.layerDriver;
-
-            if (this.trailRenderer != null)
-                this.trailRenderer.lifeTime = (this.baseTrailLength / this.currentSpeed) * this.gridSize;
-            if (this.cameraTrail != null)
-                this.cameraTrail.time = (this.baseTrailLength / this.currentSpeed) * this.gridSize;
-
+            
             Vector3 totalMovement = Vector3.zero;
 
             Vector3 gravityRayStart = this.transform.position - (this.moveDirection * (this.characterController.radius + 0.1f));
@@ -330,12 +332,16 @@ public class DriverController : MonoBehaviour
                 if (Physics.Linecast(this.transform.position - (this.gravityDirection * (this.characterController.height / 2.0f)), this.transform.position - (this.moveDirection * (this.characterController.radius + 3.0f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
                 {
                     // Change direction if a wall was detected
-                    this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection + this.moveDirection).normalized, this.moveDirection));
+                    Vector3 oldMoveDirection = this.moveDirection;
+                    Vector3 oldGravityDirection = this.gravityDirection;
 
                     Vector3 temp = -this.moveDirection;
                     this.moveDirection = this.gravityDirection;
                     this.gravityDirection = temp;
                     this.characterController.Move(((this.characterController.radius + 0.1f) * this.moveDirection));
+
+                    Vector3 cornerPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(this.GetNextNode().position - this.nodeList[this.nodeList.Count - 1].position, oldMoveDirection);
+                    this.nodeList.Add(new PathNode(cornerPos, (-oldGravityDirection + oldMoveDirection).normalized, oldMoveDirection, nodeColor));
                 }
 
                 // Apply gravity
@@ -345,6 +351,7 @@ public class DriverController : MonoBehaviour
             {
                 // Check, if player can turn
                 PathNode nextNode = this.GetNextNode();
+                nextNode.color = nodeColor;
                 Vector3 nodeOnDriver = nextNode.position; // this.nextNode.position;
                 Quaternion transformRotation = this.transform.rotation;
                 this.transform.rotation = Quaternion.LookRotation(this.moveDirection, -this.gravityDirection);
@@ -394,7 +401,8 @@ public class DriverController : MonoBehaviour
                     }
                     else
                     {
-                        this.nodeList.Add(new PathNode(this.transform.position, (-this.gravityDirection - this.moveDirection).normalized, -this.moveDirection));
+                        Vector3 cornerPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(raycastHit.point - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
+                        this.nodeList.Add(new PathNode(cornerPos, (-this.gravityDirection - this.moveDirection).normalized, -this.moveDirection, nodeColor));
 
                         Vector3 temp = this.moveDirection;
                         this.moveDirection = -this.gravityDirection;
@@ -407,14 +415,11 @@ public class DriverController : MonoBehaviour
             }
 
             // Clean up node list
-            Vector3 positionGroundLevel = this.transform.position;
-            RaycastHit nodeGroundRaycast;
-            if (Physics.Linecast(this.transform.position, (this.transform.position - this.gravityDirection) * 5.0f, out nodeGroundRaycast, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
-                positionGroundLevel = nodeGroundRaycast.point;
-            this.nodeList.Add(new PathNode(positionGroundLevel, -this.gravityDirection, -this.gravityDirection));
+            Vector3 groundPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(this.transform.position - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
+            this.nodeList.Add(new PathNode(groundPos, -this.gravityDirection, -this.gravityDirection, nodeColor));
             float currentLength = 0.0f;
             float totalLength = 0.0f;
-            PathNode firstRemoved = this.nodeList[0];
+            PathNode firstRemoved = (PathNode)(this.nodeList[0]);
 
             for (int i = this.nodeList.Count - 2; i >= 0; i--)
             {
@@ -423,7 +428,7 @@ public class DriverController : MonoBehaviour
                 {
                     if (!(this.removedNode))
                     {
-                        firstRemoved = this.nodeList[i];
+                        firstRemoved = (PathNode)(this.nodeList[i]);
                     }
                     this.nodeList.RemoveAt(i);
                     this.removedNode = true;
@@ -436,7 +441,7 @@ public class DriverController : MonoBehaviour
             if (totalLength < this.baseTrailLength * this.gridSize && currentLength > this.baseTrailLength * this.gridSize)
             {
                 float difference = (this.baseTrailLength * this.gridSize) - totalLength;
-                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), firstRemoved.nextNormal, firstRemoved.nextNormal));
+                this.nodeList.Insert(0, new PathNode(this.nodeList[0].position + (difference * directionVector), firstRemoved.nextNormal, firstRemoved.nextNormal, nodeColor));
                 this.insertedNode = true;
             }
 
@@ -449,7 +454,7 @@ public class DriverController : MonoBehaviour
                 {
                     if (lookDirection.sqrMagnitude > 0)
                     {
-                        UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.trailCollisionSegment, this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f)), Quaternion.LookRotation(lookDirection, this.nodeList[i].normal));
+                        UnityEngine.Object newObject = UnityEngine.Object.Instantiate(this.trailCollisionSegment, this.nodeList[i].position + (lookDirection / 2.0f) + (((PathNode)(this.nodeList[i])).nextNormal * (this.trailCollisionSegment.localScale.y / 2.0f)), Quaternion.LookRotation(lookDirection, this.nodeList[i].normal));
                         ((Transform)(newObject)).localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
                         ((Transform)(newObject)).parent = this.trailCollisionObject.transform;
                         this.colliderList.Add((Transform)(newObject));
@@ -462,7 +467,7 @@ public class DriverController : MonoBehaviour
                     {
                         this.colliderList[i].collider.enabled = true;
                         this.colliderList[i].localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
-                        this.colliderList[i].position = this.nodeList[i].position + (lookDirection / 2.0f) + (this.nodeList[i].normal * (this.trailCollisionSegment.localScale.y / 2.0f));
+                        this.colliderList[i].position = this.nodeList[i].position + (lookDirection / 2.0f) + (((PathNode)(this.nodeList[i])).nextNormal * (this.trailCollisionSegment.localScale.y / 2.0f));
                         if (lookDirection.sqrMagnitude > 0)
                             this.colliderList[i].rotation = Quaternion.LookRotation(lookDirection, this.nodeList[i].normal);
                         currentCollider++;
@@ -506,6 +511,17 @@ public class DriverController : MonoBehaviour
                 else
                     UnityEngine.Object.Destroy(this.gameObject);
             }
+        }
+
+        if (this.lineRenderer != null)
+        {
+            this.lineRenderer.pointList = this.nodeList;
+            this.lineRenderer.baseLength = this.baseTrailLength;
+        }
+
+        if (this.killed)
+        {
+            this.baseTrailLength = Math.Max(0, this.baseTrailLength - Time.deltaTime * 10.0f);
         }
     }
 
@@ -560,10 +576,8 @@ public class DriverController : MonoBehaviour
         this.harmlessTimer = 100.0f;
         this.UpdateColors();
 
-        if (this.trailRenderer != null)
-            this.trailRenderer.gameObject.transform.parent = null;
-        if (this.cameraTrail != null)
-            this.cameraTrail.gameObject.transform.parent = null;
+        if (this.lineRenderer != null)
+            this.lineRenderer.gameObject.transform.parent = null;
 
         UnityEngine.Object explosion = UnityEngine.Object.Instantiate(this.explosionPrefab, this.transform.position, this.transform.rotation);
         ParticleSystem particleSystem = ((Transform)(explosion)).gameObject.GetComponent<ParticleSystem>();
@@ -574,16 +588,10 @@ public class DriverController : MonoBehaviour
         particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
         UnityEngine.Object.Destroy(((Transform)(explosion)).gameObject, 3.0f);
 
-        if (this.trailRenderer != null)
+        if (this.lineRenderer != null)
         {
-            UnityEngine.Object.Destroy(this.trailRenderer.GetTrail(), this.trailRenderer.lifeTime);
-            UnityEngine.Object.Destroy(this.trailRenderer.gameObject, this.trailRenderer.lifeTime);
-            this.trailRenderer = null;
-        }
-        if (this.cameraTrail != null)
-        {
-            UnityEngine.Object.Destroy(this.cameraTrail.gameObject, this.cameraTrail.time);
-            this.cameraTrail = null;
+            UnityEngine.Object.Destroy(this.lineRenderer.gameObject, this.killTimer);
+            this.lineRenderer = null;
         }
 
         if (this.vehicleMesh != null)
@@ -606,6 +614,12 @@ public class DriverController : MonoBehaviour
         }
         if (this.trailCollisionObject != null)
         {
+//#if UNITY_EDITOR            
+//            UnityEditor.EditorApplication.ExecuteMenuItem("Edit/Pause");
+//            UnityEngine.Object.Destroy(this.trailCollisionObject, 1.0f);
+//#else
+//            UnityEngine.Object.Destroy(this.trailCollisionObject);
+//#endif
             UnityEngine.Object.Destroy(this.trailCollisionObject);
             this.trailCollisionObject = null;
         }
@@ -731,7 +745,7 @@ public class DriverController : MonoBehaviour
                 stream.Serialize(ref nodePos);
                 nodeNormal = this.nodeList[i].normal;
                 stream.Serialize(ref nodeNormal);
-                nodeNextNormal = this.nodeList[i].nextNormal;
+                nodeNextNormal = ((PathNode)(this.nodeList[i])).nextNormal;
                 stream.Serialize(ref nodeNextNormal);
             }
         }
@@ -768,9 +782,9 @@ public class DriverController : MonoBehaviour
                 stream.Serialize(ref nodeNormal);
                 stream.Serialize(ref nodeNextNormal);
                 if (i < this.nodeList.Count)
-                    this.nodeList[i] = new PathNode(nodePos, nodeNormal, nodeNextNormal);
+                    this.nodeList[i] = new PathNode(nodePos, nodeNormal, nodeNextNormal, this.mainColor);
                 else
-                    this.nodeList.Add(new PathNode(nodePos, nodeNormal, nodeNextNormal));
+                    this.nodeList.Add(new PathNode(nodePos, nodeNormal, nodeNextNormal, this.mainColor));
             }
             while (this.nodeList.Count > totalNodes)
                 this.nodeList.RemoveAt(this.nodeList.Count - 1);
