@@ -74,48 +74,6 @@ NavMeshSettings:
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
   m_NavMesh: {fileID: 0}
---- !u!21 &191051761
-Material:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: mat_wall_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
-    (Instance) (Instance)
-  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: []
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
-          m_Scale: {x: 30, y: 8}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _BumpMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 30, y: 8}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: _Shininess
-        second: .215352014
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _SpecColor
-        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &238344327
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,13 +156,14 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_HDR: 0
   m_OcclusionCulling: 1
---- !u!21 &493303824
+--- !u!21 &471213711
 Material:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: mat_ceiling_drive (Instance) (Instance) (Instance) (Instance) (Instance)
+  m_Name: mat_wall_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
     (Instance) (Instance) (Instance)
   m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: []
@@ -216,21 +175,21 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: e67ab105c3ff4774e8e0cebf2c557464, type: 3}
-          m_Scale: {x: 30, y: 50}
+          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
+          m_Scale: {x: 40, y: 6}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 30, y: 50}
+          m_Scale: {x: 40, y: 6}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
           name: _Shininess
-        second: .202494472
+        second: .215352014
     m_Colors:
       data:
         first:
@@ -342,10 +301,103 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 547867679}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: -4.37113883e-08}
-  m_LocalPosition: {x: 5, y: 39, z: -175}
+  m_LocalPosition: {x: 5.00000238, y: 12.5997782, z: -175}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 832051626}
+--- !u!21 &572750592
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
+          m_Scale: {x: 6, y: 60}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 60}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .215352014
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
+--- !u!21 &577304302
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_floor_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 10b6c54301ca55e498f8c695a3d1df8f, type: 3}
+          m_Scale: {x: 40, y: 60}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 40, y: 60}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _Detail
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .220354751
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &586771570
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,7 +428,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2025433751}
+  - {fileID: 572750592}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -412,8 +464,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 586771570}
   m_LocalRotation: {x: 0, y: 0, z: .707106829, w: .707106829}
-  m_LocalPosition: {x: 150, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 1, z: 50}
+  m_LocalPosition: {x: 200, y: 0, z: 0}
+  m_LocalScale: {x: 6, y: 1, z: 60}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &594301684
@@ -496,7 +548,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 618195676}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: -39, z: -175}
+  m_LocalPosition: {x: 5, y: -25.6343689, z: -175}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 832051626}
@@ -530,7 +582,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 191051761}
+  - {fileID: 471213711}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -566,8 +618,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 638252737}
   m_LocalRotation: {x: -.707106888, y: 0, z: 0, w: .707106769}
-  m_LocalPosition: {x: 0, y: 0, z: 250}
-  m_LocalScale: {x: 30, y: 1, z: 8}
+  m_LocalPosition: {x: 0, y: 0, z: 300}
+  m_LocalScale: {x: 40, y: 1, z: 6}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &712976258
@@ -600,7 +652,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 1322973646}
+  - {fileID: 852721868}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -636,8 +688,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 712976258}
   m_LocalRotation: {x: .707106888, y: 0, z: 0, w: .707106769}
-  m_LocalPosition: {x: 0, y: 0, z: -250}
-  m_LocalScale: {x: 30, y: 1, z: 8}
+  m_LocalPosition: {x: 0, y: 0, z: -300}
+  m_LocalScale: {x: 40, y: 1, z: 6}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &725436739
@@ -892,6 +944,49 @@ NetworkView:
   m_ViewID:
     m_ID: 1
     m_Type: 1
+--- !u!21 &852721868
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
+          m_Scale: {x: 40, y: 6}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 40, y: 6}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .215352014
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &858560795
 GameObject:
   m_ObjectHideFlags: 0
@@ -998,7 +1093,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2045376413}
+  - {fileID: 1447609611}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1034,8 +1129,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 870950862}
   m_LocalRotation: {x: 0, y: 0, z: -.707106888, w: .707106769}
-  m_LocalPosition: {x: -150, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 1, z: 50}
+  m_LocalPosition: {x: -200, y: 0, z: 0}
+  m_LocalScale: {x: 6, y: 1, z: 60}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &1073255230
@@ -1117,7 +1212,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1075110700}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: -4.37113883e-08}
-  m_LocalPosition: {x: 5, y: -39, z: 175}
+  m_LocalPosition: {x: 5, y: -25.1661911, z: 175}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 832051626}
@@ -1151,7 +1246,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 493303824}
+  - {fileID: 1683788536}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1187,8 +1282,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1167493965}
   m_LocalRotation: {x: 1, y: -4.37113883e-08, z: -4.37113883e-08, w: 1.91068547e-15}
-  m_LocalPosition: {x: 0, y: 40, z: 0}
-  m_LocalScale: {x: 30, y: 1, z: 50}
+  m_LocalPosition: {x: 0, y: 30, z: 0}
+  m_LocalScale: {x: 40, y: 1, z: 60}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &1182745706
@@ -1452,48 +1547,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!21 &1322973646
-Material:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: mat_wall_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
-    (Instance) (Instance)
-  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: []
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
-          m_Scale: {x: 30, y: 8}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _BumpMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 30, y: 8}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: _Shininess
-        second: .215352014
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _SpecColor
-        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1379932327
 GameObject:
   m_ObjectHideFlags: 0
@@ -1516,7 +1569,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1379932327}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 39, z: -175}
+  m_LocalPosition: {x: 5, y: -26.8574677, z: -175}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 832051626}
@@ -1656,6 +1709,49 @@ Animator:
   m_ApplyRootMotion: 1
   m_AnimatePhysics: 0
   m_HasTransformHierarchy: 1
+--- !u!21 &1447609611
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: mat_wall_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance)
+  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
+          m_Scale: {x: 6, y: 60}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BumpMap
+        second:
+          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
+          m_Scale: {x: 6, y: 60}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Shininess
+        second: .215352014
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
 --- !u!1 &1476181039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1728,14 +1824,15 @@ Transform:
   m_Children:
   - {fileID: 1414144549}
   m_Father: {fileID: 0}
---- !u!21 &1555737128
+--- !u!21 &1683788536
 Material:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: mat_floor_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
-    (Instance) (Instance)
+  m_Name: mat_ceiling_drive (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
+    (Instance) (Instance) (Instance) (Instance)
   m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
@@ -1746,28 +1843,21 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: 10b6c54301ca55e498f8c695a3d1df8f, type: 3}
-          m_Scale: {x: 30, y: 50}
+          m_Texture: {fileID: 2800000, guid: e67ab105c3ff4774e8e0cebf2c557464, type: 3}
+          m_Scale: {x: 40, y: 60}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 30, y: 50}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _Detail
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 1, y: 1}
+          m_Scale: {x: 40, y: 60}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
           name: _Shininess
-        second: .220354751
+        second: .202494472
     m_Colors:
       data:
         first:
@@ -2025,7 +2115,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 1555737128}
+  - {fileID: 577304302}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -2061,91 +2151,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1970471038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -40, z: 0}
-  m_LocalScale: {x: 30, y: 1, z: 50}
+  m_LocalPosition: {x: 0, y: -30, z: 0}
+  m_LocalScale: {x: 40, y: 1, z: 60}
   m_Children: []
   m_Father: {fileID: 1405639799}
---- !u!21 &2025433751
-Material:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: mat_wall_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
-    (Instance) (Instance)
-  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: []
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
-          m_Scale: {x: 8, y: 50}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _BumpMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 8, y: 50}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: _Shininess
-        second: .215352014
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _SpecColor
-        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}
---- !u!21 &2045376413
-Material:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: mat_wall_drive (Instance) (Instance) (Instance) (Instance) (Instance) (Instance)
-    (Instance) (Instance)
-  m_Shader: {fileID: 4, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: []
-  m_CustomRenderQueue: -1
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-      data:
-        first:
-          name: _MainTex
-        second:
-          m_Texture: {fileID: 2800000, guid: 4940b38f6b5df174691657c79bdab324, type: 3}
-          m_Scale: {x: 8, y: 50}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _BumpMap
-        second:
-          m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 8, y: 50}
-          m_Offset: {x: 0, y: 0}
-    m_Floats:
-      data:
-        first:
-          name: _Shininess
-        second: .215352014
-    m_Colors:
-      data:
-        first:
-          name: _Color
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _SpecColor
-        second: {r: .784313738, g: .784313738, b: .784313738, a: 1}

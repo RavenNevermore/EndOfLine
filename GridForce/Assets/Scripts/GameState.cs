@@ -84,6 +84,7 @@ public class GameState : MonoBehaviour
         if (this.gameStarted)
         {
             GameObject[] drivers = GameObject.FindGameObjectsWithTag("Driver");
+			//Debug.Log("- "+drivers+" - "+drivers[0]+ " . "+drivers[1]+" --");
             if (this.arrowGameObjects == null)
             {
                 this.arrowGameObjects = new PlayerArrowScript[3];

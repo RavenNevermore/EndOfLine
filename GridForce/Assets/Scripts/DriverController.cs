@@ -305,6 +305,7 @@ public class DriverController : MonoBehaviour
                 {
                     case ItemType.Boost:
                         this.boostTime = this.boostDuration;
+						this.SendMessage("OnPlayerUsedBoost");
                         break;
                 }
 
@@ -369,12 +370,14 @@ public class DriverController : MonoBehaviour
                         case PlayerAction.TurnLeft:
                             this.moveDirection = Vector3.Cross(this.gravityDirection, this.moveDirection);
                             this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
-                            this.nodeList.Add(nextNode);
+							this.nodeList.Add(nextNode);
+							this.SendMessage("OnPlayerTurned");
                             break;
                         case PlayerAction.TurnRight:
                             this.moveDirection = Vector3.Cross(this.moveDirection, this.gravityDirection);
                             this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
-                            this.nodeList.Add(nextNode);
+							this.nodeList.Add(nextNode);
+							this.SendMessage("OnPlayerTurned");
                             break;
                         default:
                             break;

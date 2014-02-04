@@ -59,9 +59,20 @@ public class ItemBoxBehavior : MonoBehaviour
         }	
 	}
 
+	private void playSound(string childName){
+		Transform child = this.transform.FindChild(childName);
+		if (null == child)
+			return;
+		AudioSource audio =  child.GetComponent<AudioSource>();
+		if (null != audio){
+			audio.Play();
+		}
+	}
+
     // Deactivate item box
     public void SetInactive()
     {
+		this.playSound("Collected");
         if (Network.connections.Length > 0)
             this.networkView.RPC("SetInactiveRPC", RPCMode.All);
         else
@@ -80,6 +91,7 @@ public class ItemBoxBehavior : MonoBehaviour
     // Activate item box
     public void SetActive()
     {
+		this.playSound("Respawn");
         this.itemBoxMesh.SetActive(true);
         this.itemBoxCollider.enabled = true;
     }

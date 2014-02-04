@@ -1072,7 +1072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Arena_for_2or3
+  arenaName: Final_1
 --- !u!64 &694997518
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1500,7 +1500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Arena_for_3or4_2
+  arenaName: Final_3
 --- !u!64 &1067097469
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2259,7 +2259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Arena_for_2
+  arenaName: Final_2
 --- !u!23 &1453687594
 Renderer:
   m_ObjectHideFlags: 0
@@ -2345,7 +2345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b0b73f20b9f434088928e1912a6e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arenaName: Arena_for_3or4
+  arenaName: Arena_2pl
 --- !u!64 &1522659116
 MeshCollider:
   m_ObjectHideFlags: 0
