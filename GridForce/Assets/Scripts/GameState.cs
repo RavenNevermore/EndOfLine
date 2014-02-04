@@ -137,7 +137,7 @@ public class GameState : MonoBehaviour
             newObject = UnityEngine.Object.Instantiate(this.driverPrefab, this.arenaSettings.spawnPoints[i].position, this.arenaSettings.spawnPoints[i].rotation);
 		DriverController driver = ((Transform)(newObject)).gameObject.GetComponent<DriverController>();
         driver.arenaSettings = this.arenaSettings;
-        driver.cameraTransform = this.arenaSettings.cameraTransform;
+        //driver.cameraTransform = this.arenaSettings.cameraTransform;
         driver.mainColor = this.playerColor;
         driver.updateColor = true;
         driver.playerIndex = this.playerIndex;
@@ -148,6 +148,7 @@ public class GameState : MonoBehaviour
         driverInput.playerAction = PlayerAction.None;
         driver.driverInput = driverInput;
         this.currentPlayerObject = ((Transform)(newObject));
+		this.arenaSettings.cameraTransform.SendMessage("FollowTheLeader", this.currentPlayerObject);
     }
 
     public void CountdownOver()
@@ -247,6 +248,7 @@ public class GameState : MonoBehaviour
 
         this.gameStarted = true;
         this.CreateDriverObject(this.spawnPoint, this.playerColor);
+
     }
 
     // Call when instantiated on network
