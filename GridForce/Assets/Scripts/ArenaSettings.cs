@@ -31,14 +31,14 @@ public class ArenaSettings : MonoBehaviour
     void OnDrawGizmos()
     {
         #if UNITY_EDITOR
-
+        
         MeshRenderer[] allChildren = this.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer child in allChildren)
         {
             if (child.gameObject.tag == "Drivable" || child.gameObject.tag == "NonDrivable")
             {
-                child.sharedMaterial.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
-                child.sharedMaterial.SetTextureScale("_BumpMap", new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize));
+                child.material.mainTextureScale = new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize);
+                child.material.SetTextureScale("_BumpMap", new Vector2(child.gameObject.transform.localScale.x / this.gridSize, child.gameObject.transform.localScale.z / this.gridSize));
             }
         }
 

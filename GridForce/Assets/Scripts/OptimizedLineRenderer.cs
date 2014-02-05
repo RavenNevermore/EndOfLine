@@ -24,8 +24,9 @@ public class OptimizedLineRenderer : MonoBehaviour
         MeshFilter meshFilter = (MeshFilter)(this.lineObject.AddComponent(typeof(MeshFilter)));
         this.lineMesh = meshFilter.mesh;
         this.lineObject.AddComponent(typeof(MeshRenderer));
-        this.instanceMaterial = new Material(this.material);
-        this.lineObject.renderer.material = this.instanceMaterial;	
+        this.instanceMaterial = UnityEngine.Object.Instantiate(this.material) as Material;
+        this.instanceMaterial.shaderKeywords = this.material.shaderKeywords;
+        this.lineObject.renderer.material = this.instanceMaterial;
 	}
 	
 	// Update is called once per frame

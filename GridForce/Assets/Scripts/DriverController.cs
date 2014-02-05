@@ -56,8 +56,6 @@ public class DriverController : MonoBehaviour
     private bool insertedNode = false;      // Node was inserted this frame
     private float killedTrailLength = 0.0f;     // Length of trail when killed
 
-    private float lightColorA = 1.0f;       // Light's original alpha value
-
     public GameObject[] meshList = null;   // List of all meshes
 
 
@@ -164,12 +162,18 @@ public class DriverController : MonoBehaviour
         if (this.harmlessTimer > 0.0f && this.gameStarted)
             currentColor = new Color(currentColor.r * 0.35f, currentColor.g * 0.35f, currentColor.b * 0.35f, currentColor.a * 0.1f);
 
-        Light light = this.GetComponentInChildren<Light>();
-        if (light != null)
-            light.color = new Color(currentColor.r, currentColor.g, currentColor.b, lightColorA * currentColor.a);
-
         for (int i = 0; this.lineRenderer != null && i < this.lineRenderer.pointList.Count; i++)
             this.lineRenderer.pointList[i].color = new Color(currentColor.r, currentColor.g, currentColor.b, currentColor.a);
+
+        if (this.vehicleMesh == null)
+            return;
+
+        MeshRenderer[] meshRenderers = this.vehicleMesh.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer renderer in meshRenderers)
+        {
+            renderer.materials[1].SetColor("_TintColor", currentColor);
+            renderer.materials[1].SetColor("_GlowColor", currentColor);
+        }
     }
 
 
@@ -187,9 +191,6 @@ public class DriverController : MonoBehaviour
 
         this.lineRenderer = this.GetComponentInChildren<OptimizedLineRenderer>();
         this.vehicleMesh = this.transform.Find("VehicleMeshes").gameObject;
-
-        Light light = this.GetComponentInChildren<Light>();
-        this.lightColorA = light.color.a;
 
         if (this.arenaSettings != null)
             this.gridSize = this.arenaSettings.gridSize;
@@ -506,6 +507,9 @@ public class DriverController : MonoBehaviour
 
             this.NodeListCleanup(this.killedTrailLength, nodeColor);
         }
+
+        for (int i = 0; i < this.nodeList.Count; i++)
+            Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f, Color.yellow);
     }
 
 
@@ -621,10 +625,6 @@ public class DriverController : MonoBehaviour
             UnityEngine.Object.Destroy(this.vehicleMesh);
             this.vehicleMesh = null;
         }
-
-        Light childObject = this.GetComponentInChildren<Light>();
-        if (childObject != null)
-            UnityEngine.Object.Destroy(childObject.gameObject);
 
         for (int i = 0; i < this.colliderList.Count; i++)
         {
