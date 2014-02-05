@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 
 [RequireComponent(typeof(CharacterController))]
-public class DriverController : MonoBehaviour
+public class DriverController : ExtendedBehaviour
 {
     public Transform trailCollisionSegment = null;    // Game object that represents collision segment
     public Transform itemBoxPrefab = null;      // Item box prefab
@@ -310,7 +310,7 @@ public class DriverController : MonoBehaviour
                 {
                     case ItemType.Boost:
                         this.boostTime = this.boostDuration;
-						this.SendMessage("OnPlayerUsedBoost");
+						this.ShoutMessage("OnBoostStarted");
                         break;
                 }
 
@@ -323,6 +323,8 @@ public class DriverController : MonoBehaviour
                 this.updateColor = true;
                 this.currentSpeed = this.boostSpeed;
                 this.boostTime -= Time.deltaTime;
+				if (this.boostTime <= 0.0f)
+					this.ShoutMessage("OnBoostEnded");
             }
             else
             {
