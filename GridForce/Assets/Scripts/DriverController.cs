@@ -422,6 +422,11 @@ public class DriverController : MonoBehaviour
                 totalMovement += (this.currentSpeed * this.moveDirection);
             }
 
+            // Move player
+            totalMovement = new Vector3((float)(Math.Round(totalMovement.x, 1)), (float)(Math.Round(totalMovement.y, 1)), (float)(Math.Round(totalMovement.z, 1)));
+            if (this.characterController.enabled)
+                this.characterController.Move(totalMovement * Time.deltaTime);
+
             // Clean up node list
             this.NodeListCleanup(this.baseTrailLength, nodeColor);
 
@@ -460,15 +465,11 @@ public class DriverController : MonoBehaviour
                 this.colliderList[i].collider.enabled = false;
             }
 
-            // Player transformations
-            totalMovement = new Vector3((float)(Math.Round(totalMovement.x, 1)), (float)(Math.Round(totalMovement.y, 1)), (float)(Math.Round(totalMovement.z, 1)));
-            if (this.characterController.enabled)
-                this.characterController.Move(totalMovement * Time.deltaTime);
-
             if (this.transform.position.magnitude > this.arenaSettings.maxDistance)
                 this.Kill(-2);
         }
 
+        // Player transformations
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), this.rotationSpeed * Time.deltaTime);
 
         if (this.cameraTransform != null)
