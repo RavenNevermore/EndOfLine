@@ -4,13 +4,21 @@ using System.Collections;
 public class FollowingCamera : MonoBehaviour {
 
 	public Vector3 relativeCameraPosition = new Vector3(0, 1, -12);
+	public Vector3 relativePositionInBoost = new Vector3(0, 1, -18);
 	public Transform leader;
 	public float speed = 0.15f;
 
+	private bool inBoost;
 
+	public void OnBoostStarted(){
+		this.inBoost = true;
+	}
+
+	public void OnBoostEnded(){
+		this.inBoost = false;
+	}
 
 	public void FollowTheLeader(Transform leader){
-		Debug.Log("Following "+leader);
 		this.leader = leader;
 	}
 	
@@ -28,7 +36,8 @@ public class FollowingCamera : MonoBehaviour {
 	}
 
 	Vector3 calculateWantedPosition(){
-		Vector3 rotatedRelative = this.leader.rotation * this.relativeCameraPosition;
+		Vector3 relativePos = this.inBoost ? this.relativePositionInBoost : this.relativeCameraPosition;
+		Vector3 rotatedRelative = this.leader.rotation * relativePos;
 		Vector3 relative = this.leader.position + rotatedRelative;
 		return relative;
 	}
@@ -43,5 +52,9 @@ public class FollowingCamera : MonoBehaviour {
 			this.transform.position, 
 			target,
 			this.speed);
+	}
+
+	void OnTriggerEnter(Collider other){
+		Debug.Log("Trigger: "+other);
 	}
 }

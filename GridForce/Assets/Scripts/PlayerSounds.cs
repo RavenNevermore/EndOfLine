@@ -36,7 +36,7 @@ public class PlayerSounds : MonoBehaviour {
 		}
 	}
 
-	public void OnPlayerUsedBoost(){
+	public void OnBoostStarted(){
 		if (null == this.boostSound)
 			return;
 
