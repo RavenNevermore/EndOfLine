@@ -55,7 +55,7 @@ Material:
       data:
         first:
           name: _GlowStrength
-        second: 1
+        second: .600000024
     m_Colors:
       data:
         first:

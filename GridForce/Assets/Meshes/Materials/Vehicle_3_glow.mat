@@ -6,9 +6,11 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Vehicle_1_glow
-  m_Shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: []
+  m_Name: Vehicle_3_glow
+  m_Shader: {fileID: 4800000, guid: 3d4e75855dbd4264f9f04e8975f7fc0c, type: 3}
+  m_ShaderKeywords:
+  - GLOW11_GLOW_GLOWTEX
+  - GLOW11_MULTIPLY_GLOWCOLOR
   m_CustomRenderQueue: -1
   m_SavedProperties:
     serializedVersion: 2
@@ -17,12 +19,31 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 2800000, guid: 7aced145daf574c47b7003f34c01cfeb, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
-    m_Floats: {}
+      data:
+        first:
+          name: _GlowTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 7aced145daf574c47b7003f34c01cfeb, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _GlowStrength
+        second: .600000024
     m_Colors:
       data:
         first:
           name: _Color
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _GlowColor
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _TintColor
         second: {r: 1, g: 1, b: 1, a: 1}
