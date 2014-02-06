@@ -348,7 +348,9 @@ public class DriverController : ExtendedBehaviour
                     this.gravityDirection = temp;
                     this.characterController.Move(((this.characterController.radius + 0.1f) * this.moveDirection));
 
-                    Vector3 cornerPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(this.GetNextNode().position - this.nodeList[this.nodeList.Count - 1].position, oldMoveDirection);
+                    Vector3 cornerPos = Vector3.zero;                        
+                    if (this.nodeList.Count > 0)
+                        cornerPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(this.GetNextNode().position - this.nodeList[this.nodeList.Count - 1].position, oldMoveDirection);
                     this.nodeList.Add(new PathNode(cornerPos, (-oldGravityDirection + oldMoveDirection).normalized, oldMoveDirection, nodeColor));
                 }
 
@@ -411,7 +413,9 @@ public class DriverController : ExtendedBehaviour
                     }
                     else
                     {
-                        Vector3 cornerPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(raycastHit.point - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
+                        Vector3 cornerPos = Vector3.zero;
+                        if (this.nodeList.Count > 0)
+                            cornerPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(raycastHit.point - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
                         this.nodeList.Add(new PathNode(cornerPos, (-this.gravityDirection - this.moveDirection).normalized, -this.moveDirection, nodeColor));
 
                         Vector3 temp = this.moveDirection;
@@ -516,6 +520,9 @@ public class DriverController : ExtendedBehaviour
     // Clean up node list
     private void NodeListCleanup(float trailLength, Color nodeColor)
     {
+        if (this.nodeList.Count <= 0)
+            return;
+
         Vector3 groundPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(this.transform.position - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
         this.nodeList.Add(new PathNode(groundPos, -this.gravityDirection, -this.gravityDirection, nodeColor));
         float currentLength = 0.0f;
