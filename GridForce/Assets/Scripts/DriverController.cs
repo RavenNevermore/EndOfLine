@@ -96,7 +96,7 @@ public class DriverController : ExtendedBehaviour
         PathNode pathNode = new PathNode(Vector3.zero, Vector3.up, Vector3.up, Color.grey);
 
         RaycastHit raycastHit;
-        if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+        if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, DriverController.drivableLayerMask /*| DriverController.nonDrivableLayerMask*/))
         {
             // Convert from world to local space
             Vector3 localPos = raycastHit.transform.InverseTransformDirection(this.transform.position);
@@ -203,7 +203,7 @@ public class DriverController : ExtendedBehaviour
 
         // Snap player to a close node point on grid
         RaycastHit raycastHit;
-        if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+        if (Physics.Raycast(new Ray(this.transform.position, this.gravityDirection), out raycastHit, Mathf.Infinity, DriverController.drivableLayerMask /*| DriverController.nonDrivableLayerMask*/))
         {
             Vector3 localPos = raycastHit.transform.InverseTransformDirection(this.transform.position);
 
@@ -334,10 +334,10 @@ public class DriverController : ExtendedBehaviour
 
             RaycastHit raycastHit;
             // First check if player is in the air...
-            if (!(Physics.Linecast(gravityRayStart, gravityRayEnd, out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask)))
+            if (!(Physics.Linecast(gravityRayStart, gravityRayEnd, out raycastHit, DriverController.drivableLayerMask /*| DriverController.nonDrivableLayerMask*/)))
             {
                 // ...and if he is, check if there is a wall behind him
-                if (Physics.Linecast(this.transform.position - (this.gravityDirection * (this.characterController.height / 2.0f)), this.transform.position - (this.moveDirection * (this.characterController.radius + 3.0f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+                if (Physics.Linecast(this.transform.position - (this.gravityDirection * (this.characterController.height / 2.0f)), this.transform.position - (this.moveDirection * (this.characterController.radius + 3.0f)), out raycastHit, DriverController.drivableLayerMask /*| DriverController.nonDrivableLayerMask*/))
                 {
                     // Change direction if a wall was detected
                     Vector3 oldMoveDirection = this.moveDirection;
@@ -397,21 +397,21 @@ public class DriverController : ExtendedBehaviour
                         this.driverInput.playerAction = PlayerAction.None;
                 }
 
-                if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
-                {
-                    this.Kill(-1);
-                }
+                //if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
+                //{
+                //    this.Kill(-1);
+                //}
 
 
                 // If player is not in the air, check if there is a wall ahead of him 
-                if (Physics.Linecast(this.transform.position, this.transform.position + (this.moveDirection * (this.characterController.radius + 0.1f)), out raycastHit, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+                if (Physics.Linecast(this.transform.position, this.transform.position + (this.moveDirection * (this.characterController.radius + 0.1f)), out raycastHit, DriverController.drivableLayerMask /*| DriverController.nonDrivableLayerMask*/))
                 {
                     // Change direction or kill if a wall was detected
-                    if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
-                    {
-                        this.Kill(-1);
-                    }
-                    else
+                    //if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
+                    //{
+                    //    this.Kill(-1);
+                    //}
+                    //else
                     {
                         Vector3 cornerPos = Vector3.zero;
                         if (this.nodeList.Count > 0)
@@ -592,6 +592,9 @@ public class DriverController : ExtendedBehaviour
     [RPC]
     void KillRPC(int killer)
     {
+        this.invincibleTimer = 0.0f;
+        this.boostTime = 0.0f;
+
         if (this.killed)
             return;
 
@@ -712,7 +715,12 @@ public class DriverController : ExtendedBehaviour
                     otherDriver.Kill(this.playerIndex);
                 }
             }
-                
+
+        }
+
+        if (collider.tag == "NonDrivable" && collider.transform.parent != this)
+        {
+            this.Kill(-1);
         }
 
         if (collider.tag == this.itemBoxPrefab.tag)

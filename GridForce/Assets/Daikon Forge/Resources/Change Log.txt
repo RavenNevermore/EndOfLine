@@ -1,0 +1,13 @@
+Daikon Forge GUI v1.0.14 Changelog
+
+NOTE: This update is a "hotfix" that resolves important touch interaction issues and Windows Phone 8 issues
+
+* Resolved issues where some controls were not rendering correctly after being shown when initially hidden
+* Implemented workaround for Unity bug (Reflection on WP8 with Unity 4.3.3+) on Windows Phone 8
+* Resolved issue with touch processing - controls that were moved after tapping no longer responded to taps
+* Removed caching of control's GameObject - Provided zero performance benefit, contributed to bugs
+* Texture Sprite inspector now uses Texture instead of Texture2D, allows use of RenderTexture
+* Can dynamically re-assign Tween component at runtime
+* Made modifications to "click through" blocking code that should prove to be more consistent
+* Create Script wizard now properly handles byref parameters in event handler signatures
+* dfFollowObject now sorts controls by distance from camera, more performant frustum culling
