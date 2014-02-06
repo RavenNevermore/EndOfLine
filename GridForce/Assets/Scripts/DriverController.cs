@@ -720,6 +720,9 @@ public class DriverController : ExtendedBehaviour
 
         if (collider.tag == "NonDrivable" && collider.transform.parent != this)
         {
+            if (!((Network.connections.Length <= 0 || this.networkView.isMine)) || this.killed)
+                return;
+
             this.Kill(-1);
         }
 
