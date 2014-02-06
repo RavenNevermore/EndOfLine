@@ -38,8 +38,10 @@ public class ItemBoxBehavior : MonoBehaviour
     {
         if (Network.connections.Length > 0)
         {
-            Debug.Log("Instantiating over network item box...");
-            Network.Instantiate(itemBoxBugFix.itemBoxPrefab, this.transform.position, this.transform.rotation, 0);
+            GameObject networkInstance = (GameObject)(Network.Instantiate(itemBoxBugFix.itemBoxPrefab, this.transform.position, this.transform.rotation, 0));
+            Travelling travelComponent = this.GetComponent<Travelling>();
+            if (travelComponent != null)
+                this.CopyComponent(travelComponent, networkInstance);
             UnityEngine.Object.Destroy(this.gameObject);
         }
         else
@@ -58,6 +60,20 @@ public class ItemBoxBehavior : MonoBehaviour
                 this.SetActive();
         }	
 	}
+
+    // Copy a component to another GameObject
+    Component CopyComponent(Component original, GameObject destination)
+    {
+        System.Type type = original.GetType();
+        Component copy = destination.AddComponent(type);
+        // Copied fields can be restricted with BindingFlags
+        System.Reflection.FieldInfo[] fields = type.GetFields();
+        foreach (System.Reflection.FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+        return copy;
+    }
 
 	private void playSound(string childName){
 		Transform child = this.transform.FindChild(childName);
@@ -94,5 +110,22 @@ public class ItemBoxBehavior : MonoBehaviour
 		this.playSound("Respawn");
         this.itemBoxMesh.SetActive(true);
         this.itemBoxCollider.enabled = true;
+    }
+    // Send data over network
+    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
+    {
+        Vector3 position = Vector3.zero;
+        if (stream.isWriting)
+        {
+            // Sending data...
+            position = this.transform.position;
+            stream.Serialize(ref position);
+        }
+        else
+        {
+            // Receiving data...
+            stream.Serialize(ref position);
+            this.transform.position = position;
+        }
     }
 }

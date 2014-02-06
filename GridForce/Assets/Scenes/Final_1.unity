@@ -1747,9 +1747,9 @@ MonoBehaviour:
   maxDistance: 40
   minSpawnPointDistance: 10
   spawnPoints:
-  - {fileID: 211697579}
-  - {fileID: 211697579}
-  - {fileID: 211697579}
+  - {fileID: 618195677}
+  - {fileID: 1075332917}
+  - {fileID: 184240125}
   - {fileID: 211697579}
   cameraTransform: {fileID: 1899410311}
   trailLengthMultiplyer: 2
