@@ -510,9 +510,6 @@ public class DriverController : ExtendedBehaviour
 
             this.NodeListCleanup(this.killedTrailLength, nodeColor);
         }
-
-        for (int i = 0; i < this.nodeList.Count; i++)
-            Debug.DrawRay(this.nodeList[i].position, this.nodeList[i].normal * 10.0f, Color.yellow);
     }
 
 
