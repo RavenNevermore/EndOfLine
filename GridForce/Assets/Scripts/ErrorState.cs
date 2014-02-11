@@ -4,6 +4,31 @@ using System.Collections.Generic;
 
 public class ErrorState : MonoBehaviour
 {
+	
+	public static ErrorState FindErrorState(){
+        GameObject errorStateObject = GameObject.Find("ErrorState");
+        if (errorStateObject != null)
+            return errorStateObject.GetComponent<ErrorState>();
+		else
+			return null;
+	}
+	
+	public static void InfoMessage(string lineText){
+		ErrorState.Message(lineText, false);
+	}
+	
+	public static void ErrorMessage(string lineText){
+		ErrorState.Message(lineText, true);
+	}
+	
+	public static void Message(string lineText, bool isError){
+		ErrorState state = FindErrorState();
+		if (null == state)
+			return;
+		
+        state.showMessage(lineText, isError);
+	}
+	
     public GUISkin guiSkin = null;
 
     private bool displayConsole = false;
@@ -171,6 +196,20 @@ public class ErrorState : MonoBehaviour
     {
         this.consoleLines.Add(new ErrorLine("→ " + lineText, isError));
     }
+	
+	public void showInfoMessage(string lineText){
+		this.showMessage(lineText, false);
+	}
+	
+	public void showErrorMessage(string lineText){
+		this.showMessage(lineText, true);
+	}
+	
+	public void showMessage(string lineText, bool isError){
+        this.ClearButtons();
+        this.AddLine(lineText, isError);
+        this.Show(3.0f);
+	}
 }
 
 public delegate void ErrorGuiButtonDelegate();

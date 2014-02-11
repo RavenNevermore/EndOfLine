@@ -234,7 +234,14 @@ public class GameState : MonoBehaviour
     [RPC]
     void AssignPlayerData(int playerIndex, string playerName, float colorR, float colorG, float colorB, float colorA)
     {
-        this.players[playerIndex] = new PlayerData(playerIndex, playerName, new Color(colorR, colorG, colorB, colorA));
+        this.players[playerIndex] = new PlayerData( 
+				playerIndex, 
+				playerName, 
+				new Color(	colorR, 
+							colorG, 
+							colorB, 
+							colorA),
+				this.arenaSettings.BaseScore);
     }
 
     // Start game remote call
@@ -266,14 +273,22 @@ public class GameState : MonoBehaviour
         public int playerIndex;
         public string name;
         public int score;
+		public int multiplyer;
+		
+		private float scoreBase;
         private GUIText playerNameText;
         private GUIText playerScoreText;
 
-        public PlayerData(int playerIndex, string name, Color color)
+        public PlayerData(int playerIndex, 
+						  string name, 
+						  Color color, 
+						  float scoreBase)
         {
             this.playerIndex = playerIndex;
             this.name = name;
+			this.scoreBase = scoreBase;
             this.score = 0;
+			this.multiplyer = 1;
 
             this.playerNameText = GameObject.Find("Player " + (this.playerIndex + 1).ToString()).GetComponent<GUIText>();
             this.playerScoreText = GameObject.Find("Player " + (this.playerIndex + 1).ToString() + " Score").GetComponent<GUIText>();
@@ -285,6 +300,16 @@ public class GameState : MonoBehaviour
                 this.playerNameText.text = this.name.Substring(0, 10) + "...";
             this.playerScoreText.text = score.ToString();
         }
+		
+		public void playerDied(){
+			this.multiplyer = 1;
+		}
+		
+		public void playerKilled(string playerName){
+			this.score += (int)(this.scoreBase * this.multiplyer);
+			this.multiplyer++;
+			ErrorState.InfoMessage("You killed "+playerName+"!");
+		}
 
         public void Update()
         {
