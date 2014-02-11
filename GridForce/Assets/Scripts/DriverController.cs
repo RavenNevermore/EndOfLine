@@ -603,9 +603,10 @@ public class DriverController : ExtendedBehaviour
         if ((Network.connections.Length <= 0 || Network.isServer) && this.playersRef != null)
         {
             if (killer != this.playerIndex && killer >= 0 && this.playersRef.GetLength(0) > killer)
-                this.playersRef[killer].score += 1;
+                this.playersRef[killer].playerKilled(
+					this.playersRef[this.playerIndex].name);
             if (killer != -2 && this.playersRef.GetLength(0) > this.playerIndex)
-                this.playersRef[this.playerIndex].score -= 1;
+                this.playersRef[this.playerIndex].playerDied();
         }
 
         this.harmlessTimer = 100.0f;

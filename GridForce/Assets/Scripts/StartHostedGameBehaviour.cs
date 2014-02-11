@@ -37,10 +37,7 @@ public class StartHostedGameBehaviour : MonoBehaviour {
     {
         if (!(this.menuState.AllPlayersReady()))
         {
-            this.errorState.ClearButtons();
-            this.errorState.AddLine("Some players not ready...", true);
-            this.errorState.Show(3.0f);
-
+			this.errorState.showErrorMessage("Some players not ready...");
             return;
         }
 
