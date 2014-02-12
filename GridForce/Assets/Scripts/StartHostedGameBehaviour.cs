@@ -49,13 +49,28 @@ public class StartHostedGameBehaviour : MonoBehaviour {
         else
 			gameState = (GameObject) UnityEngine.Object.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity);
 
+        // Reinstantiate all objects if necessary
         GameObject[] itemBoxes = GameObject.FindGameObjectsWithTag("ItemBox");
+        ItemBoxBehavior itemBoxScript = null;
         foreach (GameObject itemBox in itemBoxes)
         {
-            ItemBoxBehavior itemBoxScript = itemBox.GetComponent<ItemBoxBehavior>();
+            itemBoxScript = itemBox.GetComponent<ItemBoxBehavior>();
             if (itemBoxScript != null)
                 itemBoxScript.ReInstantiate();
         }
+        if (itemBoxScript != null)
+            itemBoxScript.KillAllLocal();
+
+        GameObject[] pillarObjects = GameObject.FindGameObjectsWithTag("Pillar");
+        PillarBehavior pillarScript = null;
+        foreach (GameObject pillar in pillarObjects)
+        {
+            pillarScript = pillar.GetComponent<PillarBehavior>();
+            if (pillarScript != null)
+                pillarScript.ReInstantiate();
+        }
+        if (pillarScript != null)
+            pillarScript.KillAllLocal();
 
 		if (MenuState.GameType.HOST == this.menuState.type){
 	        try {

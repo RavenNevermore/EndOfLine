@@ -40,6 +40,12 @@ public class MenuState : MonoBehaviour
             if (this.name == "MenuState")
                 UnityEngine.Object.Destroy(this.gameObject);
         }
+
+#if UNITY_STANDALONE || UNITY_EDITOR
+
+        this.playerName = System.Environment.MachineName;
+
+#endif
     }
 
 	public void StartGame()

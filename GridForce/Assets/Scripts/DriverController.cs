@@ -657,7 +657,8 @@ public class DriverController : ExtendedBehaviour
             this.trailCollisionObject = null;
         }
 
-        this.characterController.enabled = false;
+        if (this.characterController != null)
+            this.characterController.enabled = false;
     }
 
 

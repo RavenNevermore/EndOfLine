@@ -12,22 +12,6 @@ public class ItemBoxBehavior : MonoBehaviour
 
     private bool networkInstance = false;
 
-    void Start()
-    {
-        if (!(this.networkInstance))
-        {
-            if (Network.isClient)
-            {
-                UnityEngine.Object.Destroy(this.gameObject);
-            }
-            else
-            {
-                this.SetInactiveRPC();
-                this.timeUntilRespawn = 0.0f;
-            }
-        }
-    }
-
     void OnNetworkInstantiate(NetworkMessageInfo info)
     {
         this.networkInstance = true;
@@ -40,14 +24,39 @@ public class ItemBoxBehavior : MonoBehaviour
         {
             GameObject networkInstance = (GameObject)(Network.Instantiate(itemBoxBugFix.itemBoxPrefab, this.transform.position, this.transform.rotation, 0));
             Travelling travelComponent = this.GetComponent<Travelling>();
-            if (travelComponent != null)
-                this.CopyComponent(travelComponent, networkInstance);
+            Travelling networkTravelComponent = networkInstance.GetComponent<Travelling>();
+            networkTravelComponent.pathNodes = travelComponent.pathNodes;
+            networkTravelComponent.speed = travelComponent.speed;
+            networkTravelComponent.sloppyness = travelComponent.sloppyness;
+        }
+    }
+
+    void KillIfLocal()
+    {
+        if (!(this.networkInstance) && Network.connections.Length > 0)
+        {
             UnityEngine.Object.Destroy(this.gameObject);
         }
-        else
+    }
+
+    [RPC]
+    void KillAllLocalItemboxRPC()
+    {
+        GameObject[] itemBoxes = GameObject.FindGameObjectsWithTag("ItemBox");
+        foreach (GameObject itemBox in itemBoxes)
         {
-            this.SetActive();
+            ItemBoxBehavior itemBoxScript = itemBox.GetComponent<ItemBoxBehavior>();
+            if (itemBoxScript != null)
+                itemBoxScript.KillIfLocal();
         }
+    }
+
+    public void KillAllLocal()
+    {
+        if (Network.connections.Length > 0)
+            this.networkView.RPC("KillAllLocalItemboxRPC", RPCMode.All);
+        else
+            this.KillAllLocalItemboxRPC();
     }
 	
 	// Update is called once per frame
@@ -110,22 +119,5 @@ public class ItemBoxBehavior : MonoBehaviour
 		this.playSound("Respawn");
         this.itemBoxMesh.SetActive(true);
         this.itemBoxCollider.enabled = true;
-    }
-    // Send data over network
-    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
-    {
-        Vector3 position = Vector3.zero;
-        if (stream.isWriting)
-        {
-            // Sending data...
-            position = this.transform.position;
-            stream.Serialize(ref position);
-        }
-        else
-        {
-            // Receiving data...
-            stream.Serialize(ref position);
-            this.transform.position = position;
-        }
     }
 }
