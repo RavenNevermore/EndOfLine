@@ -18,6 +18,7 @@ public class PlayerSounds : MonoBehaviour {
 			foreach (AudioClip clip in this.soundClips){
 				AudioSource source = (AudioSource) Instantiate(this.turnSound);
 				source.clip = clip;
+                source.transform.parent = this.transform;
 				this.sources.Add(source);
 			}
 		}
