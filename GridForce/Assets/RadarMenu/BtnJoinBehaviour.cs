@@ -24,11 +24,13 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
 		this.resetName();
 	}
 
-	public void resetName(){
+	public void resetName()
+    {
 		this.resetName(this.hostName, this.hostIp);
 	}
 
-	public void resetName(string hostName, string hostIp){
+	public void resetName(string hostName, string hostIp)
+    {
 		this.hostIp = hostIp;
 		this.hostName = hostName;
 		if (null == this.hostName || this.hostName.Trim().Equals(""))
@@ -76,6 +78,8 @@ public class BtnJoinBehaviour : AbstractMenuBehaviour
         this.errorState.Show(3.0f);
 
         this.switchToMenu("03_select_vehicle");
+
+        this.gameState.networkView.RPC("SetClientName", RPCMode.Server, Network.player, this.gameState.playerName);
     }
 
     void OnFailedToConnect(NetworkConnectionError error)

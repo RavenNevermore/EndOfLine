@@ -25,6 +25,7 @@ public class MenuState : MonoBehaviour
     public bool gameStarted = false;
 
     private Dictionary<NetworkPlayer, bool> playersReady = new Dictionary<NetworkPlayer, bool>();
+    public Dictionary<NetworkPlayer, string> playerNames = new Dictionary<NetworkPlayer, string>();
 
     void Start()
     {
@@ -50,6 +51,9 @@ public class MenuState : MonoBehaviour
 
 	public void StartGame()
     {
+        this.playersReady.Clear();
+        this.playerNames.Clear();
+
 		NetworkConnectionError connectionError;
         Network.maxConnections = 3;
 
@@ -152,14 +156,25 @@ public class MenuState : MonoBehaviour
             this.playersReady.Add(player, false);
 
         this.numConnections++;
+    }
 
+
+    [RPC]
+    void SetClientName(NetworkPlayer player, string name)
+    {
         this.errorState.ClearButtons();
-        this.errorState.AddLine("Player " + player.ipAddress + " connected", false);
+        this.errorState.AddLine("Player " + name + " connected", false);
         this.errorState.Show(3.0f);
 
-		Debug.Log("Sending game details to player: " + player);
+        Debug.Log("Sending game details to player: " + player);
         if (this.networkView != null)
-		    this.networkView.RPC("SetServerDetails", player, this.hostName, this.arenaName);
+        {
+            this.networkView.RPC("SetServerDetails", player, this.hostName, this.arenaName);
+            this.networkView.RPC("PlayerConnectedNotification", RPCMode.Others, player, name);
+        }
+
+        if (!(this.playerNames.ContainsKey(player)))
+            this.playerNames.Add(player, name);
     }
 
 
@@ -167,6 +182,12 @@ public class MenuState : MonoBehaviour
     {
         if (this.playersReady.ContainsKey(player))
             this.playersReady.Remove(player);
+        string name = "";
+        if (this.playerNames.ContainsKey(player))
+        {
+            name = this.playerNames[player];
+            this.playerNames.Remove(player);
+        }
 
         this.numConnections--;
 
@@ -181,7 +202,7 @@ public class MenuState : MonoBehaviour
             Network.Disconnect(200);
 
             this.errorState.Clear();
-            this.errorState.AddLine("Player " + player.ipAddress + " disconnected", false);
+            this.errorState.AddLine("Player " + name + " disconnected", false);
             this.errorState.AddLine("All players disconnected", true);
             this.errorState.AddButton("Main Menu", this.ReturnToMainMenu);
             this.errorState.AddButton("Restart", this.HostGameRetry);
@@ -190,17 +211,25 @@ public class MenuState : MonoBehaviour
         else
         {
             if (this.networkView != null)
-                this.networkView.RPC("PlayerDisconnectedNotification", RPCMode.All, player);
+                this.networkView.RPC("PlayerDisconnectedNotification", RPCMode.All, player, name);
             else
-                this.PlayerDisconnectedNotification(player);
+                this.PlayerDisconnectedNotification(player, name);
         }
     }
 
     [RPC]
-    void PlayerDisconnectedNotification(NetworkPlayer player)
+    void PlayerDisconnectedNotification(NetworkPlayer player, string name)
     {
         this.errorState.ClearButtons();
-        this.errorState.AddLine("Player " + player.ipAddress + " disconnected", false);
+        this.errorState.AddLine("Player " + name + " disconnected", false);
+        this.errorState.Show(3.0f);
+    }
+
+    [RPC]
+    void PlayerConnectedNotification(NetworkPlayer player, string name)
+    {
+        this.errorState.ClearButtons();
+        this.errorState.AddLine("Player " + name + " connected", false);
         this.errorState.Show(3.0f);
     }
 

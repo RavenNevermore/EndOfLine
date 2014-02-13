@@ -3,7 +3,8 @@ using System;
 using System.Net;
 using System.Collections;
 
-public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
+public class BtnJoinOtherBehaviour : AbstractMenuBehaviour
+{
 
 	public int boxWidth;
 	public int boxHeight;
@@ -152,6 +153,8 @@ public class BtnJoinOtherBehaviour : AbstractMenuBehaviour {
         this.ipToJoin = "";
 
         this.switchToMenu("03_select_vehicle");
+
+        this.gameState.networkView.RPC("SetClientName", RPCMode.Server, Network.player, this.gameState.playerName);
     }
 
     void OnFailedToConnect(NetworkConnectionError error)

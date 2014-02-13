@@ -11,6 +11,8 @@ public class AbstractMenuBehaviour : MonoBehaviour {
 		string backPath = null;
 		if (findReturnPath){
 			backPath = this.transform.parent.gameObject.name;
+            if (backPath.Contains("beacon"))
+                backPath = this.transform.parent.parent.gameObject.name;
 		}
 
 		GameObject root = GameObject.Find("root");

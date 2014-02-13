@@ -10,6 +10,10 @@ public class PillarBehavior : MonoBehaviour
     void OnNetworkInstantiate(NetworkMessageInfo info)
     {
         this.networkInstance = true;
+
+        ArenaSettings arenaSettings = GameObject.FindObjectOfType<ArenaSettings>();
+        if (arenaSettings != null)
+            ArenaSettings.SetTextureScales(this.gameObject, arenaSettings.gridSize);
     }
 
     // Reinstantiate object on level load

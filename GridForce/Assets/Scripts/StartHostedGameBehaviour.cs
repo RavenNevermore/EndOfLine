@@ -9,6 +9,11 @@ public class StartHostedGameBehaviour : MonoBehaviour {
     public MenuState menuState = null;
     public ErrorState errorState = null;
 
+    public GameObject startGameButton = null;
+    public GameObject connectionsList = null;
+    public GameObject dummyButton = null;
+    public GameObject ipAddress = null;
+
 	void Start ()
     {
         GameObject errorStateObject = GameObject.Find("ErrorState");
@@ -17,20 +22,11 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 
 		Debug.Log("My menustate is : " + this.menuState);
 
-		if (MenuState.GameType.HOST == this.menuState.type){
-	        try {
-	            UdpBroadcasting.createBeacon();
-				Debug.Log("Beacon is active!");
-	        } catch (Exception e) {
-				Debug.LogException(e);
-	        }
-		}
-
 		Input.simulateMouseWithTouches = true;
 
-		TextMesh text = this.GetComponentInChildren<TextMesh>();
+		GUIText text = this.ipAddress.GetComponentInChildren<GUIText>();
 
-		text.text = "Your IP is " + Network.player.ipAddress + ".\nStart Game!";
+		text.text = Network.player.ipAddress;
 	}
 
 	void OnMouseDown()
@@ -84,4 +80,39 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 		gameState.GetComponent<GameState>().menuState = this.menuState;
         this.menuState.gameStarted = true;
 	}
+
+    public void SetHostGame(MenuState menuState)
+    {
+        this.menuState = menuState;
+        this.dummyButton.SetActive(false);
+        this.gameObject.SetActive(true);
+        this.StartUDPBroadcasting();
+    }
+
+    public void SetClientGame(MenuState menuState)
+    {
+        this.menuState = menuState;
+        this.startGameButton.SetActive(false);
+        this.connectionsList.SetActive(false);
+        this.gameObject.SetActive(true);
+
+        GUIText text = this.ipAddress.GetComponentInChildren<GUIText>();
+        text.text += "\n\nWaiting for host...";
+    }
+
+    void StartUDPBroadcasting()
+    {
+        if (MenuState.GameType.HOST == this.menuState.type)
+        {
+            try
+            {
+                UdpBroadcasting.createBeacon();
+                Debug.Log("Beacon is active!");
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }
+    }
 }
