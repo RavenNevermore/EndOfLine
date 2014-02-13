@@ -178,14 +178,14 @@ Material:
           name: _MainTex
         second:
           m_Texture: {fileID: 2800000, guid: 34b82f8ea31b2254a979fa25598be5d5, type: 3}
-          m_Scale: {x: 40, y: 56}
+          m_Scale: {x: 80, y: 112}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 40, y: 56}
+          m_Scale: {x: 80, y: 112}
           m_Offset: {x: 0, y: 0}
       data:
         first:
@@ -226,14 +226,14 @@ Material:
           name: _MainTex
         second:
           m_Texture: {fileID: 2800000, guid: 3f60741bee70def45a8a77e6149f3803, type: 3}
-          m_Scale: {x: 40, y: 8}
+          m_Scale: {x: 80, y: 24}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 40, y: 8}
+          m_Scale: {x: 80, y: 24}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
@@ -1230,14 +1230,14 @@ Material:
           name: _MainTex
         second:
           m_Texture: {fileID: 2800000, guid: f91716f28e16d334eac94fca3bc5d8af, type: 3}
-          m_Scale: {x: 40, y: 56}
+          m_Scale: {x: 80, y: 112}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 40, y: 56}
+          m_Scale: {x: 80, y: 112}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
@@ -1320,7 +1320,7 @@ Transform:
   m_GameObject: {fileID: 586771570}
   m_LocalRotation: {x: 0, y: 0, z: .707106829, w: .707106829}
   m_LocalPosition: {x: 200, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 1, z: 56}
+  m_LocalScale: {x: 24, y: 1, z: 80}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &594301684
@@ -1546,7 +1546,7 @@ Transform:
   m_GameObject: {fileID: 638252737}
   m_LocalRotation: {x: -.707106888, y: 0, z: 0, w: .707106769}
   m_LocalPosition: {x: 0, y: 0, z: 280}
-  m_LocalScale: {x: 40, y: 1, z: 8}
+  m_LocalScale: {x: 80, y: 1, z: 24}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &680432808
@@ -1863,7 +1863,7 @@ Transform:
   m_GameObject: {fileID: 712976258}
   m_LocalRotation: {x: .707106888, y: 0, z: 0, w: .707106769}
   m_LocalPosition: {x: 0, y: 0, z: -280}
-  m_LocalScale: {x: 40, y: 1, z: 8}
+  m_LocalScale: {x: 80, y: 1, z: 24}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &724315372
@@ -2531,7 +2531,7 @@ Transform:
   m_GameObject: {fileID: 870950862}
   m_LocalRotation: {x: 0, y: 0, z: -.707106888, w: .707106769}
   m_LocalPosition: {x: -200, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 1, z: 56}
+  m_LocalScale: {x: 24, y: 1, z: 80}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &871161850
@@ -3234,14 +3234,14 @@ Material:
           name: _MainTex
         second:
           m_Texture: {fileID: 2800000, guid: 3f60741bee70def45a8a77e6149f3803, type: 3}
-          m_Scale: {x: 8, y: 56}
+          m_Scale: {x: 24, y: 80}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 8, y: 56}
+          m_Scale: {x: 24, y: 80}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
@@ -3519,7 +3519,7 @@ Transform:
   m_GameObject: {fileID: 1167493965}
   m_LocalRotation: {x: 1, y: -4.37113883e-08, z: -4.37113883e-08, w: 1.91068547e-15}
   m_LocalPosition: {x: 0, y: 40, z: 0}
-  m_LocalScale: {x: 40, y: 1, z: 56}
+  m_LocalScale: {x: 80, y: 1, z: 112}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &1179200115
@@ -5382,14 +5382,14 @@ Material:
           name: _MainTex
         second:
           m_Texture: {fileID: 2800000, guid: 3f60741bee70def45a8a77e6149f3803, type: 3}
-          m_Scale: {x: 8, y: 56}
+          m_Scale: {x: 24, y: 80}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 8, y: 56}
+          m_Scale: {x: 24, y: 80}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
@@ -5657,14 +5657,14 @@ Material:
           name: _MainTex
         second:
           m_Texture: {fileID: 2800000, guid: 3f60741bee70def45a8a77e6149f3803, type: 3}
-          m_Scale: {x: 40, y: 8}
+          m_Scale: {x: 80, y: 24}
           m_Offset: {x: 0, y: 0}
       data:
         first:
           name: _BumpMap
         second:
           m_Texture: {fileID: 2800000, guid: 1ff72bafaf2e7ca41bd15f88818182d9, type: 3}
-          m_Scale: {x: 40, y: 8}
+          m_Scale: {x: 80, y: 24}
           m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
@@ -5983,7 +5983,7 @@ Transform:
   m_GameObject: {fileID: 1970471038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -40, z: 0}
-  m_LocalScale: {x: 40, y: 1, z: 56}
+  m_LocalScale: {x: 80, y: 1, z: 112}
   m_Children: []
   m_Father: {fileID: 1405639799}
 --- !u!1 &1995595317
