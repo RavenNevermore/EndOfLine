@@ -5,6 +5,7 @@ public class TitleScreenClickBehavior : MonoBehaviour
 {
     public GameObject nextMenu = null;
 
+    // On mouse down
     void OnMouseDown()
     {
         this.nextMenu.SetActive(true);
