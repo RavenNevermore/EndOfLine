@@ -45,7 +45,15 @@ public class StartHostedGameBehaviour : MonoBehaviour {
         else
 			gameState = (GameObject) UnityEngine.Object.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity);
 
-        // Reinstantiate all objects if necessary
+        this.ReinstatiateObjectsIfNeccesary();
+		
+		
+
+		gameState.GetComponent<GameState>().menuState = this.menuState;
+        this.menuState.gameStarted = true;
+	}
+	
+	void ReinstatiateObjectsIfNeccesary(){
         GameObject[] itemBoxes = GameObject.FindGameObjectsWithTag("ItemBox");
         ItemBoxBehavior itemBoxScript = null;
         foreach (GameObject itemBox in itemBoxes)
@@ -76,9 +84,6 @@ public class StartHostedGameBehaviour : MonoBehaviour {
 				Debug.LogException(e);
 	        }
 		}
-
-		gameState.GetComponent<GameState>().menuState = this.menuState;
-        this.menuState.gameStarted = true;
 	}
 
     public void SetHostGame(MenuState menuState)
