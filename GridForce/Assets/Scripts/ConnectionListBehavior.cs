@@ -36,8 +36,8 @@ public class ConnectionListBehavior : AbstractMenuBehaviour
         {
             string name = valuePair.Value;
 
-            //if (this.name.Length > 11)
-            //    name = this.name.Substring(0, 10) + "...";
+            if (name.Length > 11)
+                name = name.Substring(0, 10) + "...";
 
             switch (currentPlayer)
             {
