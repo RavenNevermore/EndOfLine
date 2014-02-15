@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class ArenaSettings : MonoBehaviour
 {
 	
-	public float BaseScore = 2.0f;
+	public float baseScore = 2.0f;
+    public float multiplierIncrease = 1.0f;
     public float gridSize = 1.0f;
     public float maxDistance = 50.0f;
     public float minSpawnPointDistance = 10.0f;

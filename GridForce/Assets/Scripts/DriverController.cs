@@ -9,12 +9,14 @@ public class DriverController : ExtendedBehaviour
     public Transform trailCollisionSegment = null;    // Game object that represents collision segment
     public Transform itemBoxPrefab = null;      // Item box prefab
     public Transform explosionPrefab = null;     // Which effect to use for the explosion
+    public GameObject fakeItemBoxPrefab = null;     // Fake item box
     public ArenaSettings arenaSettings = null;      // Arena settings
     public Transform cameraTransform = null;    // The camera's transform
     public DriverInput driverInput = null;    // Input for driver
     public float baseSpeed = 20.0f;     // Base drive speed
     public float boostSpeed = 30.0f;    // Speed when on boost
     public float boostDuration = 5.0f;    // Duration of boost
+    public float immunityDuration = 10.0f;  // Immunity duration
     public float killBoostDuration = 1.5f;  // Duration of kill boost
     public float baseTrailLength = 20.0f;   // Base length of trail
     public float rotationSpeed = 15.0f;  // Rotation speed when changing orientation
@@ -23,8 +25,8 @@ public class DriverController : ExtendedBehaviour
     public Color mainColor = new Color(0.0f, 0.0f, 0.9f);    // Main color of light and trail
     public bool updateColor = true;     // Whether to update player's color
     public int playerIndex = 0;    // This driver's player index
-    public GameState.PlayerData[] playersRef = null;    // Array of players
     public bool gameStarted = false;        // Has the game started yet?
+    public ScoreDelegate ScoreFunction = null;
 
     private const int layerDrivable = 8;     // Layer of drivable plane
     private const int layerNonDrivable = 9;    // Layer of non drivable plane
@@ -312,6 +314,24 @@ public class DriverController : ExtendedBehaviour
                         this.boostTime = this.boostDuration;
 						this.ShoutMessage("OnBoostStarted");
                         break;
+
+                    case ItemType.FakeItemBox:
+                        UnityEngine.Object fakeItemBoxInstance = null;
+                        RaycastHit raycastHitFakeItemBox;
+                        Physics.Linecast(gravityRayStart, gravityRayEnd, out raycastHitFakeItemBox, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask);
+                        if (Network.connections.Length > 0)
+                            fakeItemBoxInstance = UnityEngine.Network.Instantiate(this.fakeItemBoxPrefab, raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f) - (this.gravityDirection * 0.5f), this.fakeItemBoxPrefab.transform.rotation, 0);
+                        else
+                            fakeItemBoxInstance = UnityEngine.Object.Instantiate(this.fakeItemBoxPrefab, raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f) - (this.gravityDirection * 0.5f), this.fakeItemBoxPrefab.transform.rotation);
+                        FakeItemBoxBehavior fakeItemBoxScript = ((GameObject)(fakeItemBoxInstance)).gameObject.GetComponent<FakeItemBoxBehavior>();
+                        if (fakeItemBoxScript != null)
+                            fakeItemBoxScript.playerIndex = this.playerIndex;
+                        break;
+
+                    case ItemType.Immunity:
+                        if (this.invincibleTimer < this.immunityDuration)
+                            this.invincibleTimer = this.immunityDuration;
+                        break;
                 }
 
                 this.heldItem = ItemType.None;
@@ -472,7 +492,7 @@ public class DriverController : ExtendedBehaviour
             }
 
             if (this.transform.position.magnitude > this.arenaSettings.maxDistance)
-                this.Kill(-2);
+                this.Kill(-2, this.playerIndex);
         }
 
         // Player transformations
@@ -577,20 +597,23 @@ public class DriverController : ExtendedBehaviour
 
 
     // Kill driver
-    void Kill(int killer)
+    void Kill(int killer, int killedPlayer)
     {
         if (!(this.killed))
         {
             if (Network.connections.Length > 0)
-                this.networkView.RPC("KillRPC", RPCMode.All, killer);
+                this.networkView.RPC("KillRPC", RPCMode.All, killer, killedPlayer);
             else
-                this.KillRPC(killer);
+                this.KillRPC(killer, killedPlayer);
+
+            if (this.ScoreFunction != null)
+                this.ScoreFunction(killer, killedPlayer);
         }
     }
 
 
     [RPC]
-    void KillRPC(int killer)
+    void KillRPC(int killer, int killedPlayer)
     {
         this.invincibleTimer = 0.0f;
         this.boostTime = 0.0f;
@@ -599,15 +622,6 @@ public class DriverController : ExtendedBehaviour
             return;
 
         this.killed = true;
-
-        if ((Network.connections.Length <= 0 || Network.isServer) && this.playersRef != null)
-        {
-            if (killer != this.playerIndex && killer >= 0 && this.playersRef.GetLength(0) > killer)
-                this.playersRef[killer].playerKilled(
-					this.playersRef[this.playerIndex].name);
-            if (killer != -2 && this.playersRef.GetLength(0) > this.playerIndex)
-                this.playersRef[this.playerIndex].playerDied();
-        }
 
         this.harmlessTimer = 100.0f;
         this.UpdateColors();
@@ -667,7 +681,30 @@ public class DriverController : ExtendedBehaviour
         if (this.heldItem == ItemType.None)
         {
             itemBoxScript.SetInactive();
-            this.heldItem = ItemType.Boost;
+            int randomValue = UnityEngine.Random.Range(0, 5);
+
+            switch (randomValue)
+            {
+                case 0:
+                    this.heldItem = ItemType.Boost;
+                    break;
+
+                case 1:
+                    this.heldItem = ItemType.FakeItemBox;
+                    break;
+
+                case 2:
+                    this.heldItem = ItemType.SideBlades;
+                    break;
+
+                case 3:
+                    this.heldItem = ItemType.Immunity;
+                    break;
+
+                case 4:
+                    this.heldItem = ItemType.InvertControls;
+                    break;
+            }
         }
     }
     
@@ -707,14 +744,14 @@ public class DriverController : ExtendedBehaviour
             if (otherDriver != null)
                 killer = otherDriver.playerIndex;
 
-            this.Kill(killer);
+            this.Kill(killer, this.playerIndex);
 
             // Check if driver is crashing into other driver and kill both
             if (otherDriver != null)
             {
                 if (otherDriver.invincibleTimer <= 0.0f && (otherDriver.transform.position - this.transform.position).magnitude <= 0.9f)
                 {
-                    otherDriver.Kill(this.playerIndex);
+                    otherDriver.Kill(this.playerIndex, this.playerIndex);
                 }
             }
 
@@ -725,13 +762,30 @@ public class DriverController : ExtendedBehaviour
             if (!((Network.connections.Length <= 0 || this.networkView.isMine)) || this.killed)
                 return;
 
-            this.Kill(-1);
+            this.Kill(-1, this.playerIndex);
         }
 
         if (collider.tag == this.itemBoxPrefab.tag)
         {
             if (Network.connections.Length <= 0 || this.networkView.isMine)
                 this.GetRandomItem(collider.gameObject.GetComponent<ItemBoxBehavior>());
+        }
+
+        if (collider.tag == this.fakeItemBoxPrefab.tag)
+        {
+            if (!((Network.connections.Length <= 0 || this.networkView.isMine)) || this.invincibleTimer > 0.0f || this.killed)
+                return;
+
+            FakeItemBoxBehavior fakeItemBoxScript = collider.gameObject.GetComponent<FakeItemBoxBehavior>();
+            if (fakeItemBoxScript != null)
+                this.Kill(fakeItemBoxScript.playerIndex, this.playerIndex);
+            else
+                this.Kill(-1, this.playerIndex);
+
+            if (Network.connections.Length > 0)
+                UnityEngine.Network.Destroy(collider.gameObject);
+            else
+                UnityEngine.Object.Destroy(collider.gameObject);
         }
     }
 
@@ -841,14 +895,19 @@ public class DriverController : ExtendedBehaviour
             this.arenaSettings = GameObject.Find("Arena").GetComponent<ArenaSettings>();
             GameState gameState = GameObject.FindWithTag("GameState").GetComponent<GameState>();
             this.playerIndex = gameState.playerIndex;
-            this.playersRef = gameState.players;
         }
     }
 }
+
+public delegate void ScoreDelegate(int killer, int killedPlayer);
 
 
 public enum ItemType
 {
     None,
-    Boost
+    Boost,
+    FakeItemBox,
+    SideBlades,
+    Immunity,
+    InvertControls
 }

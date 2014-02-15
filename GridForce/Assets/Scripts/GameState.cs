@@ -33,6 +33,11 @@ public class GameState : MonoBehaviour
     public int selectedMesh = 1;
 
     public GameObject boostItemGfx = null;
+    public GameObject fakeItemBoxItemGfx = null;
+    public GameObject sideBladesItemGfx = null;
+    public GameObject immunityItemGfx = null;
+    public GameObject invertControlsItemGfx = null;
+
     public GameObject playerArrowPrefab = null;
     private PlayerArrowScript[] arrowGameObjects = null;
 
@@ -116,12 +121,114 @@ public class GameState : MonoBehaviour
             {
                 case ItemType.None:
                     this.boostItemGfx.SetActive(false);
+                    this.sideBladesItemGfx.SetActive(false);
+                    this.fakeItemBoxItemGfx.SetActive(false);
+                    this.immunityItemGfx.SetActive(false);
+                    this.invertControlsItemGfx.SetActive(false);
                     break;
 
                 case ItemType.Boost:
                     this.boostItemGfx.SetActive(true);
+                    this.sideBladesItemGfx.SetActive(false);
+                    this.fakeItemBoxItemGfx.SetActive(false);
+                    this.immunityItemGfx.SetActive(false);
+                    this.invertControlsItemGfx.SetActive(false);
+                    break;
+
+                case ItemType.SideBlades:
+                    this.boostItemGfx.SetActive(false);
+                    this.sideBladesItemGfx.SetActive(true);
+                    this.fakeItemBoxItemGfx.SetActive(false);
+                    this.immunityItemGfx.SetActive(false);
+                    this.invertControlsItemGfx.SetActive(false);
+                    break;
+
+                case ItemType.FakeItemBox:
+                    this.boostItemGfx.SetActive(false);
+                    this.sideBladesItemGfx.SetActive(false);
+                    this.fakeItemBoxItemGfx.SetActive(true);
+                    this.immunityItemGfx.SetActive(false);
+                    this.invertControlsItemGfx.SetActive(false);
+                    break;
+
+                case ItemType.InvertControls:
+                    this.boostItemGfx.SetActive(false);
+                    this.sideBladesItemGfx.SetActive(false);
+                    this.fakeItemBoxItemGfx.SetActive(false);
+                    this.immunityItemGfx.SetActive(false);
+                    this.invertControlsItemGfx.SetActive(true);
+                    break;
+
+                case ItemType.Immunity:
+                    this.boostItemGfx.SetActive(false);
+                    this.sideBladesItemGfx.SetActive(false);
+                    this.fakeItemBoxItemGfx.SetActive(false);
+                    this.immunityItemGfx.SetActive(true);
+                    this.invertControlsItemGfx.SetActive(false);
                     break;
             }
+        }
+    }
+
+
+    // This function is automatically called when a player is killed
+    // "killedPlayer" should always equal "this.playerIndex"
+    // "killer" either contains the index of the killer or one of two values:
+    // -1: Player was killed by non-drivable wall
+    // -2: Player was killed by glitching out of level
+    // Note that killer can equal killedPlayer if a player killed himself
+    void ScoreFunction(int killer, int killedPlayer)
+    {
+        if (killer == -2)
+            return;
+
+        this.ResetMultiplier(killedPlayer);
+
+        if (killer == killedPlayer || killer < 0)
+            return;
+
+        string playerName = "";
+        if (killedPlayer >= 0 && killedPlayer < this.players.GetLength(0))
+            playerName = this.players[killedPlayer].name;
+
+        this.AddScore(killer, playerName);
+    }
+
+    // Reset multiplier on killed player
+    public void ResetMultiplier(int playerIndex)
+    {
+        if (Network.connections.Length > 0)
+            this.networkView.RPC("ResetMultiplierRPC", RPCMode.All, playerIndex);
+        else
+            this.ResetMultiplierRPC(playerIndex);
+    }
+
+    [RPC]
+    public void ResetMultiplierRPC(int playerIndex)
+    {
+        if (playerIndex >= 0 && playerIndex < this.players.GetLength(0))
+            this.players[playerIndex].multiplier = 1;
+    }
+
+    // Add score to killer's score count
+    public void AddScore(int playerIndex, string playerName)
+    {
+        if (Network.connections.Length > 0)
+            this.networkView.RPC("AddScoreRPC", RPCMode.All, playerIndex, playerName);
+        else
+            this.AddScoreRPC(playerIndex, playerName);
+    }
+
+    [RPC]
+    public void AddScoreRPC(int playerIndex, string playerName)
+    {
+        if (playerIndex >= 0 && playerIndex < this.players.GetLength(0))
+        {
+            this.players[playerIndex].score += (int)(this.arenaSettings.baseScore * this.players[playerIndex].multiplier);
+            this.players[playerIndex].multiplier += this.arenaSettings.multiplierIncrease;
+
+            if (playerIndex == this.playerIndex)
+                ErrorState.InfoMessage("You killed " + playerName + "!");
         }
     }
 
@@ -141,9 +248,9 @@ public class GameState : MonoBehaviour
         driver.mainColor = this.playerColor;
         driver.updateColor = true;
         driver.playerIndex = this.playerIndex;
-        driver.playersRef = this.players;
         driver.SetMesh(this.selectedMesh);
         driver.gameStarted = this.countdownOver;
+        driver.ScoreFunction = ScoreFunction;
         DriverInput driverInput = this.GetComponent<DriverInput>();
         driverInput.playerAction = PlayerAction.None;
         driver.driverInput = driverInput;
@@ -240,8 +347,7 @@ public class GameState : MonoBehaviour
 				new Color(	colorR, 
 							colorG, 
 							colorB, 
-							colorA),
-				this.arenaSettings.BaseScore);
+							colorA));
     }
 
     // Start game remote call
@@ -273,22 +379,19 @@ public class GameState : MonoBehaviour
         public int playerIndex;
         public string name;
         public int score;
-		public int multiplyer;
+		public float multiplier;
 		
-		private float scoreBase;
         private GUIText playerNameText;
         private GUIText playerScoreText;
 
         public PlayerData(int playerIndex, 
 						  string name, 
-						  Color color, 
-						  float scoreBase)
+						  Color color)
         {
             this.playerIndex = playerIndex;
             this.name = name;
-			this.scoreBase = scoreBase;
             this.score = 0;
-			this.multiplyer = 1;
+			this.multiplier = 1.0f;
 
             this.playerNameText = GameObject.Find("Player " + (this.playerIndex + 1).ToString()).GetComponent<GUIText>();
             this.playerScoreText = GameObject.Find("Player " + (this.playerIndex + 1).ToString() + " Score").GetComponent<GUIText>();
@@ -300,16 +403,6 @@ public class GameState : MonoBehaviour
                 this.playerNameText.text = this.name.Substring(0, 10) + "...";
             this.playerScoreText.text = score.ToString();
         }
-		
-		public void playerDied(){
-			this.multiplyer = 1;
-		}
-		
-		public void playerKilled(string playerName){
-			this.score += (int)(this.scoreBase * this.multiplyer);
-			this.multiplyer++;
-			ErrorState.InfoMessage("You killed "+playerName+"!");
-		}
 
         public void Update()
         {
@@ -332,13 +425,19 @@ public class GameState : MonoBehaviour
             numPlayers = this.players.GetLength(0);
             stream.Serialize(ref numPlayers);
             for (int i = 0; i < numPlayers; i++)
+            {
                 stream.Serialize(ref this.players[i].score);
+                stream.Serialize(ref this.players[i].multiplier);
+            }
         }
         else
         {
             stream.Serialize(ref numPlayers);
             for (int i = 0; i < numPlayers; i++)
+            {
                 stream.Serialize(ref this.players[i].score);
+                stream.Serialize(ref this.players[i].multiplier);
+            }
         }
     }
 }

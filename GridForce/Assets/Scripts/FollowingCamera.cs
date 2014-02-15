@@ -23,6 +23,7 @@ public class FollowingCamera : MonoBehaviour {
 	}
 
 	public void FollowTheLeader(Transform leader){
+        this.inBoost = false;
 		this.leader = leader;
 	}
 

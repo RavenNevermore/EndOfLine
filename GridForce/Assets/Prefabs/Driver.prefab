@@ -1837,6 +1837,7 @@ MonoBehaviour:
     type: 2}
   itemBoxPrefab: {fileID: 400000, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
   explosionPrefab: {fileID: 400000, guid: f75468363e2394440a081e9c175e6c93, type: 2}
+  fakeItemBoxPrefab: {fileID: 100000, guid: 0cc057a7979079446a0145e48de441d4, type: 2}
   arenaSettings: {fileID: 0}
   cameraTransform: {fileID: 0}
   driverInput: {fileID: 0}
