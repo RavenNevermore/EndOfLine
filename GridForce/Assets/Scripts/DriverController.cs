@@ -772,7 +772,7 @@ public class DriverController : ExtendedBehaviour
         if (this.heldItem == ItemType.None)
         {
             itemBoxScript.SetInactive();
-            int randomValue = UnityEngine.Random.Range(0, 5);
+            int randomValue = UnityEngine.Random.Range(0, 4);
 
             switch (randomValue)
             {
@@ -790,10 +790,6 @@ public class DriverController : ExtendedBehaviour
 
                 case 3:
                     this.heldItem = ItemType.Immunity;
-                    break;
-
-                case 4:
-                    this.heldItem = ItemType.InvertControls;
                     break;
             }
         }

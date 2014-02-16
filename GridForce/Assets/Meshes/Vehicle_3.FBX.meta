@@ -41,6 +41,7 @@ ModelImporter:
     2300018: Torus008
     2300020: Object001
     2300022: Object002
+    2300024: //RootNode
     3300000: Box001
     3300002: Torus001
     3300004: Torus002
@@ -53,6 +54,7 @@ ModelImporter:
     3300018: Torus008
     3300020: Object001
     3300022: Object002
+    3300024: //RootNode
     4300000: Box001
     4300002: Torus001
     4300004: Torus002
