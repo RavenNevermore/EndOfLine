@@ -10,6 +10,7 @@ public class DriverController : ExtendedBehaviour
     public Transform itemBoxPrefab = null;      // Item box prefab
     public Transform explosionPrefab = null;     // Which effect to use for the explosion
     public GameObject fakeItemBoxPrefab = null;     // Fake item box
+    public GameObject sideBladePrefab = null;       // Side blade
     public ArenaSettings arenaSettings = null;      // Arena settings
     public Transform cameraTransform = null;    // The camera's transform
     public DriverInput driverInput = null;    // Input for driver
@@ -17,6 +18,7 @@ public class DriverController : ExtendedBehaviour
     public float boostSpeed = 30.0f;    // Speed when on boost
     public float boostDuration = 5.0f;    // Duration of boost
     public float immunityDuration = 10.0f;  // Immunity duration
+    public float sideBladeDuration = 10.0f; // Duration of side blades
     public float killBoostDuration = 1.5f;  // Duration of kill boost
     public float baseTrailLength = 20.0f;   // Base length of trail
     public float rotationSpeed = 15.0f;  // Rotation speed when changing orientation
@@ -57,6 +59,9 @@ public class DriverController : ExtendedBehaviour
     private bool removedNode = false;       // Node was removed this frame
     private bool insertedNode = false;      // Node was inserted this frame
     private float killedTrailLength = 0.0f;     // Length of trail when killed
+    private float sideBladeTimer = 0.0f;        // Side blade timer
+    private GameObject sideBladeOne = null;     // First side blade
+    private GameObject sideBladeTwo = null;     // Second side blade
 
     public GameObject[] meshList = null;   // List of all meshes
 
@@ -275,6 +280,8 @@ public class DriverController : ExtendedBehaviour
         if (this.nodeList.Count > 0)
             nodeColor = this.nodeList[0].color;
 
+        Vector3 totalMovement = Vector3.zero;
+
         if (!(this.killed) && this.gameStarted)
         {
             this.killedTrailLength = this.baseTrailLength;
@@ -292,8 +299,6 @@ public class DriverController : ExtendedBehaviour
             else
                 this.gameObject.layer = DriverController.layerDriver;
             
-            Vector3 totalMovement = Vector3.zero;
-
             Vector3 gravityRayStart = this.transform.position - (this.moveDirection * (this.characterController.radius + 0.1f));
             Vector3 gravityRayEnd = gravityRayStart + (this.gravityDirection * (this.characterController.height + 0.1f));
 
@@ -319,18 +324,57 @@ public class DriverController : ExtendedBehaviour
                         UnityEngine.Object fakeItemBoxInstance = null;
                         RaycastHit raycastHitFakeItemBox;
                         Physics.Linecast(gravityRayStart, gravityRayEnd, out raycastHitFakeItemBox, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask);
-                        if (Network.connections.Length > 0)
-                            fakeItemBoxInstance = UnityEngine.Network.Instantiate(this.fakeItemBoxPrefab, raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f) - (this.gravityDirection * 0.5f), this.fakeItemBoxPrefab.transform.rotation, 0);
-                        else
-                            fakeItemBoxInstance = UnityEngine.Object.Instantiate(this.fakeItemBoxPrefab, raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f) - (this.gravityDirection * 0.5f), this.fakeItemBoxPrefab.transform.rotation);
-                        FakeItemBoxBehavior fakeItemBoxScript = ((GameObject)(fakeItemBoxInstance)).gameObject.GetComponent<FakeItemBoxBehavior>();
-                        if (fakeItemBoxScript != null)
-                            fakeItemBoxScript.playerIndex = this.playerIndex;
+                        Vector3 fakeItemBoxPosition = raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f) - (this.gravityDirection * 0.5f);
+                        if (Physics.Raycast(fakeItemBoxPosition, this.gravityDirection, out raycastHitFakeItemBox, Mathf.Infinity, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
+                        {
+                            fakeItemBoxPosition = raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f) - (this.gravityDirection * 0.5f);
+                            if (Network.connections.Length > 0)
+                                fakeItemBoxInstance = UnityEngine.Network.Instantiate(this.fakeItemBoxPrefab, fakeItemBoxPosition, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), 0);
+                            else
+                                fakeItemBoxInstance = UnityEngine.Object.Instantiate(this.fakeItemBoxPrefab, fakeItemBoxPosition, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection));
+                            FakeItemBoxBehavior fakeItemBoxScript = ((GameObject)(fakeItemBoxInstance)).gameObject.GetComponent<FakeItemBoxBehavior>();
+                            if (fakeItemBoxScript != null)
+                                fakeItemBoxScript.playerIndex = this.playerIndex;
+                        }
                         break;
 
                     case ItemType.Immunity:
                         if (this.invincibleTimer < this.immunityDuration)
                             this.invincibleTimer = this.immunityDuration;
+                        break;
+
+                    case ItemType.SideBlades:
+                        if (this.sideBladeOne == null)
+                        {
+                            UnityEngine.Object newInstance = null;
+                            if (Network.connections.Length > 0)
+                                newInstance = UnityEngine.Network.Instantiate(this.sideBladePrefab, this.transform.position + (this.transform.right * 1.0f) + (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, this.transform.up), 0);
+                            else
+                                newInstance = UnityEngine.Object.Instantiate(this.sideBladePrefab, this.transform.position + (this.transform.right * 1.0f) + (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, this.transform.up));
+                            this.sideBladeOne = (GameObject)(newInstance);
+                            this.sideBladeOne.transform.parent = this.transform;
+
+                            SideBladeBehavior sideBladeScript = this.sideBladeOne.GetComponent<SideBladeBehavior>();
+                            if (sideBladeScript != null)
+                                sideBladeScript.playerIndex = this.playerIndex;
+                        }
+
+                        if (this.sideBladeTwo == null)
+                        {
+                            UnityEngine.Object newInstance = null;
+                            if (Network.connections.Length > 0)
+                                newInstance = UnityEngine.Network.Instantiate(this.sideBladePrefab, this.transform.position - (this.transform.right * 1.0f) - (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, -this.transform.up), 0);
+                            else
+                                newInstance = UnityEngine.Object.Instantiate(this.sideBladePrefab, this.transform.position - (this.transform.right * 1.0f) - (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, -this.transform.up));
+                            this.sideBladeTwo = (GameObject)(newInstance);
+                            this.sideBladeTwo.transform.parent = this.transform;
+
+                            SideBladeBehavior sideBladeScript = this.sideBladeTwo.GetComponent<SideBladeBehavior>();
+                            if (sideBladeScript != null)
+                                sideBladeScript.playerIndex = this.playerIndex;
+                        }
+
+                        this.sideBladeTimer = this.sideBladeDuration;
                         break;
                 }
 
@@ -534,6 +578,25 @@ public class DriverController : ExtendedBehaviour
 
             this.NodeListCleanup(this.killedTrailLength, nodeColor);
         }
+
+        if (this.sideBladeOne != null)
+        {
+            SideBladeBehavior sideBladeScript = this.sideBladeOne.GetComponent<SideBladeBehavior>();
+            if (sideBladeScript != null)
+                sideBladeScript.moveDirection = totalMovement;
+        }
+        if (this.sideBladeTwo != null)
+        {
+            SideBladeBehavior sideBladeScript = this.sideBladeTwo.GetComponent<SideBladeBehavior>();
+            if (sideBladeScript != null)
+                sideBladeScript.moveDirection = totalMovement;
+        }
+        if (this.sideBladeTimer > 0.0f)
+        {
+            this.sideBladeTimer -= Time.deltaTime;
+            if (this.sideBladeTimer <= 0.0f)
+                this.KillSideBlades();
+        }
     }
 
 
@@ -673,6 +736,34 @@ public class DriverController : ExtendedBehaviour
 
         if (this.characterController != null)
             this.characterController.enabled = false;
+
+        this.KillSideBlades();
+    }
+
+    void KillSideBlades()
+    {
+        if (!((Network.connections.Length <= 0 || this.networkView.isMine)))
+            return;
+
+        if (this.sideBladeOne != null)
+        {
+            if (Network.connections.Length > 0)
+                UnityEngine.Network.Destroy(this.sideBladeOne);
+            else
+                UnityEngine.Object.Destroy(this.sideBladeOne);
+            this.sideBladeOne = null;
+        }
+
+        if (this.sideBladeTwo != null)
+        {
+            if (Network.connections.Length > 0)
+                UnityEngine.Network.Destroy(this.sideBladeTwo);
+            else
+                UnityEngine.Object.Destroy(this.sideBladeTwo);
+            this.sideBladeTwo = null;
+        }
+
+        this.sideBladeTimer = 0.0f;
     }
 
 
@@ -786,6 +877,21 @@ public class DriverController : ExtendedBehaviour
                 UnityEngine.Network.Destroy(collider.gameObject);
             else
                 UnityEngine.Object.Destroy(collider.gameObject);
+        }
+
+        if (collider.tag == this.sideBladePrefab.tag)
+        {
+            if (!((Network.connections.Length <= 0 || this.networkView.isMine)) || this.invincibleTimer > 0.0f || this.killed)
+                return;
+
+            if (collider.transform.parent != this.transform)
+            {
+                SideBladeBehavior sideBladeScript = collider.gameObject.GetComponent<SideBladeBehavior>();
+                if (sideBladeScript != null)
+                    this.Kill(sideBladeScript.playerIndex, this.playerIndex);
+                else
+                    this.Kill(-1, this.playerIndex);
+            }
         }
     }
 
