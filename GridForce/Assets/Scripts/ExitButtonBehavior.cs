@@ -5,6 +5,7 @@ public class ExitButtonBehavior : MonoBehaviour
 {
     void OnMouseDown()
     {
-        GameEnd.EndGame();
+        GameEnd.CloseConnections();
+        Application.LoadLevel("MainMenu");
     }
 }

@@ -47,13 +47,18 @@ public class FollowingCamera : MonoBehaviour {
 	}
 
 	void LookAtLeader(){
-		this.transform.LookAt(this.leader, this.leader.up);
+        if (this.leader != null)
+		    this.transform.LookAt(this.leader, this.leader.up);
 	}
 
 	Vector3 calculateWantedPosition(){
 		Vector3 relativePos = this.inBoost ? this.relativePositionInBoost : this.relativeCameraPosition;
-		Vector3 rotatedRelative = this.leader.rotation * relativePos;
-		Vector3 relative = this.leader.position + rotatedRelative;
+        Vector3 relative = Vector3.zero;
+        if (this.leader != null)
+        {
+            Vector3 rotatedRelative = this.leader.rotation * relativePos;
+            relative = this.leader.position + rotatedRelative;
+        }
 		return relative;
 	}
 

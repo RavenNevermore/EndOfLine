@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -175,6 +176,26 @@ public class GameState : MonoBehaviour
     }
 
 
+    public void EndGame()
+    {
+        this.gameStarted = false;
+        if (this.currentPlayerObject != null)
+        {
+            GameObject[] drivers = GameObject.FindGameObjectsWithTag("Driver");
+            foreach (GameObject currentDriver in drivers)
+            {
+                DriverController driverController = currentDriver.GetComponent<DriverController>();
+                if (driverController != null)
+                {
+                    UnityEngine.Object.Destroy(driverController.lineRenderer);
+                    driverController.Kill(-1, driverController.playerIndex);
+                }
+                UnityEngine.Object.Destroy(currentDriver);
+            }
+        }
+    }
+
+
     // This function is automatically called when a player is killed
     // "killedPlayer" should always equal "this.playerIndex"
     // "killer" either contains the index of the killer or one of two values:
@@ -302,7 +323,7 @@ public class GameState : MonoBehaviour
         }
 
         if (foundFreeSpawnPoint)
-            spawnPoint = Random.Range(0, this.arenaSettings.spawnPoints.Count - 1);
+            spawnPoint = UnityEngine.Random.Range(0, this.arenaSettings.spawnPoints.Count - 1);
 
         return spawnPoint;
     }
@@ -390,12 +411,13 @@ public class GameState : MonoBehaviour
 
 
     // Contains information on a player
-    public struct PlayerData
+    public struct PlayerData : IComparable
     {
         public int playerIndex;
         public string name;
         public int score;
 		public float multiplier;
+        public Color color;
 		
         private GUIText playerNameText;
         private GUIText playerScoreText;
@@ -408,6 +430,7 @@ public class GameState : MonoBehaviour
             this.name = name;
             this.score = 0;
 			this.multiplier = 1.0f;
+            this.color = color;
 
             this.playerNameText = GameObject.Find("Player " + (this.playerIndex + 1).ToString()).GetComponent<GUIText>();
             this.playerScoreText = GameObject.Find("Player " + (this.playerIndex + 1).ToString() + " Score").GetComponent<GUIText>();
@@ -426,6 +449,16 @@ public class GameState : MonoBehaviour
             {
                 this.playerScoreText.text = score.ToString();
             }
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is PlayerData)
+            {
+                return this.score.CompareTo(((PlayerData)(obj)).score);
+            }
+
+            throw new ArgumentException("Object is not a PlayerData");
         }
     }
 

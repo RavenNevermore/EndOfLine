@@ -38,7 +38,7 @@ public class DriverController : ExtendedBehaviour
     private const int layerDriverInvincible = 12;    // Layer of invincible driver
 
     private CharacterController characterController;        // Character controller
-    private OptimizedLineRenderer lineRenderer;      // This object's line renderer
+    public OptimizedLineRenderer lineRenderer;      // This object's line renderer
     private OptimizedLineRenderer lineRendererKilled;      // Line renderer when killed
     private GameObject vehicleMesh;      // This object's mesh
     private Vector3 moveDirection;          // Character move direction
@@ -660,7 +660,7 @@ public class DriverController : ExtendedBehaviour
 
 
     // Kill driver
-    void Kill(int killer, int killedPlayer)
+    public void Kill(int killer, int killedPlayer)
     {
         if (!(this.killed))
         {
