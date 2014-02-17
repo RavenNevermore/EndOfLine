@@ -1437,6 +1437,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 461603314}
+  - 114: {fileID: 461603315}
   m_Layer: 0
   m_Name: ConnectionList
   m_TagString: Untagged
@@ -1460,6 +1461,22 @@ Transform:
   - {fileID: 1125242015}
   - {fileID: 1108111684}
   m_Father: {fileID: 1073255232}
+--- !u!114 &461603315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400008, guid: 971012cdfae7ca643b16eea25e620250,
+    type: 2}
+  m_PrefabInternal: {fileID: 1938814635}
+  m_GameObject: {fileID: 461603313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 291114a47708fbd45b0e94df1b5d129c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameObjectPlayerOne: {fileID: 467781946}
+  gameObjectPlayerTwo: {fileID: 810400868}
+  gameObjectPlayerThree: {fileID: 1125242014}
+  gameObjectPlayerFour: {fileID: 1108111682}
 --- !u!1 &467781946
 GameObject:
   m_ObjectHideFlags: 0
@@ -2464,7 +2481,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previewState: {fileID: 1073255230}
-  gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
   menuState: {fileID: 0}
   errorState: {fileID: 0}
   startGameButton: {fileID: 1220698939}
@@ -2746,7 +2762,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc1d41bf50d2964fb0ff9a5e8d4ab08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BaseScore: 2
+  baseScore: 2
+  multiplierIncrease: 1
   gridSize: 1
   maxDistance: 40
   minSpawnPointDistance: 10
@@ -2792,6 +2809,19 @@ MonoBehaviour:
   playerName: PLAYER NAME
   errorState: {fileID: 0}
   gameStarted: 1
+  playerNameListOld:
+  - 
+  - 
+  - 
+  - 
+  playerNameList:
+  - 
+  - 
+  - 
+  - 
+  gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
+  selectControlsPrefab: {fileID: 100008, guid: b1767ac9e10434b4c9c82d18ef8fa2d4, type: 2}
+  useButtonControls: 0
 --- !u!148 &832051630
 NetworkView:
   m_ObjectHideFlags: 0
@@ -3522,7 +3552,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previewState: {fileID: 1073255230}
-  gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
   menuState: {fileID: 0}
   errorState: {fileID: 0}
   startGameButton: {fileID: 1220698939}

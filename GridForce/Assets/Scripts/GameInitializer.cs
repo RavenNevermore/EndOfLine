@@ -28,12 +28,18 @@ public class GameInitializer : MonoBehaviour
                 this.previewHostObject.GetComponentInChildren<StartHostedGameBehaviour>().SetHostGame(lastMenuState);
 				this.previewClientObject.SetActive(false);
 				this.previewHostObject.SetActive(true);
+
+                if (lastMenuState.selectingControls)
+                    this.previewHostObject.GetComponentInChildren<StartHostedGameBehaviour>().HideAll();
 			}
             else
             {
                 this.previewClientObject.GetComponentInChildren<StartHostedGameBehaviour>().SetClientGame(lastMenuState);
 				this.previewHostObject.SetActive(false);
                 this.previewClientObject.SetActive(true);
+
+                if (lastMenuState.selectingControls)
+                    this.previewClientObject.GetComponentInChildren<StartHostedGameBehaviour>().HideAll();
             }
 
 			this.previewState.SetActive(true);

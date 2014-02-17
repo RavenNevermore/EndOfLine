@@ -2032,7 +2032,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previewState: {fileID: 1073255230}
-  gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
   menuState: {fileID: 0}
   errorState: {fileID: 0}
   startGameButton: {fileID: 189067412}
@@ -2302,6 +2301,19 @@ MonoBehaviour:
   playerName: PLAYER NAME
   errorState: {fileID: 0}
   gameStarted: 1
+  playerNameListOld:
+  - 
+  - 
+  - 
+  - 
+  playerNameList:
+  - 
+  - 
+  - 
+  - 
+  gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
+  selectControlsPrefab: {fileID: 100008, guid: b1767ac9e10434b4c9c82d18ef8fa2d4, type: 2}
+  useButtonControls: 0
 --- !u!148 &832051630
 NetworkView:
   m_ObjectHideFlags: 0
@@ -3198,7 +3210,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previewState: {fileID: 1073255230}
-  gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
   menuState: {fileID: 0}
   errorState: {fileID: 0}
   startGameButton: {fileID: 189067412}

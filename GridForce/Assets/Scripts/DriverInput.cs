@@ -14,6 +14,7 @@ public class DriverInput : MonoBehaviour
     public float swipeSpeed = 1500.0f;     // Speed of touch input swipe
     public PlayerAction playerAction;
 
+    public GameState gameState = null;
     public OnScreenButtonBehavior screenButtonLeft = null;      // Screen button "left"
     public OnScreenButtonBehavior screenButtonRight = null;     // Screen button "right"
     public OnScreenButtonBehavior screenButtonItem1 = null;     // Screen buton "item" (1)
@@ -52,71 +53,81 @@ public class DriverInput : MonoBehaviour
 
 #endif
 
-        foreach (Touch touch in Input.touches)
+        if (!(this.gameState.useOnScreenButtons))
         {
-            //if (this.fingerId >= 0 && touch.fingerId != this.fingerId)
-            //    continue;
 
-            if (/*touch.phase == TouchPhase.Moved && */
-			    	touch.deltaPosition.magnitude / touch.deltaTime >= this.swipeSpeed /*&& 
+            foreach (Touch touch in Input.touches)
+            {
+                //if (this.fingerId >= 0 && touch.fingerId != this.fingerId)
+                //    continue;
+
+                if (/*touch.phase == TouchPhase.Moved && */
+                        touch.deltaPosition.magnitude / touch.deltaTime >= this.swipeSpeed /*&& 
 			    	this.fingerId != touch.fingerId*/)
-            {
-				TouchDirection direction = this.getTouchDirection(touch);
-
-				if (null == this.lastDirection ||
-				    !this.lastDirection.Equals(direction)){
-					this.lastDirection = direction;
-
-					this.timeSinceLastTouch = Time.time;
-
-					if (direction.Equals(TouchDirection.LEFT)){
-						this.playerAction = PlayerAction.TurnLeft;
-					} else if (direction.Equals(TouchDirection.RIGHT)){
-						this.playerAction = PlayerAction.TurnRight;
-					} else if (direction.Equals(TouchDirection.UP)){
-						this.playerAction = PlayerAction.UseItem;
-					}
-				}
-
-                /*if (direction > -1.0f && direction < 1.0f)
                 {
-                    if (touch.deltaPosition.x < 0.0f)
-                        this.playerAction = PlayerAction.TurnLeft;
-                    else
-                        this.playerAction = PlayerAction.TurnRight;
+                    TouchDirection direction = this.getTouchDirection(touch);
+
+                    if (null == this.lastDirection ||
+                        !this.lastDirection.Equals(direction))
+                    {
+                        this.lastDirection = direction;
+
+                        this.timeSinceLastTouch = Time.time;
+
+                        if (direction.Equals(TouchDirection.LEFT))
+                        {
+                            this.playerAction = PlayerAction.TurnLeft;
+                        }
+                        else if (direction.Equals(TouchDirection.RIGHT))
+                        {
+                            this.playerAction = PlayerAction.TurnRight;
+                        }
+                        else if (direction.Equals(TouchDirection.UP))
+                        {
+                            this.playerAction = PlayerAction.UseItem;
+                        }
+                    }
+
+                    /*if (direction > -1.0f && direction < 1.0f)
+                    {
+                        if (touch.deltaPosition.x < 0.0f)
+                            this.playerAction = PlayerAction.TurnLeft;
+                        else
+                            this.playerAction = PlayerAction.TurnRight;
+                    }
+                    else if (touch.deltaPosition.y > 0.0f)
+                        this.playerAction = PlayerAction.UseItem;
+                    */
+                    this.fingerId = touch.fingerId;
                 }
-                else if (touch.deltaPosition.y > 0.0f)
-                    this.playerAction = PlayerAction.UseItem;
-				*/
-                this.fingerId = touch.fingerId;
+
+                if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled && this.fingerId != touch.fingerId)
+                {
+                    this.fingerId = -1;
+                    this.lastDirection = TouchDirection.NONE;
+                }
             }
 
-            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled && this.fingerId != touch.fingerId)
+            float delta = Time.time - this.timeSinceLastTouch;
+            if (delta > 0.5f)
             {
-                this.fingerId = -1;
-				this.lastDirection = TouchDirection.NONE;
+                this.lastDirection = TouchDirection.NONE;
             }
         }
-
-		float delta = Time.time - this.timeSinceLastTouch;
-		if (delta > 0.5f)
+        else
         {
-			this.lastDirection = TouchDirection.NONE;
-		}
-
-
-        if (this.playerAction == PlayerAction.None)
-        {
-            if (screenButtonLeft.buttonClicked)
-                this.playerAction = PlayerAction.TurnLeft;
-            else if (screenButtonRight.buttonClicked)
-                this.playerAction = PlayerAction.TurnRight;
-            else if (screenButtonItem1.buttonClicked)
-                this.playerAction = PlayerAction.UseItem;
-            else if (screenButtonItem2.buttonClicked)
-                this.playerAction = PlayerAction.UseItem;
+            if (this.playerAction == PlayerAction.None)
+            {
+                if (screenButtonLeft.buttonClicked)
+                    this.playerAction = PlayerAction.TurnLeft;
+                else if (screenButtonRight.buttonClicked)
+                    this.playerAction = PlayerAction.TurnRight;
+                else if (screenButtonItem1.buttonClicked)
+                    this.playerAction = PlayerAction.UseItem;
+                else if (screenButtonItem2.buttonClicked)
+                    this.playerAction = PlayerAction.UseItem;
+            }
         }
-
 	}
 
 	TouchDirection getTouchDirection(Touch touch)

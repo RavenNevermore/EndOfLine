@@ -504,21 +504,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!1 &100062
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400062}
-  m_Layer: 0
-  m_Name: Select Controls UI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
 --- !u!1 &100064
 GameObject:
   m_ObjectHideFlags: 1
@@ -744,21 +729,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &100092
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 400092}
-  m_Layer: 0
-  m_Name: Player Ready UI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -770,8 +740,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400058}
-  - {fileID: 400062}
-  - {fileID: 400092}
   - {fileID: 400060}
   m_Father: {fileID: 0}
 --- !u!4 &400002
@@ -1143,17 +1111,6 @@ Transform:
   - {fileID: 400088}
   - {fileID: 400086}
   m_Father: {fileID: 400000}
---- !u!4 &400062
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100062}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400000}
 --- !u!4 &400064
 Transform:
   m_ObjectHideFlags: 1
@@ -1311,17 +1268,6 @@ Transform:
   m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children: []
   m_Father: {fileID: 400022}
---- !u!4 &400092
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100092}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 400000}
 --- !u!82 &8200000
 AudioSource:
   m_ObjectHideFlags: 1
@@ -1405,6 +1351,7 @@ MonoBehaviour:
   invertControlsItemGfx: {fileID: 100002}
   ingameUI: {fileID: 100058}
   onScreenButtons: {fileID: 100056}
+  useOnScreenButtons: 0
   playerArrowPrefab: {fileID: 100000, guid: e0a7d668edfcfae4e8e55eca6f2e8c0a, type: 2}
 --- !u!114 &11400002
 MonoBehaviour:
@@ -1486,6 +1433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swipeSpeed: 1500
   playerAction: 0
+  gameState: {fileID: 11400000}
   screenButtonLeft: {fileID: 11400016}
   screenButtonRight: {fileID: 11400014}
   screenButtonItem1: {fileID: 11400020}
@@ -1561,7 +1509,7 @@ MonoBehaviour:
   player2Score: {fileID: 13200024}
   player3Score: {fileID: 13200028}
   player4Score: {fileID: 13200034}
-  matchTimeInSeconds: 5
+  matchTimeInSeconds: 250
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1

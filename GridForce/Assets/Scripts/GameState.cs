@@ -41,7 +41,7 @@ public class GameState : MonoBehaviour
 
     public GameObject ingameUI = null;
     public GameObject onScreenButtons = null;
-    private bool useOnScreenButtons = false;
+    public bool useOnScreenButtons = false;
 
     public GameObject playerArrowPrefab = null;
     private PlayerArrowScript[] arrowGameObjects = null;
@@ -52,6 +52,8 @@ public class GameState : MonoBehaviour
     {
 		if (null == menuState)
             menuState = GameObject.Find("MenuState").GetComponent<MenuState>();
+
+        this.useOnScreenButtons = this.menuState.useButtonControls;
 
         this.playerName = menuState.playerName;
         this.selectedMesh = menuState.vehicleSelection;

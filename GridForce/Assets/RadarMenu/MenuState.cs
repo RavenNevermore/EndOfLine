@@ -29,6 +29,14 @@ public class MenuState : MonoBehaviour
     public string[] playerNameListOld = new string[4] { "", "", "", "" };
     public string[] playerNameList = new string[4] { "", "", "", "" };
 
+    public GameObject gameStatePrefab = null;
+    public GameObject selectControlsPrefab = null;
+    public bool useButtonControls = false;
+    public bool selectingControls = false;
+    public bool loadedLevel = false;
+
+    private GameObject controlSelectionInstance = null;
+
     void Start()
     {
         GameObject errorStateObject = GameObject.Find("ErrorState");
@@ -51,12 +59,19 @@ public class MenuState : MonoBehaviour
 #endif
     }
 
+    void Update()
+    {
+        this.WaitForPlayers();
+    }
+
 	public void StartGame()
     {
+        this.controlSelectionInstance = null;
         this.playersReady.Clear();
         this.playerNames.Clear();
         this.playerNameListOld = new string[4] { "", "", "", "" };
         this.playerNameList = new string[4] { "", "", "", "" };
+        this.useButtonControls = false;
 
 		NetworkConnectionError connectionError;
         Network.maxConnections = 3;
@@ -69,6 +84,9 @@ public class MenuState : MonoBehaviour
 
             Debug.Log("Starting new server");
             connectionError = Network.InitializeServer(Network.maxConnections, this.portNumber, false);
+
+            if (!(this.playersReady.ContainsKey(Network.player)))
+                this.playersReady.Add(Network.player, false);
 
             if (connectionError != NetworkConnectionError.NoError)
             {
@@ -92,8 +110,124 @@ public class MenuState : MonoBehaviour
             }
 		}
         else
-            this.ClientReady();
+            this.InitGameState();
 	}
+
+
+    public void ProceedToControlSelection()
+    {
+        Network.maxConnections = Network.connections.Length;
+
+        if (MenuState.GameType.HOST == this.type)
+        {
+            try
+            {
+                UdpBroadcasting.destroyBeacon();
+                Debug.Log("Beacon has been taken down!");
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }
+
+        if (Network.connections.Length > 0 && this.networkView != null)
+            this.networkView.RPC("ShowControlSelectionScreenRPC", RPCMode.All);
+        else
+            this.ShowControlSelectionScreenRPC();
+    }
+
+    [RPC]
+    void ShowControlSelectionScreenRPC()
+    {
+        this.selectingControls = true;
+
+        if (!(this.loadedLevel))
+            return;
+
+        StartHostedGameBehaviour[] startButtonBehaviors = GameObject.FindObjectsOfType<StartHostedGameBehaviour>();
+        for (int i = 0; i < startButtonBehaviors.GetLength(0); i++)
+            startButtonBehaviors[i].HideAll();
+
+        this.controlSelectionInstance = (GameObject)(UnityEngine.Object.Instantiate(this.selectControlsPrefab, this.selectControlsPrefab.transform.position, this.selectControlsPrefab.transform.rotation));
+        
+        SelectControlBehavior[] buttonScripts = this.controlSelectionInstance.GetComponentsInChildren<SelectControlBehavior>();
+        for (int i = 0; i < buttonScripts.GetLength(0); i++)
+        {
+            buttonScripts[i].menuState = this;
+        }
+
+        this.loadedLevel = false;
+    }
+
+    public void ControlsSelected()
+    {
+        this.ClientReady();
+    }
+
+    void WaitForPlayers()
+    {
+        if (!(this.selectingControls) || (Network.connections.Length > 0 && !(this.networkView.isMine)))
+            return;
+
+        Network.maxConnections = Network.connections.Length;
+
+        if (this.AllPlayersReady())
+        {
+            this.InstantiateGameState();
+            if (Network.connections.Length > 0 && this.networkView != null)
+                this.networkView.RPC("DoneSelectingControlsRPC", RPCMode.All);
+            else
+                this.DoneSelectingControlsRPC();
+        }
+    }
+
+    [RPC]
+    void DoneSelectingControlsRPC()
+    {
+        this.selectingControls = false;
+
+        UnityEngine.Object.Destroy(this.controlSelectionInstance);
+    }
+
+    void InstantiateGameState()
+    {
+        GameObject gameState = null;
+        if (Network.connections.Length > 0)
+            gameState = (GameObject)UnityEngine.Network.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity, 0);
+        else
+            gameState = (GameObject)UnityEngine.Object.Instantiate(this.gameStatePrefab, Vector3.zero, Quaternion.identity);
+
+        this.ReinstatiateObjectsIfNeccesary();
+
+        gameState.GetComponent<GameState>().menuState = this;
+        this.gameStarted = true;
+    }
+
+    void ReinstatiateObjectsIfNeccesary()
+    {
+        GameObject[] itemBoxes = GameObject.FindGameObjectsWithTag("ItemBox");
+        ItemBoxBehavior itemBoxScript = null;
+        foreach (GameObject itemBox in itemBoxes)
+        {
+            itemBoxScript = itemBox.GetComponent<ItemBoxBehavior>();
+            if (itemBoxScript != null)
+                itemBoxScript.ReInstantiate();
+        }
+        if (itemBoxScript != null)
+            itemBoxScript.KillAllLocal();
+
+        GameObject[] pillarObjects = GameObject.FindGameObjectsWithTag("Pillar");
+        PillarBehavior pillarScript = null;
+        foreach (GameObject pillar in pillarObjects)
+        {
+            pillarScript = pillar.GetComponent<PillarBehavior>();
+            if (pillarScript != null)
+                pillarScript.ReInstantiate();
+        }
+        if (pillarScript != null)
+            pillarScript.KillAllLocal();
+    }
 
 
     public void ConnectAsClient()
@@ -109,14 +243,24 @@ public class MenuState : MonoBehaviour
 		
 		DontDestroyOnLoad(this);
 		Application.LoadLevel(this.arenaName);
+
+        this.loadedLevel = true;
 	}
+
+    void OnLevelWasLoaded(int level)
+    {
+        if (this.loadedLevel && this.selectingControls)
+        {
+            this.ShowControlSelectionScreenRPC();
+        }
+    }
 
     public void ClientReady()
     {
-        this.InitGameState();
-
-        if (this.networkView != null)
-            this.networkView.RPC("ClientReadyRPC", RPCMode.Server, Network.player, this.playerName);
+        if (Network.connections.Length > 0 && this.networkView != null)
+            this.networkView.RPC("ClientReadyRPC", RPCMode.All, Network.player, this.playerName);
+        else
+            this.ClientReadyRPC(Network.player, this.playerName);
     }
 
 

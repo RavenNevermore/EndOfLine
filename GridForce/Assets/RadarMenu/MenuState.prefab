@@ -48,6 +48,19 @@ MonoBehaviour:
   playerName: PLAYER NAME
   errorState: {fileID: 0}
   gameStarted: 0
+  playerNameListOld:
+  - 
+  - 
+  - 
+  - 
+  playerNameList:
+  - 
+  - 
+  - 
+  - 
+  gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
+  selectControlsPrefab: {fileID: 100008, guid: b1767ac9e10434b4c9c82d18ef8fa2d4, type: 2}
+  useButtonControls: 0
 --- !u!148 &14800000
 NetworkView:
   m_ObjectHideFlags: 1
