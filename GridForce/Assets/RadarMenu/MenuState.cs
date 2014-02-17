@@ -26,6 +26,8 @@ public class MenuState : MonoBehaviour
 
     private Dictionary<NetworkPlayer, bool> playersReady = new Dictionary<NetworkPlayer, bool>();
     public Dictionary<NetworkPlayer, string> playerNames = new Dictionary<NetworkPlayer, string>();
+    public string[] playerNameListOld = new string[4] { "", "", "", "" };
+    public string[] playerNameList = new string[4] { "", "", "", "" };
 
     void Start()
     {
@@ -53,6 +55,8 @@ public class MenuState : MonoBehaviour
     {
         this.playersReady.Clear();
         this.playerNames.Clear();
+        this.playerNameListOld = new string[4] { "", "", "", "" };
+        this.playerNameList = new string[4] { "", "", "", "" };
 
 		NetworkConnectionError connectionError;
         Network.maxConnections = 3;
@@ -112,7 +116,7 @@ public class MenuState : MonoBehaviour
         this.InitGameState();
 
         if (this.networkView != null)
-            this.networkView.RPC("ClientReadyRPC", RPCMode.Server, Network.player);
+            this.networkView.RPC("ClientReadyRPC", RPCMode.Server, Network.player, this.playerName);
     }
 
 
@@ -137,7 +141,7 @@ public class MenuState : MonoBehaviour
 	}
 
     [RPC]
-    void ClientReadyRPC(NetworkPlayer player)
+    void ClientReadyRPC(NetworkPlayer player, string name)
     {
         if (this.playersReady.ContainsKey(player))
             this.playersReady[player] = true;
@@ -145,7 +149,7 @@ public class MenuState : MonoBehaviour
             this.playersReady.Add(player, true);
 
         this.errorState.ClearButtons();
-        this.errorState.AddLine("Player " + player.ipAddress + " is ready", false);
+        this.errorState.AddLine("Player " + name + " is ready", false);
         this.errorState.Show(3.0f);
     }
 
@@ -217,6 +221,36 @@ public class MenuState : MonoBehaviour
         }
     }
 
+    public void RequestNameUpdate(NetworkPlayer player)
+    {
+        this.networkView.RPC("RequestNameUpdateRPC", RPCMode.Server, Network.player);
+    }
+
+    public void UpdateNames(string name1, string name2, string name3, string name4)
+    {
+        this.networkView.RPC("UpdateNamesRPC", RPCMode.Others, this.playerNameList[0], this.playerNameList[1], this.playerNameList[2], this.playerNameList[3]);
+    }
+
+    [RPC]
+    void RequestNameUpdateRPC(NetworkPlayer player)
+    {
+        this.networkView.RPC("UpdateNamesRPC", player, this.playerNameList[0], this.playerNameList[1], this.playerNameList[2], this.playerNameList[3]);
+    }
+
+    [RPC]
+    void UpdateNamesRPC(string name1, string name2, string name3, string name4)
+    {
+        this.playerNameList[0] = name1;
+        this.playerNameList[1] = name2;
+        this.playerNameList[2] = name3;
+        this.playerNameList[3] = name4;
+
+        this.playerNameListOld[0] = this.playerNameList[0];
+        this.playerNameListOld[1] = this.playerNameList[1];
+        this.playerNameListOld[2] = this.playerNameList[2];
+        this.playerNameListOld[3] = this.playerNameList[3];
+    }
+
     [RPC]
     void PlayerDisconnectedNotification(NetworkPlayer player, string name)
     {
@@ -245,6 +279,9 @@ public class MenuState : MonoBehaviour
             this.errorState.AddLine("Disconnected from server", true);
             this.errorState.AddButton("Main Menu", this.ReturnToMainMenu);
             this.errorState.Show();
+
+            this.playerNameListOld = new string[4] { this.playerName, "", "", "" };
+            this.playerNameList = new string[4] { this.playerName, "", "", "" };
         }
     }
 

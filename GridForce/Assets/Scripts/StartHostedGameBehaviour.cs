@@ -98,7 +98,6 @@ public class StartHostedGameBehaviour : MonoBehaviour {
     {
         this.menuState = menuState;
         this.startGameButton.SetActive(false);
-        this.connectionsList.SetActive(false);
         this.gameObject.SetActive(true);
 
         GUIText text = this.ipAddress.GetComponentInChildren<GUIText>();

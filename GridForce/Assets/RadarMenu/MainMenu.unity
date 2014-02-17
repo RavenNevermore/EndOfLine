@@ -990,6 +990,16 @@ MonoBehaviour:
   playerName: PLAYER NAME
   errorState: {fileID: 0}
   gameStarted: 0
+  playerNameListOld:
+  - 
+  - 
+  - 
+  - 
+  playerNameList:
+  - 
+  - 
+  - 
+  - 
 --- !u!4 &623721123
 Transform:
   m_ObjectHideFlags: 0

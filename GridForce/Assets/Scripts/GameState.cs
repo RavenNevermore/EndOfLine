@@ -38,6 +38,10 @@ public class GameState : MonoBehaviour
     public GameObject immunityItemGfx = null;
     public GameObject invertControlsItemGfx = null;
 
+    public GameObject ingameUI = null;
+    public GameObject onScreenButtons = null;
+    private bool useOnScreenButtons = false;
+
     public GameObject playerArrowPrefab = null;
     private PlayerArrowScript[] arrowGameObjects = null;
 
@@ -341,6 +345,7 @@ public class GameState : MonoBehaviour
     [RPC]
     void AssignPlayerData(int playerIndex, string playerName, float colorR, float colorG, float colorB, float colorA)
     {
+        this.ingameUI.SetActive(true);
         this.players[playerIndex] = new PlayerData( 
 				playerIndex, 
 				playerName, 
@@ -348,6 +353,7 @@ public class GameState : MonoBehaviour
 							colorG, 
 							colorB, 
 							colorA));
+        this.ingameUI.SetActive(false);
     }
 
     // Start game remote call
@@ -358,6 +364,10 @@ public class GameState : MonoBehaviour
         if (previewState != null)
             previewState.SetActive(false);
         this.arenaSettings.cameraTransform.gameObject.SetActive(true);
+
+        this.ingameUI.SetActive(true);
+        if (this.useOnScreenButtons)
+            this.onScreenButtons.SetActive(true);
 
         this.gameStarted = true;
         this.CreateDriverObject(this.spawnPoint, this.playerColor);
