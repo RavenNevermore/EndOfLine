@@ -888,6 +888,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 369040426}
+  - 114: {fileID: 369040427}
   m_Layer: 0
   m_Name: ConnectionList
   m_TagString: Untagged
@@ -911,6 +912,22 @@ Transform:
   - {fileID: 1456443756}
   - {fileID: 940789286}
   m_Father: {fileID: 1073255232}
+--- !u!114 &369040427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400008, guid: 971012cdfae7ca643b16eea25e620250,
+    type: 2}
+  m_PrefabInternal: {fileID: 1938814635}
+  m_GameObject: {fileID: 369040425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 291114a47708fbd45b0e94df1b5d129c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameObjectPlayerOne: {fileID: 1714924417}
+  gameObjectPlayerTwo: {fileID: 174211146}
+  gameObjectPlayerThree: {fileID: 1456443754}
+  gameObjectPlayerFour: {fileID: 940789285}
 --- !u!1 &391031550
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,7 +2255,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc1d41bf50d2964fb0ff9a5e8d4ab08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BaseScore: 2
+  baseScore: 2
+  multiplierIncrease: 1
   gridSize: 1
   maxDistance: 40
   minSpawnPointDistance: 10
@@ -2509,7 +2527,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 858560795}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
   m_Name: 

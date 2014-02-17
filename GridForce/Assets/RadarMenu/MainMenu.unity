@@ -487,7 +487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32940e84352c844c897af855f4e4304b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseTime: 2
+  pauseTime: 4
 --- !u!1 &289610395
 GameObject:
   m_ObjectHideFlags: 0
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   - {x: .550000012, y: .129999995, z: 1}
   - {x: .600000024, y: 0, z: 1}
   - {x: .5, y: -.25, z: 1}
-  RefreshRate: 3
+  RefreshRate: 1.5
 --- !u!1001 &1204325114
 Prefab:
   m_ObjectHideFlags: 0
