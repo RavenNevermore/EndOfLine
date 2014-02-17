@@ -263,6 +263,12 @@ public class GameState : MonoBehaviour
         this.countdownOver = true;
         DriverController driver = this.currentPlayerObject.GetComponent<DriverController>();
         driver.gameStarted = true;
+		
+		GameEnd end = this.GetComponent<GameEnd>();
+		if (null != end){
+			Debug.Log("This ends, when the song is over.");
+			end.Engage();
+		}
     }
 
     // Try to find a free spawn point or else return a random spawn point
