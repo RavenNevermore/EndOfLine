@@ -1989,6 +1989,7 @@ GameObject:
   - 114: {fileID: 723552918}
   - 114: {fileID: 723552917}
   - 114: {fileID: 723552924}
+  - 114: {fileID: 723552925}
   m_Layer: 0
   m_Name: ArenaMainCamera
   m_TagString: MainCamera
@@ -2012,8 +2013,8 @@ MonoBehaviour:
   relativePositionInBoost: {x: 0, y: 1, z: -18}
   leader: {fileID: 0}
   speed: .150000006
-  motionBlurNormal: .200000003
-  motionBlurBoost: 100
+  motionBlurNormal: .0199999996
+  motionBlurBoost: .5
 --- !u!114 &723552918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2021,12 +2022,12 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1438187444}
   m_GameObject: {fileID: 723552916}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blurMode: 0
+  _blurMode: 100
   _reuseDepth: 0
   _rerenderResolution: 1
   _highPrecsion: 0
@@ -2034,7 +2035,7 @@ MonoBehaviour:
     downsampleSteps: 2
     baseResolution: 4
     downsampleResolution: 4
-    iterations: 3
+    iterations: 2
     blurSpread: .600000024
     innerStrength: 1
     outerStrength: 1
@@ -2157,6 +2158,18 @@ MonoBehaviour:
   jitter: .0500000007
   showVelocity: 0
   showVelocityScale: 1
+--- !u!114 &723552925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400006, guid: a4e1f59bc59ae934fb8509944a3065fe,
+    type: 2}
+  m_PrefabInternal: {fileID: 1438187444}
+  m_GameObject: {fileID: 723552916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6cb65e3aa234ea48f7dce87070f686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &724315372
 GameObject:
   m_ObjectHideFlags: 0
@@ -2437,6 +2450,8 @@ MonoBehaviour:
   gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
   selectControlsPrefab: {fileID: 100008, guid: b1767ac9e10434b4c9c82d18ef8fa2d4, type: 2}
   useButtonControls: 0
+  selectingControls: 0
+  loadedLevel: 0
 --- !u!148 &832051630
 NetworkView:
   m_ObjectHideFlags: 0
@@ -2637,6 +2652,7 @@ GameObject:
   - 124: {fileID: 238344331}
   - 92: {fileID: 238344330}
   - 81: {fileID: 238344329}
+  - 114: {fileID: 858560796}
   - 114: {fileID: 858560799}
   m_Layer: 0
   m_Name: PreviewCamera
@@ -2645,6 +2661,51 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &858560796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400010, guid: 971012cdfae7ca643b16eea25e620250,
+    type: 2}
+  m_PrefabInternal: {fileID: 1938814635}
+  m_GameObject: {fileID: 858560795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blurMode: 100
+  _reuseDepth: 0
+  _rerenderResolution: 1
+  _highPrecsion: 0
+  settings:
+    downsampleSteps: 2
+    baseResolution: 4
+    downsampleResolution: 4
+    iterations: 3
+    blurSpread: .600000024
+    innerStrength: 1
+    outerStrength: 1
+    boostStrength: 4
+    blendMode: 0
+    downsampleBlendMode: 100
+    falloff:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    falloffScale: 1
+    radius: 4
+    normalize: 1
 --- !u!4 &858560798
 Transform:
   m_ObjectHideFlags: 0

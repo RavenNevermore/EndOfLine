@@ -423,6 +423,26 @@ public class DriverController : ExtendedBehaviour
             }
             else
             {
+                // If player is not in the air, check if there is a wall ahead of him 
+                if (Physics.Linecast(	this.transform.position, 
+										this.transform.position + (this.moveDirection * (this.characterController.radius + .25f)), 
+										out raycastHit, 
+										DriverController.drivableLayerMask 
+										/*| DriverController.nonDrivableLayerMask*/))
+                {
+                    {
+                        Vector3 cornerPos = Vector3.zero;
+                        if (this.nodeList.Count > 0)
+                            cornerPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(raycastHit.point - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
+                        this.nodeList.Add(new PathNode(cornerPos, (-this.gravityDirection - this.moveDirection).normalized, -this.moveDirection, nodeColor));
+
+                        Vector3 temp = this.moveDirection;
+                        this.moveDirection = -this.gravityDirection;
+                        this.gravityDirection = temp;
+						
+                    }
+                }
+
                 // Check, if player can turn
                 PathNode nextNode = this.GetNextNode();
                 nextNode.color = nodeColor;
@@ -443,14 +463,14 @@ public class DriverController : ExtendedBehaviour
                         case PlayerAction.TurnLeft:
                             this.moveDirection = Vector3.Cross(this.gravityDirection, this.moveDirection);
                             this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
-							this.nodeList.Add(nextNode);
-							this.SendMessage("OnPlayerTurned");
+                            this.nodeList.Add(nextNode);
+                            this.SendMessage("OnPlayerTurned");
                             break;
                         case PlayerAction.TurnRight:
                             this.moveDirection = Vector3.Cross(this.moveDirection, this.gravityDirection);
                             this.transform.position = nodeOnDriver - ((nodeOnDriver - this.transform.position).magnitude * this.moveDirection);
-							this.nodeList.Add(nextNode);
-							this.SendMessage("OnPlayerTurned");
+                            this.nodeList.Add(nextNode);
+                            this.SendMessage("OnPlayerTurned");
                             break;
                         default:
                             break;
@@ -459,38 +479,6 @@ public class DriverController : ExtendedBehaviour
                     this.playerAction = PlayerAction.None;
                     if (this.driverInput != null)
                         this.driverInput.playerAction = PlayerAction.None;
-                }
-
-                //if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
-                //{
-                //    this.Kill(-1);
-                //}
-
-
-                // If player is not in the air, check if there is a wall ahead of him 
-                if (Physics.Linecast(	this.transform.position, 
-										this.transform.position + (this.moveDirection * (this.characterController.radius + .25f)), 
-										out raycastHit, 
-										DriverController.drivableLayerMask 
-										/*| DriverController.nonDrivableLayerMask*/))
-                {
-                    // Change direction or kill if a wall was detected
-                    //if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
-                    //{
-                    //    this.Kill(-1);
-                    //}
-                    //else
-                    {
-                        Vector3 cornerPos = Vector3.zero;
-                        if (this.nodeList.Count > 0)
-                            cornerPos = this.nodeList[this.nodeList.Count - 1].position + Vector3.Project(raycastHit.point - this.nodeList[this.nodeList.Count - 1].position, this.moveDirection);
-                        this.nodeList.Add(new PathNode(cornerPos, (-this.gravityDirection - this.moveDirection).normalized, -this.moveDirection, nodeColor));
-
-                        Vector3 temp = this.moveDirection;
-                        this.moveDirection = -this.gravityDirection;
-                        this.gravityDirection = temp;
-						
-                    }
                 }
 
                 // Apply driving speed
