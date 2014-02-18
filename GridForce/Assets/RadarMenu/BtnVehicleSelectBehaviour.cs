@@ -1,18 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BtnVehicleSelectBehaviour : AbstractMenuBehaviour {
-
+public class BtnVehicleSelectBehaviour : AbstractMenuBehaviour
+{
 	public int vehicleSelection = 0;
-
-	void Start()
-    {
-		TextMesh text = this.GetComponentInChildren<TextMesh>();
-		if (null != text)
-        {
-            text.text = "Vehicle " + (this.vehicleSelection + 1).ToString();
-		}
-	}
 
 	void OnMouseDown()
     {
