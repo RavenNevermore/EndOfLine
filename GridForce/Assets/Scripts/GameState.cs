@@ -46,6 +46,9 @@ public class GameState : MonoBehaviour
     public GameObject playerArrowPrefab = null;
     private PlayerArrowScript[] arrowGameObjects = null;
 
+    public GameObject killFeedback = null;
+    public float killFeedbackTimer = 0.0f;
+
 
     // Use this for initialization
     void Start()
@@ -80,6 +83,13 @@ public class GameState : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (this.killFeedbackTimer > 0.0f)
+        {
+            this.killFeedbackTimer -= Time.deltaTime;
+            if (this.killFeedbackTimer <= 0.0f)
+                this.killFeedback.SetActive(false);
+        }
+
         for (int i = 0; this.players != null && i < this.players.GetLength(0); i++)
         {
             this.players[i].Update();
@@ -217,10 +227,14 @@ public class GameState : MonoBehaviour
             return;
 
         string playerName = "";
+        Color playerColor = Color.white;
         if (killedPlayer >= 0 && killedPlayer < this.players.GetLength(0))
+        {
             playerName = this.players[killedPlayer].name;
+            playerColor = this.players[killedPlayer].color;
+        }
 
-        this.AddScore(killer, playerName);
+        this.AddScore(killer, playerName, playerColor.r, playerColor.g, playerColor.b, playerColor.a);
     }
 
     // Reset multiplier on killed player
@@ -240,24 +254,40 @@ public class GameState : MonoBehaviour
     }
 
     // Add score to killer's score count
-    public void AddScore(int playerIndex, string playerName)
+    public void AddScore(int playerIndex, string playerName, float colorR, float colorG, float colorB, float colorA)
     {
         if (Network.connections.Length > 0)
-            this.networkView.RPC("AddScoreRPC", RPCMode.All, playerIndex, playerName);
+            this.networkView.RPC("AddScoreRPC", RPCMode.All, playerIndex, playerName, colorR, colorG, colorB, colorA);
         else
-            this.AddScoreRPC(playerIndex, playerName);
+            this.AddScoreRPC(playerIndex, playerName, colorR, colorG, colorB, colorA);
     }
 
     [RPC]
-    public void AddScoreRPC(int playerIndex, string playerName)
+    public void AddScoreRPC(int playerIndex, string playerName, float colorR, float colorG, float colorB, float colorA)
     {
         if (playerIndex >= 0 && playerIndex < this.players.GetLength(0))
         {
-            this.players[playerIndex].score += (int)(this.arenaSettings.baseScore * this.players[playerIndex].multiplier);
+            int scoreAdd = (int)(this.arenaSettings.baseScore * this.players[playerIndex].multiplier);
+            this.players[playerIndex].score += scoreAdd;
             this.players[playerIndex].multiplier += this.arenaSettings.multiplierIncrease;
 
             if (playerIndex == this.playerIndex)
-                ErrorState.InfoMessage("You killed " + playerName + "!");
+            {
+                GUIText feedbackText = this.killFeedback.GetComponent<GUIText>();
+                if (feedbackText != null)
+                {
+                    string name = playerName;
+
+                    if (name.Length > 11)
+                        name = name.Substring(0, 10) + "...";
+
+                    feedbackText.text = "YOU KILLED PLAYER " + name + "!\n SCORE +" + scoreAdd.ToString();
+                    feedbackText.color = new Color(colorR, colorG, colorB, colorA);
+                }
+
+                this.killFeedbackTimer = 3.0f;
+                this.killFeedback.SetActive(true);
+            }
         }
     }
 
