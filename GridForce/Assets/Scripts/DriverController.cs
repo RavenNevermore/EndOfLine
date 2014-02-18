@@ -468,7 +468,11 @@ public class DriverController : ExtendedBehaviour
 
 
                 // If player is not in the air, check if there is a wall ahead of him 
-                if (Physics.Linecast(this.transform.position, this.transform.position + (this.moveDirection * (this.characterController.radius + 0.1f)), out raycastHit, DriverController.drivableLayerMask /*| DriverController.nonDrivableLayerMask*/))
+                if (Physics.Linecast(	this.transform.position, 
+										this.transform.position + (this.moveDirection * (this.characterController.radius + .25f)), 
+										out raycastHit, 
+										DriverController.drivableLayerMask 
+										/*| DriverController.nonDrivableLayerMask*/))
                 {
                     // Change direction or kill if a wall was detected
                     //if (raycastHit.transform.gameObject.layer == DriverController.layerNonDrivable)
@@ -485,6 +489,7 @@ public class DriverController : ExtendedBehaviour
                         Vector3 temp = this.moveDirection;
                         this.moveDirection = -this.gravityDirection;
                         this.gravityDirection = temp;
+						
                     }
                 }
 
@@ -523,7 +528,8 @@ public class DriverController : ExtendedBehaviour
                         this.colliderList[i].collider.enabled = true;
                         this.colliderList[i].localScale = new Vector3(this.trailCollisionSegment.localScale.x, this.trailCollisionSegment.localScale.y, lookDirection.magnitude);
                         this.colliderList[i].position = this.nodeList[i].position + (lookDirection / 2.0f) + (((PathNode)(this.nodeList[i])).nextNormal * (this.trailCollisionSegment.localScale.y / 2.0f));
-                        if (lookDirection.sqrMagnitude > 0)
+                        if (!Vector3.zero.Equals(lookDirection) && 
+							0.0f != lookDirection.sqrMagnitude)
                             this.colliderList[i].rotation = Quaternion.LookRotation(lookDirection, this.nodeList[i].normal);
                         currentCollider++;
                     }
@@ -540,7 +546,13 @@ public class DriverController : ExtendedBehaviour
         }
 
         // Player transformations
-        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), this.rotationSpeed * Time.deltaTime);
+		if (!Vector3.zero.Equals(this.moveDirection) 
+				&& 0.0f != this.moveDirection.sqrMagnitude){
+        	this.transform.rotation = Quaternion.Slerp(
+					this.transform.rotation, 
+					Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), 
+					this.rotationSpeed * Time.deltaTime);
+		}
 
         if (this.cameraTransform != null)
         {
@@ -662,6 +674,7 @@ public class DriverController : ExtendedBehaviour
     // Kill driver
     public void Kill(int killer, int killedPlayer)
     {
+		Debug.Log("Kill: "+killer+" - "+killedPlayer);
         if (!(this.killed))
         {
             if (Network.connections.Length > 0)
