@@ -189,11 +189,13 @@ public class GameState : MonoBehaviour
                 DriverController driverController = currentDriver.GetComponent<DriverController>();
                 if (driverController != null)
                 {
-                    UnityEngine.Object.Destroy(driverController.lineRenderer);
-                    driverController.Kill(-1, driverController.playerIndex);
+                    driverController.gameStarted = false;
+                    //UnityEngine.Object.Destroy(driverController.lineRenderer);
+                    //driverController.Kill(-1, driverController.playerIndex);
                 }
-                UnityEngine.Object.Destroy(currentDriver);
+                //UnityEngine.Object.Destroy(currentDriver);
             }
+            this.arenaSettings.cameraTransform.SendMessage("FollowTheLeader", this.arenaSettings.transform);
         }
     }
 
