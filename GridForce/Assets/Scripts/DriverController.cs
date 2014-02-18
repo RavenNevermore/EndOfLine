@@ -324,10 +324,10 @@ public class DriverController : ExtendedBehaviour
                         UnityEngine.Object fakeItemBoxInstance = null;
                         RaycastHit raycastHitFakeItemBox;
                         Physics.Linecast(gravityRayStart, gravityRayEnd, out raycastHitFakeItemBox, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask);
-                        Vector3 fakeItemBoxPosition = raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f) - (this.gravityDirection * 0.5f);
+                        Vector3 fakeItemBoxPosition = raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f);
                         if (Physics.Raycast(fakeItemBoxPosition, this.gravityDirection, out raycastHitFakeItemBox, Mathf.Infinity, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask))
                         {
-                            fakeItemBoxPosition = raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f) - (this.gravityDirection * 0.5f);
+                            fakeItemBoxPosition = raycastHitFakeItemBox.point - (this.moveDirection * 3.0f) - (this.gravityDirection * this.fakeItemBoxPrefab.transform.localScale.y * 0.5f);
                             if (Network.connections.Length > 0)
                                 fakeItemBoxInstance = UnityEngine.Network.Instantiate(this.fakeItemBoxPrefab, fakeItemBoxPosition, Quaternion.LookRotation(this.moveDirection, -this.gravityDirection), 0);
                             else
