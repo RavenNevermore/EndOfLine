@@ -1845,9 +1845,9 @@ MonoBehaviour:
   baseSpeed: 20
   boostSpeed: 30
   boostDuration: 4
-  immunityDuration: 10
-  sideBladeDuration: 10
-  killBoostDuration: 1.5
+  immunityDuration: 3
+  sideBladeDuration: 3
+  killBoostDuration: .5
   baseTrailLength: 17
   rotationSpeed: 15
   cameraDistance: {x: 0, y: 1, z: -12}
@@ -1856,6 +1856,7 @@ MonoBehaviour:
   updateColor: 1
   playerIndex: 0
   gameStarted: 0
+  lineRenderer: {fileID: 0}
   heldItem: 0
   meshList:
   - {fileID: 100014}
@@ -1888,7 +1889,7 @@ CharacterController:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100006}
   serializedVersion: 2
-  m_Height: .300000012
+  m_Height: .200000003
   m_Radius: .150000006
   m_SlopeLimit: 45
   m_StepOffset: .300000012
