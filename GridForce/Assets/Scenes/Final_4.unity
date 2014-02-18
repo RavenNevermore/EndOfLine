@@ -242,7 +242,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1679746384}
   m_GameObject: {fileID: 24821241}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ea465f7266b4685b047c50ef00122a, type: 3}
   m_Name: 
@@ -1012,6 +1012,10 @@ Prefab:
     - target: {fileID: 11400002, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
       propertyPath: sloppyness
       value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
@@ -2323,8 +2327,8 @@ MonoBehaviour:
   relativePositionInBoost: {x: 0, y: 1, z: -18}
   leader: {fileID: 0}
   speed: .150000006
-  motionBlurNormal: .200000003
-  motionBlurBoost: 100
+  motionBlurNormal: .0199999996
+  motionBlurBoost: .5
 --- !u!114 &723552918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2332,7 +2336,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1438187444}
   m_GameObject: {fileID: 723552916}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
   m_Name: 
@@ -2822,6 +2826,8 @@ MonoBehaviour:
   gameStatePrefab: {fileID: 100000, guid: f6684ef0fb2755249a2881b99359d8ab, type: 2}
   selectControlsPrefab: {fileID: 100008, guid: b1767ac9e10434b4c9c82d18ef8fa2d4, type: 2}
   useButtonControls: 0
+  selectingControls: 0
+  loadedLevel: 0
 --- !u!148 &832051630
 NetworkView:
   m_ObjectHideFlags: 0
@@ -2949,7 +2955,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 232088528}
   m_GameObject: {fileID: 858613804}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ea465f7266b4685b047c50ef00122a, type: 3}
   m_Name: 
@@ -4937,6 +4943,10 @@ Prefab:
       propertyPath: sloppyness
       value: .5
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
   m_RootGameObject: {fileID: 1870124080}
@@ -5362,6 +5372,10 @@ Prefab:
     - target: {fileID: 11400002, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
       propertyPath: sloppyness
       value: .100000001
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 83d1863514881dc43ab08c37fc6c4787, type: 2}
@@ -5841,7 +5855,7 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1514074466}
   m_GameObject: {fileID: 1870124080}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77ea465f7266b4685b047c50ef00122a, type: 3}
   m_Name: 
