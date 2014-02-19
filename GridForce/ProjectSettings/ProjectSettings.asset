@@ -114,6 +114,22 @@ PlayerSettings:
     m_Icons:
     - m_Icon: {fileID: 0}
       m_Size: 128
+  - m_BuildTarget: iPhone
+    m_Icons:
+    - m_Icon: {fileID: 2800000, guid: 0e3e938ea74af455196b177f86c06f26, type: 3}
+      m_Size: 152
+    - m_Icon: {fileID: 2800000, guid: ae3a999faa82a40bb8ec74a28237ed1c, type: 3}
+      m_Size: 144
+    - m_Icon: {fileID: 0}
+      m_Size: 120
+    - m_Icon: {fileID: 0}
+      m_Size: 114
+    - m_Icon: {fileID: 0}
+      m_Size: 76
+    - m_Icon: {fileID: 2800000, guid: 46e8af34e62e74335b5745bc1db12437, type: 3}
+      m_Size: 72
+    - m_Icon: {fileID: 0}
+      m_Size: 57
   m_BuildTargetBatching:
   - m_BuildTarget: Standalone
     m_StaticBatching: 1
