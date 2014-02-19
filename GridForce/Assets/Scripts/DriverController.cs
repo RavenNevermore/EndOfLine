@@ -288,8 +288,6 @@ public class DriverController : ExtendedBehaviour
 
             if (this.nodeList.Count > 0)
                 this.nodeList.RemoveAt(this.nodeList.Count - 1);
-            if (this.insertedNode && !(this.removedNode))
-                this.nodeList.RemoveAt(0);
 
             this.insertedNode = false;
             this.removedNode = false;
@@ -575,6 +573,12 @@ public class DriverController : ExtendedBehaviour
             this.killedTrailLength = Math.Max(0, this.killedTrailLength - Time.deltaTime * 30.0f);
             if (this.killedTrailLength <= 0.0f && this.lineRendererKilled != null)
                 this.lineRendererKilled.pointList = null;
+
+            if (this.nodeList.Count > 0)
+                this.nodeList.RemoveAt(this.nodeList.Count - 1);
+
+            this.insertedNode = false;
+            this.removedNode = false;
 
             this.NodeListCleanup(this.killedTrailLength, nodeColor);
         }
