@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   exclusiveComponent: {fileID: 11400000}
-  targetPlatform: 0
+  targetPlatform: 1
 --- !u!124 &12400000
 Behaviour:
   m_ObjectHideFlags: 1
