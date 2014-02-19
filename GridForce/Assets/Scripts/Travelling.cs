@@ -18,6 +18,9 @@ public class Travelling : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+		if (null == this.pathNodes)
+			return;
+		
         if (this.pathNodes.GetLength(0) <= 0)
         {
             this.transform.Translate(this.travel);

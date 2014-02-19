@@ -7,11 +7,17 @@ public class MenuActivator : MonoBehaviour
 
     void OnEnable()
     {
+		if (null == this.otherGameObject)
+			return;
+		
         this.otherGameObject.SetActive(true);
     }
 
     void OnDisable()
     {
+		if (null == this.otherGameObject)
+			return;
+		
         this.otherGameObject.SetActive(false);
     }
 }
