@@ -14,7 +14,7 @@ public class ScrollingPlane : MonoBehaviour
     private Color[] meshColors = new Color[] { new Color(1.0f, 1.0f, 1.0f, 1.0f), new Color(1.0f, 1.0f, 1.0f, 1.0f), new Color(1.0f, 1.0f, 1.0f, 1.0f), new Color(1.0f, 1.0f, 1.0f, 1.0f) };
     private Vector2[] meshUVs = new Vector2[] { new Vector2(0.0f, 1.0f), new Vector2(1.0f, 1.0f), new Vector2(1.0f, 0.0f), new Vector2(0.0f, 0.0f) };
 
-    private float timer = 0.0f;
+    public float timer = 0.0f;
 
 	// Use this for initialization
 	void Start ()
