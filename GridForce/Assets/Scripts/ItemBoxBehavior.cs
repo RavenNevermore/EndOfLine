@@ -31,6 +31,12 @@ public class ItemBoxBehavior : MonoBehaviour
                 networkTravelComponent.speed = travelComponent.speed;
                 networkTravelComponent.sloppyness = travelComponent.sloppyness;
             }
+            else if (networkTravelComponent != null)
+            {
+                networkTravelComponent.pathNodes = null;
+                networkTravelComponent.speed = 0;
+                networkTravelComponent.sloppyness = 0;
+            }
         }
     }
 

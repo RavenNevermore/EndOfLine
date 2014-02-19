@@ -21,7 +21,7 @@ public class Travelling : MonoBehaviour {
 		if (null == this.pathNodes)
 			return;
 		
-        if (this.pathNodes.GetLength(0) <= 0)
+        if (this.pathNodes == null || this.pathNodes.GetLength(0) <= 0)
         {
             this.transform.Translate(this.travel);
             return;

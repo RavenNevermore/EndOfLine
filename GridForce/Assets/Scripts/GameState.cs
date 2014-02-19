@@ -377,7 +377,7 @@ public class GameState : MonoBehaviour
     // Start hosted game
     public IEnumerator StartGame()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
 
         this.AssignVariables(Network.connections.Length + 1, 0, Mathf.Min(this.spawnPointList[0], this.arenaSettings.spawnPoints.Count - 1), colorList[0].r, colorList[0].g, colorList[0].b, colorList[0].a);
 
@@ -388,11 +388,11 @@ public class GameState : MonoBehaviour
             this.networkView.RPC("AssignVariables", player, Network.connections.Length + 1, i, Mathf.Min(this.spawnPointList[i], this.arenaSettings.spawnPoints.Count - 1), colorList[i].r, colorList[i].g, colorList[i].b, colorList[i].a);
         }
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
 
         this.networkView.RPC("RequestPlayerData", RPCMode.All);
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
 
         this.networkView.RPC("StartGameRPC", RPCMode.All);
     }
