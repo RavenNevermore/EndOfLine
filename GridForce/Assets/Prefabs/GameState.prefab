@@ -1771,7 +1771,7 @@ MonoBehaviour:
   player2Score: {fileID: 13200024}
   player3Score: {fileID: 13200028}
   player4Score: {fileID: 13200034}
-  matchTimeInSeconds: 250
+  matchTimeInSeconds: 254
 --- !u!114 &11400024
 MonoBehaviour:
   m_ObjectHideFlags: 1

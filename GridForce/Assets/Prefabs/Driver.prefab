@@ -1962,7 +1962,7 @@ MonoBehaviour:
   boostSpeed: 30
   boostDuration: 4
   immunityDuration: 3
-  sideBladeDuration: 3
+  sideBladeDuration: 4
   killBoostDuration: 1.5
   baseTrailLength: 17
   rotationSpeed: 15
