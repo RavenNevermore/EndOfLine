@@ -29,6 +29,7 @@ public class DriverController : ExtendedBehaviour
     public int playerIndex = 0;    // This driver's player index
     public bool gameStarted = false;        // Has the game started yet?
     public ScoreDelegate ScoreFunction = null;
+    public GameObject shieldMesh = null;        // Shield mesh
 
     private const int layerDrivable = 8;     // Layer of drivable plane
     private const int layerNonDrivable = 9;    // Layer of non drivable plane
@@ -50,6 +51,7 @@ public class DriverController : ExtendedBehaviour
     private List<Transform> colliderList = new List<Transform>();   // List of colliders
     private bool killed = false;    // True when driver was killed
     private float invincibleTimer = 3.0f;       // Driver invincible
+    private float spawnedTimer = 3.5f;      // Spawn timer
     private float harmlessTimer = 3.0f;         // Driver can't hurt other players
     private GameObject trailCollisionObject;    // Trail collisions' parent game object
     private float killTimer = 3.0f;     // Seconds until object is destroyed
@@ -249,16 +251,24 @@ public class DriverController : ExtendedBehaviour
                 this.invincibleTimer -= Time.deltaTime;
                 if (this.gameStarted)
                 {
+                    if (this.invincibleTimer > 0.5f && this.spawnedTimer <= 0.0f)
+                        this.shieldMesh.SetActive(true);
                     float modulo = this.invincibleTimer % 0.1f;
                     if (modulo > 0.05f)
                         this.vehicleMesh.SetActive(false);
                     else
                         this.vehicleMesh.SetActive(true);
                 }
+
+                if (this.spawnedTimer > 0.0f)
+                    this.spawnedTimer -= Time.deltaTime;
             }
             else
                 this.vehicleMesh.SetActive(true);
         }
+
+        if (this.invincibleTimer <= 0.5f)
+            this.shieldMesh.SetActive(false);
 
         if (this.harmlessTimer > 0.0f)
         {
@@ -337,6 +347,7 @@ public class DriverController : ExtendedBehaviour
                         break;
 
                     case ItemType.Immunity:
+                        this.spawnedTimer = 0.0f;
                         if (this.invincibleTimer < this.immunityDuration)
                             this.invincibleTimer = this.immunityDuration;
                         break;

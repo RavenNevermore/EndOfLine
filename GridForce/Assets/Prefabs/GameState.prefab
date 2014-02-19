@@ -2042,10 +2042,10 @@ GUITexture:
   m_Color: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
-    x: -171
-    y: 52
-    width: 52
-    height: 50
+    x: -107
+    y: 242
+    width: 67
+    height: 66
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2061,10 +2061,10 @@ GUITexture:
   m_Color: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
-    x: -167
-    y: 51
-    width: 43
-    height: 51
+    x: -102
+    y: 240
+    width: 57
+    height: 67
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2080,10 +2080,10 @@ GUITexture:
   m_Color: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
-    x: -170
-    y: 54
-    width: 49
-    height: 48
+    x: -107
+    y: 243
+    width: 66
+    height: 63
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2099,10 +2099,10 @@ GUITexture:
   m_Color: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
-    x: -164
-    y: 56
-    width: 38
-    height: 47
+    x: -99
+    y: 245
+    width: 51
+    height: 63
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2118,10 +2118,10 @@ GUITexture:
   m_Color: {r: .5, g: .5, b: .5, a: .5}
   m_PixelInset:
     serializedVersion: 2
-    x: -178
-    y: 33
-    width: 65
-    height: 92
+    x: -114
+    y: 220.5
+    width: 80
+    height: 111
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2137,10 +2137,10 @@ GUITexture:
   m_Color: {r: .5, g: .5, b: .5, a: .5}
   m_PixelInset:
     serializedVersion: 2
-    x: 113
-    y: 33
-    width: 65
-    height: 92
+    x: 34
+    y: 221
+    width: 80
+    height: 111
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2156,10 +2156,10 @@ GUITexture:
   m_Color: {r: .5, g: .5, b: .5, a: .5}
   m_PixelInset:
     serializedVersion: 2
-    x: -193
-    y: 2
-    width: 193
-    height: 135
+    x: -136
+    y: 50
+    width: 136
+    height: 300
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2176,9 +2176,9 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: 0
-    y: 2
-    width: 193
-    height: 135
+    y: 50
+    width: 136
+    height: 300
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2213,10 +2213,10 @@ GUITexture:
   m_Color: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
-    x: 125
-    y: 51
-    width: 43
-    height: 51
+    x: 46.0999985
+    y: 240
+    width: 57
+    height: 67
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2232,10 +2232,10 @@ GUITexture:
   m_Color: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
-    x: 121
-    y: 54
-    width: 49
-    height: 48
+    x: 41
+    y: 243
+    width: 66
+    height: 63
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2251,10 +2251,10 @@ GUITexture:
   m_Color: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
-    x: 127
-    y: 56
-    width: 38
-    height: 47
+    x: 49
+    y: 245
+    width: 51
+    height: 63
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
@@ -2270,10 +2270,10 @@ GUITexture:
   m_Color: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
   m_PixelInset:
     serializedVersion: 2
-    x: 120
-    y: 52
-    width: 52
-    height: 50
+    x: 41
+    y: 242
+    width: 67
+    height: 66
   m_LeftBorder: 0
   m_RightBorder: 0
   m_TopBorder: 0
