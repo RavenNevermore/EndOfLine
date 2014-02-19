@@ -4131,6 +4131,9 @@ GameObject:
   - 124: {fileID: 1958384164}
   - 81: {fileID: 1958384163}
   - 114: {fileID: 1958384168}
+  - 114: {fileID: 1958384171}
+  - 114: {fileID: 1958384170}
+  - 114: {fileID: 1958384169}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4213,6 +4216,76 @@ MonoBehaviour:
   _blurMode: 0
   _reuseDepth: 0
   _rerenderResolution: 4
+  _highPrecsion: 0
+  settings:
+    downsampleSteps: 2
+    baseResolution: 4
+    downsampleResolution: 4
+    iterations: 3
+    blurSpread: .600000024
+    innerStrength: 1
+    outerStrength: 1
+    boostStrength: 4
+    blendMode: 0
+    downsampleBlendMode: 100
+    falloff:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    falloffScale: 1
+    radius: 4
+    normalize: 1
+--- !u!114 &1958384169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1958384162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec45f2c42ead1946a1e70588b961c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exclusiveComponent: {fileID: 1958384168}
+  targetPlatform: 1
+--- !u!114 &1958384170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1958384162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec45f2c42ead1946a1e70588b961c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exclusiveComponent: {fileID: 1958384171}
+  targetPlatform: 0
+--- !u!114 &1958384171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1958384162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blurMode: 0
+  _reuseDepth: 0
+  _rerenderResolution: 1
   _highPrecsion: 0
   settings:
     downsampleSteps: 2
