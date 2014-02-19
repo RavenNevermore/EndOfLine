@@ -859,14 +859,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathNodes:
-  - {fileID: 1603711860}
-  - {fileID: 1877089029}
-  - {fileID: 936088737}
-  - {fileID: 638594225}
-  - {fileID: 1567682039}
-  - {fileID: 331449506}
-  - {fileID: 1820628967}
-  - {fileID: 2017751454}
+  - {fileID: 227327728}
+  - {fileID: 1660790040}
+  - {fileID: 776645266}
+  - {fileID: 629453107}
+  - {fileID: 209175344}
+  - {fileID: 1577557944}
+  - {fileID: 1943041829}
+  - {fileID: 1462243734}
   speed: 3
   sloppyness: 1
 --- !u!1 &331449505
@@ -3670,35 +3670,35 @@ Prefab:
     - target: {fileID: 11400000, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: pathNodes.Array.data[0]
       value: 
-      objectReference: {fileID: 1603711860}
+      objectReference: {fileID: 227327728}
     - target: {fileID: 11400000, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: pathNodes.Array.data[1]
       value: 
-      objectReference: {fileID: 1877089029}
+      objectReference: {fileID: 1660790040}
     - target: {fileID: 11400000, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: pathNodes.Array.data[2]
       value: 
-      objectReference: {fileID: 936088737}
+      objectReference: {fileID: 776645266}
     - target: {fileID: 11400000, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: pathNodes.Array.data[3]
       value: 
-      objectReference: {fileID: 638594225}
+      objectReference: {fileID: 629453107}
     - target: {fileID: 11400000, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: pathNodes.Array.data[4]
       value: 
-      objectReference: {fileID: 1567682039}
+      objectReference: {fileID: 209175344}
     - target: {fileID: 11400000, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: pathNodes.Array.data[5]
       value: 
-      objectReference: {fileID: 331449506}
+      objectReference: {fileID: 1577557944}
     - target: {fileID: 11400000, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: pathNodes.Array.data[6]
       value: 
-      objectReference: {fileID: 1820628967}
+      objectReference: {fileID: 1943041829}
     - target: {fileID: 11400000, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: pathNodes.Array.data[7]
       value: 
-      objectReference: {fileID: 2017751454}
+      objectReference: {fileID: 1462243734}
     - target: {fileID: 400012, guid: afe7732ae6295114e83581d3b0c78b7c, type: 2}
       propertyPath: m_LocalScale.x
       value: 1
