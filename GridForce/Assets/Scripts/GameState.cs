@@ -450,6 +450,8 @@ public class GameState : MonoBehaviour
         this.gameStarted = true;
         this.CreateDriverObject(this.spawnPoint, this.playerColor);
 
+        if (AudioSettings.playMusic)
+            this.audio.Play();
     }
 
     // Call when instantiated on network

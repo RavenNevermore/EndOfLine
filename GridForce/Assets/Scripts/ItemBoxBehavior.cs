@@ -98,7 +98,7 @@ public class ItemBoxBehavior : MonoBehaviour
 		if (null == child)
 			return;
 		AudioSource audio =  child.GetComponent<AudioSource>();
-		if (null != audio){
+		if (null != audio && AudioSettings.playSounds){
 			audio.Play();
 		}
 	}

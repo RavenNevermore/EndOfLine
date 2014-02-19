@@ -10,7 +10,7 @@ public class RadarPing : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		this.deltaT += Time.deltaTime;
-		if (this.deltaT >= this.pauseTime){
+		if (this.deltaT >= this.pauseTime && AudioSettings.playSounds){
 			this.audio.Play();
 			this.deltaT = 0.0f;
 		}

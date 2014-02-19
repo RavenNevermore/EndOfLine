@@ -31,8 +31,8 @@ public class PlayerSounds : MonoBehaviour {
 		foreach (AudioSource source in this.sources){
 			if (source.isPlaying)
 				continue;
-
-			source.Play();
+            if (AudioSettings.playSounds)
+			    source.Play();
 			break;
 		}
 	}
@@ -40,7 +40,7 @@ public class PlayerSounds : MonoBehaviour {
 	public void OnBoostStarted(){
 		if (null == this.boostSound)
 			return;
-
-		this.boostSound.Play();
+        if (AudioSettings.playSounds)
+		    this.boostSound.Play();
 	}
 }
