@@ -25,9 +25,12 @@ public class ItemBoxBehavior : MonoBehaviour
             GameObject networkInstance = (GameObject)(Network.Instantiate(itemBoxBugFix.itemBoxPrefab, this.transform.position, this.transform.rotation, 0));
             Travelling travelComponent = this.GetComponent<Travelling>();
             Travelling networkTravelComponent = networkInstance.GetComponent<Travelling>();
-            networkTravelComponent.pathNodes = travelComponent.pathNodes;
-            networkTravelComponent.speed = travelComponent.speed;
-            networkTravelComponent.sloppyness = travelComponent.sloppyness;
+            if (travelComponent != null && networkTravelComponent != null)
+            {
+                networkTravelComponent.pathNodes = travelComponent.pathNodes;
+                networkTravelComponent.speed = travelComponent.speed;
+                networkTravelComponent.sloppyness = travelComponent.sloppyness;
+            }
         }
     }
 

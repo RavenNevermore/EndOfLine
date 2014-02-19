@@ -132,7 +132,7 @@ public class GameState : MonoBehaviour
             int arrowIndex = 0;
             for (int i = 0; i < drivers.GetLength(0); i++)
             {
-                if (drivers[i] != null && drivers[i].transform != this.currentPlayerObject && this.arrowGameObjects[arrowIndex] != null)
+                if (arrowIndex < this.arrowGameObjects.GetLength(0) && drivers[i] != null && drivers[i].transform != this.currentPlayerObject && this.arrowGameObjects[arrowIndex] != null)
                 {
                     DriverController driverController = drivers[i].GetComponent<DriverController>();
                     if (driverController != null)
