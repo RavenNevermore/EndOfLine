@@ -4212,7 +4212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blurMode: 0
   _reuseDepth: 0
-  _rerenderResolution: 1
+  _rerenderResolution: 4
   _highPrecsion: 0
   settings:
     downsampleSteps: 2
