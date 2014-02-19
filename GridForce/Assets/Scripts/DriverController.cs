@@ -346,9 +346,9 @@ public class DriverController : ExtendedBehaviour
                         {
                             UnityEngine.Object newInstance = null;
                             if (Network.connections.Length > 0)
-                                newInstance = UnityEngine.Network.Instantiate(this.sideBladePrefab, this.transform.position + (this.transform.right * 1.0f) + (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, this.transform.up), 0);
+                                newInstance = UnityEngine.Network.Instantiate(this.sideBladePrefab, this.transform.position /* + (this.transform.right * 1.0f) + (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f) */, Quaternion.LookRotation(this.transform.forward, this.transform.up), 0);
                             else
-                                newInstance = UnityEngine.Object.Instantiate(this.sideBladePrefab, this.transform.position + (this.transform.right * 1.0f) + (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, this.transform.up));
+                                newInstance = UnityEngine.Object.Instantiate(this.sideBladePrefab, this.transform.position /* + (this.transform.right * 1.0f) + (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f) */, Quaternion.LookRotation(this.transform.forward, this.transform.up));
                             this.sideBladeOne = (GameObject)(newInstance);
                             this.sideBladeOne.transform.parent = this.transform;
 
@@ -357,20 +357,20 @@ public class DriverController : ExtendedBehaviour
                                 sideBladeScript.playerIndex = this.playerIndex;
                         }
 
-                        if (this.sideBladeTwo == null)
-                        {
-                            UnityEngine.Object newInstance = null;
-                            if (Network.connections.Length > 0)
-                                newInstance = UnityEngine.Network.Instantiate(this.sideBladePrefab, this.transform.position - (this.transform.right * 1.0f) - (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, -this.transform.up), 0);
-                            else
-                                newInstance = UnityEngine.Object.Instantiate(this.sideBladePrefab, this.transform.position - (this.transform.right * 1.0f) - (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, -this.transform.up));
-                            this.sideBladeTwo = (GameObject)(newInstance);
-                            this.sideBladeTwo.transform.parent = this.transform;
+                        //if (this.sideBladeTwo == null)
+                        //{
+                        //    UnityEngine.Object newInstance = null;
+                        //    if (Network.connections.Length > 0)
+                        //        newInstance = UnityEngine.Network.Instantiate(this.sideBladePrefab, this.transform.position - (this.transform.right * 1.0f) - (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, -this.transform.up), 0);
+                        //    else
+                        //        newInstance = UnityEngine.Object.Instantiate(this.sideBladePrefab, this.transform.position - (this.transform.right * 1.0f) - (this.transform.right * this.sideBladePrefab.transform.localScale.x * 0.5f), Quaternion.LookRotation(this.transform.forward, -this.transform.up));
+                        //    this.sideBladeTwo = (GameObject)(newInstance);
+                        //    this.sideBladeTwo.transform.parent = this.transform;
 
-                            SideBladeBehavior sideBladeScript = this.sideBladeTwo.GetComponent<SideBladeBehavior>();
-                            if (sideBladeScript != null)
-                                sideBladeScript.playerIndex = this.playerIndex;
-                        }
+                        //    SideBladeBehavior sideBladeScript = this.sideBladeTwo.GetComponent<SideBladeBehavior>();
+                        //    if (sideBladeScript != null)
+                        //        sideBladeScript.playerIndex = this.playerIndex;
+                        //}
 
                         this.sideBladeTimer = this.sideBladeDuration;
                         break;
