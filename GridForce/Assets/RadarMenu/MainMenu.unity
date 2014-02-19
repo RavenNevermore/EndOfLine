@@ -1422,7 +1422,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 780055517}
-  - 114: {fileID: 780055518}
   - 114: {fileID: 780055519}
   m_Layer: 0
   m_Name: 03_select_vehicle
@@ -1447,18 +1446,6 @@ Transform:
   - {fileID: 552610881}
   - {fileID: 905970630}
   m_Father: {fileID: 432239661}
---- !u!114 &780055518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 780055516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79796ba14809659499f53017015fe8f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  otherGameObject: {fileID: 0}
 --- !u!114 &780055519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3648,7 +3635,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1960590854}
-  - 114: {fileID: 1960590855}
   m_Layer: 0
   m_Name: 02_select_arena
   m_TagString: Untagged
@@ -3667,18 +3653,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1021971698}
---- !u!114 &1960590855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1960590853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79796ba14809659499f53017015fe8f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  otherGameObject: {fileID: 0}
 --- !u!1 &1974897901
 GameObject:
   m_ObjectHideFlags: 0

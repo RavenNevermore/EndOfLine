@@ -14,13 +14,16 @@ public class AbstractMenuBehaviour : MonoBehaviour
 		if (findReturnPath)
         {
 			backPath = this.transform.parent.gameObject.name;
-            if (backPath.Contains("beacon"))
+            if (backPath != null && backPath.Contains("beacon"))
                 backPath = this.transform.parent.parent.gameObject.name;
 		}
 
 		GameObject root = GameObject.Find("root");
-		MenuSelectSwitch menuSwitch = root.GetComponent<MenuSelectSwitch>();
-		menuSwitch.switchMenu(name, backPath);
+        if (root != null)
+        {
+            MenuSelectSwitch menuSwitch = root.GetComponent<MenuSelectSwitch>();
+            menuSwitch.switchMenu(name, backPath);
+        }
 	}
 
 	public MenuState gameState

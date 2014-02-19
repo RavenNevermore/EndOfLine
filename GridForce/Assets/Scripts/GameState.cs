@@ -22,6 +22,13 @@ public class GameState : MonoBehaviour
         new Color(0.6f, 0.0f, 0.6f, 1.0f),
         new Color(0.0f, 0.8f, 0.0f, 1.0f)
     };
+    public static Dictionary<Color, string> colorNames = new Dictionary<Color, string>()
+    {
+        { colorArray[0], "RED" },
+        { colorArray[1], "BLUE" },
+        { colorArray[2], "PURPLE" },
+        { colorArray[3], "GREEN" }
+    };
     private List<Color> colorList = new List<Color>();   // Randomized color list
     private List<int> spawnPointList = new List<int>();  // List of randomized points
     public PlayerData[] players = null;  // Players
@@ -75,7 +82,12 @@ public class GameState : MonoBehaviour
         if (Network.connections.Length <= 0)
         {
             this.AssignVariables(1, 0, Mathf.Min(this.spawnPointList[0], this.arenaSettings.spawnPoints.Count - 1), colorList[0].r, colorList[0].g, colorList[0].b, colorList[0].a);
-            this.AssignPlayerData(0, this.playerName, this.playerColor.r, this.playerColor.g, this.playerColor.b, this.playerColor.a);
+
+            string nameToUse = this.playerName;
+            if (GameState.colorNames.ContainsKey(this.playerColor))
+                nameToUse = GameState.colorNames[this.playerColor];
+
+            this.AssignPlayerData(0, nameToUse, this.playerColor.r, this.playerColor.g, this.playerColor.b, this.playerColor.a);
             this.StartGameRPC();
         }
 	}
@@ -399,7 +411,11 @@ public class GameState : MonoBehaviour
     [RPC]
     void RequestPlayerData()
     {
-        this.networkView.RPC("AssignPlayerData", RPCMode.All, this.playerIndex, this.playerName, this.playerColor.r, this.playerColor.g, this.playerColor.b, this.playerColor.a);
+        string nameToUse = this.playerName;
+        if (GameState.colorNames.ContainsKey(this.playerColor))
+            nameToUse = GameState.colorNames[this.playerColor];
+
+        this.networkView.RPC("AssignPlayerData", RPCMode.All, this.playerIndex, nameToUse, this.playerColor.r, this.playerColor.g, this.playerColor.b, this.playerColor.a);
     }
 
     // Assign player names
@@ -414,7 +430,8 @@ public class GameState : MonoBehaviour
 							colorG, 
 							colorB, 
 							colorA));
-        this.ingameUI.SetActive(false);
+        if (!(this.gameStarted))
+            this.ingameUI.SetActive(false);
     }
 
     // Start game remote call
