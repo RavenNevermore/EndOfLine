@@ -2043,7 +2043,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: -107
-    y: 242
+    y: 379
     width: 67
     height: 66
   m_LeftBorder: 0
@@ -2062,7 +2062,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: -102
-    y: 240
+    y: 377
     width: 57
     height: 67
   m_LeftBorder: 0
@@ -2081,7 +2081,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: -107
-    y: 243
+    y: 380
     width: 66
     height: 63
   m_LeftBorder: 0
@@ -2100,7 +2100,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: -99
-    y: 245
+    y: 382
     width: 51
     height: 63
   m_LeftBorder: 0
@@ -2119,7 +2119,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: -137
-    y: 209
+    y: 346
     width: 136
     height: 141
   m_LeftBorder: 0
@@ -2138,7 +2138,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: 0
-    y: 209
+    y: 346
     width: 136
     height: 141
   m_LeftBorder: 0
@@ -2157,7 +2157,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: -137
-    y: 50
+    y: 187
     width: 136
     height: 300
   m_LeftBorder: 0
@@ -2176,7 +2176,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: 0
-    y: 50
+    y: 187
     width: 136
     height: 300
   m_LeftBorder: 0
@@ -2214,7 +2214,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: 46.0999985
-    y: 240
+    y: 377
     width: 57
     height: 67
   m_LeftBorder: 0
@@ -2233,7 +2233,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: 41
-    y: 243
+    y: 380
     width: 66
     height: 63
   m_LeftBorder: 0
@@ -2252,7 +2252,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: 49
-    y: 245
+    y: 382
     width: 51
     height: 63
   m_LeftBorder: 0
@@ -2271,7 +2271,7 @@ GUITexture:
   m_PixelInset:
     serializedVersion: 2
     x: 41
-    y: 242
+    y: 379
     width: 67
     height: 66
   m_LeftBorder: 0
