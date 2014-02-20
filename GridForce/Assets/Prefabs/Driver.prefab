@@ -1977,7 +1977,7 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 5e41adf3b4e904582b51c526936425ba, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: .899999976
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2149,7 +2149,7 @@ AudioSource:
   m_GameObject: {fileID: 100076}
   m_Enabled: 1
   serializedVersion: 3
-  m_audioClip: {fileID: 8300000, guid: d638125e1455d48c9afa58a74789a319, type: 3}
+  m_audioClip: {fileID: 8300000, guid: f5b9dea87e276483b8b1ac397d4240e1, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2163,7 +2163,7 @@ AudioSource:
   rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
-  BypassReverbZones: 0
+  BypassReverbZones: 1
   rolloffCustomCurve:
     serializedVersion: 2
     m_Curve:
