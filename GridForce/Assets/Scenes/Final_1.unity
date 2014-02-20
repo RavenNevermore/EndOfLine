@@ -2842,6 +2842,9 @@ GameObject:
   - 124: {fileID: 238344331}
   - 92: {fileID: 238344330}
   - 81: {fileID: 238344329}
+  - 114: {fileID: 858560800}
+  - 114: {fileID: 858560797}
+  - 114: {fileID: 858560796}
   - 114: {fileID: 858560799}
   m_Layer: 0
   m_Name: PreviewCamera
@@ -2850,6 +2853,65 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &858560796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400012, guid: 971012cdfae7ca643b16eea25e620250,
+    type: 2}
+  m_PrefabInternal: {fileID: 1923410539}
+  m_GameObject: {fileID: 858560795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec45f2c42ead1946a1e70588b961c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exclusiveComponent: {fileID: 858560797}
+  targetPlatform: 0
+--- !u!114 &858560797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400014, guid: 971012cdfae7ca643b16eea25e620250,
+    type: 2}
+  m_PrefabInternal: {fileID: 1923410539}
+  m_GameObject: {fileID: 858560795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blurMode: 100
+  _reuseDepth: 0
+  _rerenderResolution: 1
+  _highPrecsion: 0
+  settings:
+    downsampleSteps: 2
+    baseResolution: 4
+    downsampleResolution: 4
+    iterations: 3
+    blurSpread: .600000024
+    innerStrength: 1
+    outerStrength: 1
+    boostStrength: 4
+    blendMode: 0
+    downsampleBlendMode: 100
+    falloff:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    falloffScale: 1
+    radius: 4
+    normalize: 1
 --- !u!4 &858560798
 Transform:
   m_ObjectHideFlags: 0
@@ -2870,12 +2932,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 858560795}
   m_Enabled: 0
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec45f2c42ead1946a1e70588b961c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exclusiveComponent: {fileID: 858560800}
+  targetPlatform: 1
+--- !u!114 &858560800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400016, guid: 971012cdfae7ca643b16eea25e620250,
+    type: 2}
+  m_PrefabInternal: {fileID: 1923410539}
+  m_GameObject: {fileID: 858560795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _blurMode: 100
   _reuseDepth: 0
-  _rerenderResolution: 1
+  _rerenderResolution: 4
   _highPrecsion: 0
   settings:
     downsampleSteps: 2
@@ -7226,6 +7302,9 @@ GameObject:
   - 114: {fileID: 1899410312}
   - 114: {fileID: 1899410318}
   - 114: {fileID: 1899410319}
+  - 114: {fileID: 1899410322}
+  - 114: {fileID: 1899410321}
+  - 114: {fileID: 1899410320}
   m_Layer: 0
   m_Name: ArenaMainCamera
   m_TagString: MainCamera
@@ -7269,14 +7348,14 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 517883751}
   m_GameObject: {fileID: 1899410310}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _blurMode: 100
   _reuseDepth: 0
-  _rerenderResolution: 1
+  _rerenderResolution: 4
   _highPrecsion: 0
   settings:
     downsampleSteps: 2
@@ -7406,6 +7485,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe6cb65e3aa234ea48f7dce87070f686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1899410320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400012, guid: a4e1f59bc59ae934fb8509944a3065fe,
+    type: 2}
+  m_PrefabInternal: {fileID: 517883751}
+  m_GameObject: {fileID: 1899410310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec45f2c42ead1946a1e70588b961c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exclusiveComponent: {fileID: 1899410313}
+  targetPlatform: 1
+--- !u!114 &1899410321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400010, guid: a4e1f59bc59ae934fb8509944a3065fe,
+    type: 2}
+  m_PrefabInternal: {fileID: 517883751}
+  m_GameObject: {fileID: 1899410310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ec45f2c42ead1946a1e70588b961c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  exclusiveComponent: {fileID: 1899410322}
+  targetPlatform: 0
+--- !u!114 &1899410322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400008, guid: a4e1f59bc59ae934fb8509944a3065fe,
+    type: 2}
+  m_PrefabInternal: {fileID: 517883751}
+  m_GameObject: {fileID: 1899410310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -923714165, guid: 19b0cf21764734b05961b2e048d1c7c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _blurMode: 100
+  _reuseDepth: 0
+  _rerenderResolution: 1
+  _highPrecsion: 0
+  settings:
+    downsampleSteps: 2
+    baseResolution: 4
+    downsampleResolution: 4
+    iterations: 2
+    blurSpread: .600000024
+    innerStrength: 1
+    outerStrength: 1
+    boostStrength: 4
+    blendMode: 0
+    downsampleBlendMode: 100
+    falloff:
+      serializedVersion: 2
+      m_Curve:
+      - time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+    falloffScale: 1
+    radius: 4
+    normalize: 1
 --- !u!1001 &1923410539
 Prefab:
   m_ObjectHideFlags: 0

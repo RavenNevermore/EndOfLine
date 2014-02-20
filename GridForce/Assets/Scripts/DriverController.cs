@@ -9,6 +9,7 @@ public class DriverController : ExtendedBehaviour
     public Transform trailCollisionSegment = null;    // Game object that represents collision segment
     public Transform itemBoxPrefab = null;      // Item box prefab
     public Transform explosionPrefab = null;     // Which effect to use for the explosion
+	public string[] explosionParticlesNames; //which part of the explosion effect to color in.
     public GameObject fakeItemBoxPrefab = null;     // Fake item box
     public GameObject sideBladePrefab = null;       // Side blade
     public ArenaSettings arenaSettings = null;      // Arena settings
@@ -714,12 +715,18 @@ public class DriverController : ExtendedBehaviour
             this.lineRenderer.gameObject.transform.parent = null;
 
         UnityEngine.Object explosion = UnityEngine.Object.Instantiate(this.explosionPrefab, this.transform.position, this.transform.rotation);
-        ParticleSystem particleSystem = ((Transform)(explosion)).gameObject.GetComponent<ParticleSystem>();
-        particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
-        particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
-        particleSystem = ((Transform)(explosion)).gameObject.GetComponentsInChildren<ParticleSystem>()[1];
-        particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
-        particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
+		foreach (string systemName in this.explosionParticlesNames){
+	        ParticleSystem particleSystem = ((Transform)(explosion)).Find(systemName).gameObject.particleSystem;
+	        particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
+	        particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
+		}
+        //ParticleSystem particleSystem = ((Transform)(explosion)).gameObject.GetComponent<ParticleSystem>();
+        //ParticleSystem particleSystem = this.explosionPrefab.Find(this.explosionParticlesName).gameObject.particleSystem;
+        //particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
+        //particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
+        //particleSystem = particleSystem.gameObject.GetComponentInChildren<ParticleSystem>();
+        //particleSystem.startColor = 0.1f * particleSystem.startColor + 0.9f * this.mainColor;
+        //particleSystem.startColor = new Color(particleSystem.startColor.r, particleSystem.startColor.g, particleSystem.startColor.b, 1.0f);
         UnityEngine.Object.Destroy(((Transform)(explosion)).gameObject, 3.0f);
 
         if (this.lineRenderer != null)
