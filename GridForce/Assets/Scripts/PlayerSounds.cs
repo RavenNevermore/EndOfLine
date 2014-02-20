@@ -5,36 +5,17 @@ public class PlayerSounds : MonoBehaviour {
 
 	public AudioSource turnSound;
 	public AudioSource boostSound;
-
-	public AudioClip[] soundClips;
-
-	List<AudioSource> sources;
-
-	void Start(){
-		this.sources = new List<AudioSource>();
-		if (null == this.soundClips || this.soundClips.Length == 0){
-			this.sources.Add(turnSound);
-		} else {
-			foreach (AudioClip clip in this.soundClips){
-				AudioSource source = (AudioSource) Instantiate(this.turnSound);
-				source.clip = clip;
-                source.transform.parent = this.transform;
-				this.sources.Add(source);
-			}
-		}
-	}
+	public AudioSource killPlayerSound;
+	public AudioSource sawbladeSound;
+	public AudioSource shieldSound;
+	public AudioSource mineSound;
 
 	public void OnPlayerTurned(){
 		if (null == this.turnSound)
 			return;
 
-		foreach (AudioSource source in this.sources){
-			if (source.isPlaying)
-				continue;
-            if (AudioSettings.playSounds)
-			    source.Play();
-			break;
-		}
+        if (AudioSettings.playSounds)
+		    turnSound.Play();
 	}
 
 	public void OnBoostStarted(){
@@ -43,4 +24,25 @@ public class PlayerSounds : MonoBehaviour {
         if (AudioSettings.playSounds)
 		    this.boostSound.Play();
 	}
+	
+	public void OnPlayerDied(){
+        if (AudioSettings.playSounds)
+		    this.killPlayerSound.Play();
+	}
+	
+	public void OnSawbladeStarted(){
+        if (AudioSettings.playSounds)
+		    this.sawbladeSound.Play();
+	}
+	
+	public void OnShieldStarted(){
+        if (AudioSettings.playSounds)
+		    this.shieldSound.Play();
+	}
+	
+	public void OnMineCharged(){
+        if (AudioSettings.playSounds)
+		    this.mineSound.Play();
+	}
+	
 }

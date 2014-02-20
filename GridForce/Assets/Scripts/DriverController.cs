@@ -329,6 +329,7 @@ public class DriverController : ExtendedBehaviour
                         break;
 
                     case ItemType.FakeItemBox:
+						this.SendMessage("OnMineCharged");
                         UnityEngine.Object fakeItemBoxInstance = null;
                         RaycastHit raycastHitFakeItemBox;
                         Physics.Linecast(gravityRayStart, gravityRayEnd, out raycastHitFakeItemBox, DriverController.drivableLayerMask | DriverController.nonDrivableLayerMask);
@@ -348,6 +349,7 @@ public class DriverController : ExtendedBehaviour
 
                     case ItemType.Immunity:
                         this.spawnedTimer = 0.0f;
+						this.SendMessage("OnShieldStarted");
                         if (this.invincibleTimer < this.immunityDuration)
                             this.invincibleTimer = this.immunityDuration;
                         break;
@@ -384,6 +386,7 @@ public class DriverController : ExtendedBehaviour
                         //}
 
                         this.sideBladeTimer = this.sideBladeDuration;
+						this.SendMessage("OnSawbladeStarted");
                         break;
                 }
 
@@ -701,6 +704,8 @@ public class DriverController : ExtendedBehaviour
             return;
 
         this.killed = true;
+
+		this.SendMessage("OnPlayerDied");
 
         this.harmlessTimer = 100.0f;
         this.UpdateColors();
