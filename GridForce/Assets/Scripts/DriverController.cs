@@ -169,11 +169,38 @@ public class DriverController : ExtendedBehaviour
         Color currentColor = this.mainColor;
         if (this.boostTime > 0.0f)
             currentColor = new Color(1.0f, 0.8f, 0.05f, currentColor.a);
+        Color trailColor = currentColor;
         if (this.harmlessTimer > 0.0f && this.gameStarted)
+        {
+            trailColor = new Color(currentColor.r * 0.35f, currentColor.g * 0.35f, currentColor.b * 0.35f, currentColor.a * 0.0f);
             currentColor = new Color(currentColor.r * 0.35f, currentColor.g * 0.35f, currentColor.b * 0.35f, currentColor.a * 0.1f);
+        }
 
         for (int i = 0; this.lineRenderer != null && i < this.lineRenderer.pointList.Count; i++)
-            this.lineRenderer.pointList[i].color = new Color(currentColor.r, currentColor.g, currentColor.b, currentColor.a);
+        {
+            this.lineRenderer.pointList[i].color = new Color(trailColor.r, trailColor.g, trailColor.b, trailColor.a);
+        }
+
+        if (this.lineRenderer != null && this.lineRenderer.instanceMaterial != null)
+        {
+            if (this.harmlessTimer > 0.0f)
+                this.lineRenderer.instanceMaterial.SetFloat("_GlowStrength", 0.25f);
+            else
+                this.lineRenderer.instanceMaterial.SetFloat("_GlowStrength", 0.6f);
+        }
+
+        for (int i = 0; this.lineRendererKilled != null && this.lineRendererKilled.pointList != null && i < this.lineRendererKilled.pointList.Count; i++)
+        {
+            this.lineRendererKilled.pointList[i].color = new Color(trailColor.r, trailColor.g, trailColor.b, trailColor.a);
+        }
+
+        if (this.lineRendererKilled != null && this.lineRendererKilled.instanceMaterial != null)
+        {
+            if (this.harmlessTimer > 0.0f)
+                this.lineRendererKilled.instanceMaterial.SetFloat("_GlowStrength", 0.25f);
+            else
+                this.lineRendererKilled.instanceMaterial.SetFloat("_GlowStrength", 0.6f);
+        }
 
         if (this.vehicleMesh == null)
             return;

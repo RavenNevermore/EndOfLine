@@ -10,7 +10,7 @@ public class OptimizedLineRenderer : MonoBehaviour
 
     private GameObject lineObject = null;       // The line game object
     private Mesh lineMesh = null;               // The line mesh
-    private Material instanceMaterial;          // The line material instance
+    public Material instanceMaterial;          // The line material instance
 
 	// Use this for initialization
 	void Start ()

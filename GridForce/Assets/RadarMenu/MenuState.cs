@@ -52,11 +52,11 @@ public class MenuState : MonoBehaviour
                 UnityEngine.Object.Destroy(this.gameObject);
         }
 
-#if UNITY_STANDALONE || UNITY_EDITOR
+        //#if UNITY_STANDALONE || UNITY_EDITOR
 
         this.playerName = System.Environment.MachineName;
 
-#endif
+        //#endif
     }
 
     void Update()
